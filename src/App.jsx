@@ -12,7 +12,8 @@ import MeusEmprestimosPage from './pages/MeusEmprestimosPage.jsx';
 import MinhasReservasPage from './pages/MinhaReservasPage.jsx';
 import MinhasMultasPage from './pages/MinhasMultas.jsx';
 import DetalhesLivroPage from './pages/DetalhesLivrosPage.jsx';
-
+import EditarLivroPage from './pages/admin/EditarLivroPage.jsx';
+import GestaoEmprestimosPage from './pages/admin/GestaoEmprestimosPage.jsx';
 
 // ADM
 import AdminRoute from './components/AdminRoute.jsx';
@@ -36,29 +37,43 @@ const Navigation = () => {
   };
 
   return (
-    <header>
+     <header>
       <h1>Sistema de Biblioteca</h1>
       <nav>
         {user ? (
           <>
-            <span>Olá, {user.sub}</span> |
-            <Link to="/livros">Livros</Link> |
-            <Link to="/meus-emprestimos">Meus Empréstimos</Link> |
-            <Link to="/minhas-reservas">Minhas Reservas</Link> |
-            <Link to="/minhas-multas">Minhas Multas</Link> |
-            <Link to="/meu-perfil">Meu Perfil</Link> | {/* Adicionado | para consistência visual */}
+            <span>Olá, {user.sub}</span>
+            
+            <span style={{ margin: '0 8px' }}>|</span>
+            
+            <Link to="/livros">Livros</Link>
+            <span style={{ margin: '0 8px' }}>|</span>
+            
+            <Link to="/meus-emprestimos">Meus Empréstimos</Link>
+            <span style={{ margin: '0 8px' }}>|</span>
+            
+            <Link to="/minhas-reservas">Minhas Reservas</Link>
+            <span style={{ margin: '0 8px' }}>|</span>
+            
+            <Link to="/minhas-multas">Minhas Multas</Link>
+            <span style={{ margin: '0 8px' }}>|</span>
+            
+            <Link to="/meu-perfil">Meu Perfil</Link>
+            <span style={{ margin: '0 8px' }}>|</span>
 
-            {/* Link só para admins */}
             {user.role === 'BIBLIOTECARIO' && (
               <>
                 | <Link to="/admin/cadastrar-livro">Adicionar Livro</Link>
+                | <Link to="/admin/emprestimos">Gerir Empréstimos</Link> {/* 2. Adicione o link */}
               </>
-            )} |
+            )}
             <button onClick={handleLogout}>Sair</button>
           </>
         ) : (
           <>
-            <Link to="/login">Login</Link> | <Link to="/cadastro">Cadastre-se</Link>
+            <Link to="/login">Login</Link>
+            <span style={{ margin: '0 8px' }}>|</span>
+            <Link to="/cadastro">Cadastre-se</Link>
           </>
         )}
       </nav>
@@ -115,6 +130,7 @@ function App() {
             path="/livros/:id" 
             element={<ProtectedRoute><DetalhesLivroPage /></ProtectedRoute>} 
           />
+          {/* Rotas de Adimin*/}
           <Route 
             path="/admin/cadastrar-livro"
             element={
@@ -122,6 +138,14 @@ function App() {
                 <CadastrarLivroPage />
               </AdminRoute>
             }
+          />
+          <Route 
+            path="/admin/editar-livro/:id"
+            element={<AdminRoute><EditarLivroPage /></AdminRoute>}
+          />
+          <Route 
+            path="/admin/emprestimos"
+            element={<AdminRoute><GestaoEmprestimosPage /></AdminRoute>}
           />
         </Routes>
       </main>

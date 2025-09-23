@@ -58,3 +58,15 @@ export const cadastrarLivro = async (livroData, capaFile) => {
 
   return response.data;
 };
+
+// Lista os livros
+export const atualizarLivro = async (idLivro, dadosAtualizados) => {
+  const response = await api.put(`/livros/atualizar/${idLivro}`, dadosAtualizados);
+  return response.data;
+};
+
+// deleta os livros pelos seus respectivos id
+export const deletarLivro = async (idLivro) => {
+  const response = await api.delete(`/livros/remover/${idLivro}`);
+  return response.data;
+};
