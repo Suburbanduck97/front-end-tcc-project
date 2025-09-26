@@ -6,7 +6,7 @@ export const getTodosLivros = async () => {
   return response.data;
 };
 
-/*
+
 export const buscarLivrosPorTitulo = async (titulo) => {
   // A rota é /livros/buscar/titulo/{titulo}
   const response = await api.get(`/livros/buscar/titulo/${titulo}`);
@@ -18,13 +18,13 @@ export const buscarLivrosPorAutor = async (autor) => {
   const response = await api.get(`/livros/buscar/autor/${autor}`);
   return response.data;
 };
-*/
 
-export const buscarLivrosPorTermoGeral = async (termo) => {
+export default async (termo) => {
   // Isso irá gerar a URL: /livros/buscar?termo=valor_do_termo
   const response = await api.get('/livros/buscar', { params: { termo } });
   return response.data;
 };
+
 
 export const getLivroPorId = async (idLivro) => {
   // Supõe que a rota GET /livros/{id} existe no back-end
