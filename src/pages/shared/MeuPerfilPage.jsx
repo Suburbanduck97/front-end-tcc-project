@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
-import api from '../services/api'; // Usa-se a instância do Axios
-
+import { AuthContext } from "../../context/AuthContext";
+import api from '../../services/api'; // Usa-se a instância do Axios
+import styles from './MeuPerfilPage.module.css';
 
 const calcularIdade = (dataNascimentoString) => {
     if (!dataNascimentoString) return null;
@@ -19,6 +19,12 @@ const calcularIdade = (dataNascimentoString) => {
 
     return idade;
 };
+
+const formatarSexo = (sexo) => {
+    if (!sexo) return 'Não informado';
+    return sexo.charAt(0).toUpperCase() + sexo.slice(1).toLowerCase();
+}
+
 
 function MeuPerfilPage() {
     const { user } = useContext(AuthContext); // Pega o usuário do contexto para exibir o e-mail
@@ -57,7 +63,7 @@ function MeuPerfilPage() {
     }
 
     if (error) {
-        return <p style={{ color: 'red' }}>{error}</p>
+        return <p className={styles.errorMessage}>{error}</p>
     }
 
     if (!perfil) {
@@ -65,18 +71,40 @@ function MeuPerfilPage() {
     }
 
     const idade = calcularIdade(perfil.dataNascimento);
-    /*const formatarData = (data) => {
-        if(!data) return 'Não informada';
-        const [ano, mes, dia] = data.split('-');
-        return `${dia}/${mes}/${ano}`;
-    };*/
 
     return (
-        <div>
-            <h2>Meu Perfil</h2>
-            <p><strong>Nome:</strong> {perfil.nome}</p>
-            <p><strong>Sexo:</strong>{perfil.sexo}</p>
-            <p><strong>Idade:</strong> {idade !== null ? `${idade} anos` : 'Data de nascimento inválida'}</p>
+        <div className={styles.profileContainer}>
+            <div className={styles.profileCard}>
+                <div className={styles.cardHeader}>
+                    <h2>Meu Perfil</h2>
+                </div>
+                <div className={styles.cardBody}>
+                    <div className={styles.infoItem}>
+                        <span className={styles.label}>Nome Completo</span>
+                        <span className={styles.value}>{perfil.nome}</span>
+                    </div>
+                    <div className={styles.infoItem}>
+                        <span className={styles.label}>E-mail</span>
+                        <span className={styles.value}>{perfil.email}</span>
+                    </div>
+                    <div className={styles.infoItem}>
+                        <span className={styles.label}>Sexo</span>
+                        <span className={styles.value}>{formatarSexo(perfil.sexo)}</span>
+                    </div>
+                    <div className={styles.infoItem}>
+                        <span className={styles.label}>Idade</span>
+                        <span className={styles.value}>{idade !== null ? `${idade} anos` : 'Não informada'}</span>
+                    </div>
+                     <div className={styles.infoItem}>
+                        <span className={styles.label}>Telefone</span>
+                        <span className={styles.value}>{perfil.telefone}</span>
+                    </div>
+                    <div className={styles.infoItem}>
+                        <span className={styles.label}>Localização</span>
+                        <span className={styles.value}>{`${perfil.cidade}, ${perfil.estado}`}</span>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

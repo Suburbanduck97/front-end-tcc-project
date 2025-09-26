@@ -1,14 +1,16 @@
 // src/pages/admin/CadastrarLivroPage
 import React, { useState } from 'react';
 import { cadastrarLivro } from '../../services/livroService'; // 1. Importamos a função
+import styles from './CadastrarLivroPage.module.css';
 
 function CadastrarLivroPage() {
   const [formData, setFormData] = useState({
     titulo: '', autor: '', isbn: '', categoria: '', editora: '',
-    anoPublicacao: '', qtdTotal: '', descricao: '' // <- Campo qtdTotal adicionado ao estado
+    anoPublicacao: '', qtdTotal: '', descricao: ''  // <- Campo qtdTotal adicionado ao estado
   });
   const [capa, setCapa] = useState(null);
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -23,6 +25,7 @@ function CadastrarLivroPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
+    setError('');
     
     try {
       // Chamamos nosso serviço com os dados do estado
@@ -42,30 +45,56 @@ function CadastrarLivroPage() {
     }
   };
 
-  return (
-    <div>
-      <h2>Cadastrar Novo Livro</h2>
-      <form onSubmit={handleSubmit}>
-        <input type="text" id="titulo" placeholder="Título" value={formData.titulo} onChange={handleChange} required />
-        <input type="text" id="autor" placeholder="Autor" value={formData.autor} onChange={handleChange} />
-        <input type="text" id="isbn" placeholder="ISBN" value={formData.isbn} onChange={handleChange} />
-        <input type="text" id="categoria" placeholder="Categoria" value={formData.categoria} onChange={handleChange} required />
-        <input type="text" id="editora" placeholder="Editora" value={formData.editora} onChange={handleChange} />
-        <input type="number" id="anoPublicacao" placeholder="Ano de Publicação" value={formData.anoPublicacao} onChange={handleChange} />
-        
-        {/* 3. CAMPO FALTANTE ADICIONADO AQUI */}
-        <input type="number" id="qtdTotal" placeholder="Quantidade Total" value={formData.qtdTotal} onChange={handleChange} required />
-        
-        <textarea id="descricao" placeholder="Descrição" value={formData.descricao} onChange={handleChange}></textarea>
 
-        <div>
-          <label htmlFor="capa">Capa do Livro:</label>
-          <input type="file" id="capa" onChange={handleFileChange} accept="image/png, image/jpeg" />
+  return (
+    <div className={styles.pageContainer}>
+      <h1>Cadastrar Novo Livro</h1>
+      
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles.formGrid}>
+          <div className={styles.formGroup}>
+            <label htmlFor="titulo">Título</label>
+            <input type="text" id="titulo" value={formData.titulo} onChange={handleChange} required />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="autor">Autor</label>
+            <input type="text" id="autor" value={formData.autor} onChange={handleChange} />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="isbn">ISBN</label>
+            <input type="text" id="isbn" value={formData.isbn} onChange={handleChange} />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="categoria">Categoria</label>
+            <input type="text" id="categoria" value={formData.categoria} onChange={handleChange} required />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="editora">Editora</label>
+            <input type="text" id="editora" value={formData.editora} onChange={handleChange} />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="anoPublicacao">Ano de Publicação</label>
+            <input type="number" id="anoPublicacao" value={formData.anoPublicacao} onChange={handleChange} />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="qtdTotal">Quantidade Total</label>
+            <input type="number" id="qtdTotal" value={formData.qtdTotal} onChange={handleChange} required />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="capa">Capa do Livro</label>
+            <input type="file" id="capa" onChange={handleFileChange} accept="image/png, image/jpeg" />
+          </div>
+          <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+            <label htmlFor="descricao">Descrição</label>
+            <textarea id="descricao" value={formData.descricao} onChange={handleChange}></textarea>
+          </div>
         </div>
         
-        <button type="submit">Cadastrar Livro</button>
+        <button type="submit" className={styles.submitButton}>Cadastrar Livro</button>
       </form>
-      {message && <p>{message}</p>}
+
+      {message && <p className={styles.successMessage}>{message}</p>}
+      {error && <p className={styles.errorMessage}>{error}</p>}
     </div>
   );
 }

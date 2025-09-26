@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getLivroPorId, atualizarLivro } from '../../services/livroService'; // 1. Importa a função de atualizar
+import styles from './EditarLivroPage.module.css';
 
 function EditarLivroPage() {
   const { id } = useParams();
@@ -11,6 +12,7 @@ function EditarLivroPage() {
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchLivro = async () => {
@@ -42,7 +44,8 @@ function EditarLivroPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
-    
+    setError('');
+
     // 2. Compara os dados do formulário com os originais para encontrar o que mudou
     const dadosAtualizados = {};
     for (const key in formData) {
@@ -68,37 +71,46 @@ function EditarLivroPage() {
   };
 
   if (loading) return <p>Carregando livro para edição...</p>;
-  if (!formData) return <p style={{color: 'red'}}>{message}</p>;
+  if (error) return <p className={styles.errorMessage}>{error}</p>;
+  if (!formData) return <p>Nenhum dado de livro encontrado.</p>;
 
   return (
-    <div>
-      <h2>Editar Livro: {livroOriginal.titulo}</h2>
-      <form onSubmit={handleSubmit}>
-        {/* Formulário com todos os campos que podem ser editados */}
-        <label>Título:</label>
-        <input type="text" id="titulo" value={formData.titulo} onChange={handleChange} />
-        
-        <label>Autor:</label>
-        <input type="text" id="autor" value={formData.autor} onChange={handleChange} />
-
-        <label>Categoria:</label>
-        <input type="text" id="categoria" value={formData.categoria} onChange={handleChange} />
-
-        <label>Editora:</label>
-        <input type="text" id="editora" value={formData.editora} onChange={handleChange} />
-
-        <label>Ano de Publicação:</label>
-        <input type="number" id="anoPublicacao" value={formData.anoPublicacao} onChange={handleChange} />
-
-        <label>Quantidade Total:</label>
-        <input type="number" id="qtdTotal" value={formData.qtdTotal} onChange={handleChange} />
-
-        <label>Descrição:</label>
-        <textarea id="descricao" value={formData.descricao} onChange={handleChange}></textarea>
-
-        <button type="submit">Salvar Alterações</button>
+    <div className={styles.pageContainer}>
+      <h1>Editar Livro: <strong>{livroOriginal.titulo}</strong></h1>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles.formGrid}>
+          <div className={styles.formGroup}>
+            <label htmlFor="titulo">Título</label>
+            <input type="text" id="titulo" value={formData.titulo} onChange={handleChange} />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="autor">Autor</label>
+            <input type="text" id="autor" value={formData.autor} onChange={handleChange} />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="categoria">Categoria</label>
+            <input type="text" id="categoria" value={formData.categoria} onChange={handleChange} />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="editora">Editora</label>
+            <input type="text" id="editora" value={formData.editora} onChange={handleChange} />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="anoPublicacao">Ano de Publicação</label>
+            <input type="number" id="anoPublicacao" value={formData.anoPublicacao} onChange={handleChange} />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="qtdTotal">Quantidade Total</label>
+            <input type="number" id="qtdTotal" value={formData.qtdTotal} onChange={handleChange} />
+          </div>
+          <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+            <label htmlFor="descricao">Descrição</label>
+            <textarea id="descricao" value={formData.descricao} onChange={handleChange}></textarea>
+          </div>
+        </div>
+        <button type="submit" className={styles.submitButton}>Salvar Alterações</button>
       </form>
-      {message && <p>{message}</p>}
+      {message && <p className={styles.infoMessage}>{message}</p>}
     </div>
   );
 }

@@ -1,19 +1,23 @@
 // src/App.jsx
-import React, { useContext } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import { AuthContext } from './context/AuthContext.js';
 
+import Sidebar from './components/Sidebar/Sidebar.jsx'; 
+
 // Páginas
-import LoginPage from './pages/LoginPage.jsx';
-import ListaLivros from './pages/ListaLivros.jsx';
-import CadastroPage from './pages/CadastroPage.jsx';
-import MeuPerfilPage from './pages/MeuPerfilPage.jsx';
-import MeusEmprestimosPage from './pages/MeusEmprestimosPage.jsx';
-import MinhasReservasPage from './pages/MinhaReservasPage.jsx';
-import MinhasMultasPage from './pages/MinhasMultas.jsx';
-import DetalhesLivroPage from './pages/DetalhesLivrosPage.jsx';
+import LoginPage from './pages/public/LoginPage.jsx';
+import ListaLivros from './pages/shared/ListaLivrosPage.jsx';
+import CadastroPage from './pages/public/CadastroPage.jsx';
+import MeuPerfilPage from './pages/shared/MeuPerfilPage.jsx';
+import MeusEmprestimosPage from './pages/user/MeusEmprestimosPage.jsx';
+import MinhasReservasPage from './pages/user/MinhasReservasPage.jsx';
+import MinhasMultasPage from './pages/user/MinhasMultas.jsx';
+import DetalhesLivroPage from './pages/shared/DetalhesLivrosPage.jsx';
 import EditarLivroPage from './pages/admin/EditarLivroPage.jsx';
 import GestaoEmprestimosPage from './pages/admin/GestaoEmprestimosPage.jsx';
+import RecuperarSenhaPage from './pages/public/RecuperarSenhaPage.jsx';
+import NovaSenhaPage from './pages/public/NovaSenhaPage.jsx';
 
 // ADM
 import AdminRoute from './components/AdminRoute.jsx';
@@ -24,76 +28,26 @@ import CadastrarLivroPage from './pages/admin/CadastrarLivroPage.jsx';
 // Guardião
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 
+// Estilos do App
+import './App.css';
 
-// Componentes de navegação para organizar o código
-const Navigation = () => {
-  const { user, logoutContext } = useContext(AuthContext);
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logoutContext();
-    alert('Você foi desconectado.');
-    navigate('/login');
-  };
-
-  return (
-     <header>
-      <h1>Sistema de Biblioteca</h1>
-      <nav>
-        {user ? (
-          <>
-            <span>Olá, {user.sub}</span>
-            
-            <span style={{ margin: '0 8px' }}>|</span>
-            
-            <Link to="/livros">Livros</Link>
-            <span style={{ margin: '0 8px' }}>|</span>
-            
-            <Link to="/meus-emprestimos">Meus Empréstimos</Link>
-            <span style={{ margin: '0 8px' }}>|</span>
-            
-            <Link to="/minhas-reservas">Minhas Reservas</Link>
-            <span style={{ margin: '0 8px' }}>|</span>
-            
-            <Link to="/minhas-multas">Minhas Multas</Link>
-            <span style={{ margin: '0 8px' }}>|</span>
-            
-            <Link to="/meu-perfil">Meu Perfil</Link>
-            <span style={{ margin: '0 8px' }}>|</span>
-
-            {user.role === 'BIBLIOTECARIO' && (
-              <>
-                | <Link to="/admin/cadastrar-livro">Adicionar Livro</Link>
-                | <Link to="/admin/emprestimos">Gerir Empréstimos</Link> {/* 2. Adicione o link */}
-              </>
-            )}
-            <button onClick={handleLogout}>Sair</button>
-          </>
-        ) : (
-          <>
-            <Link to="/login">Login</Link>
-            <span style={{ margin: '0 8px' }}>|</span>
-            <Link to="/cadastro">Cadastre-se</Link>
-          </>
-        )}
-      </nav>
-    </header>
-  );
-};
 
 function App() {
   return (
     <Router>
-      <Navigation />
-      <main>
-        <Routes>
-          {/* Rotas públicas */}
-          <Route path='/login' element={<LoginPage />} />
-          <Route path='/cadastro' element={<CadastroPage />} />
-          <Route path='/' element={<LoginPage />} />
-          
+      <div className="appContainer">
+        <Sidebar />
+        <main className="content">
+          <Routes>
+            {/* Rotas públicas */}
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/cadastro' element={<CadastroPage />} />
+            <Route path='/' element={<LoginPage />} />
+            <Route path='/recuperarSenha' element={<RecuperarSenhaPage />} />
+            <Route path='/novaSenha' element={<NovaSenhaPage />} />
+            
 
-          {/* Rotas Protegidas */}
+            {/* Rotas Protegidas */}
           <Route
             path='/livros'
             element={
@@ -149,6 +103,7 @@ function App() {
           />
         </Routes>
       </main>
+    </div>
     </Router>
   );
 }

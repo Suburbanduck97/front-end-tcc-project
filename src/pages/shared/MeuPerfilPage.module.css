@@ -1,0 +1,158 @@
+.profileContainer {
+  width: 100%;
+}
+
+.profileCard {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2c3e50;
+  color: white;
+  padding: 1.5rem 2rem;
+}
+
+.cardHeader h2 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.editButton {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.editButton:hover {
+  background-color: #2980b9;
+}
+
+.cardBody {
+  padding: 2.5rem;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.infoItem svg {
+  color: #3498db;
+  flex-shrink: 0;
+}
+
+.label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #7f8c8d;
+  margin-bottom: 0.25rem;
+}
+
+.value {
+  font-size: 1.1rem;
+  color: #34495e;
+}
+
+/* Estilos do Formulário de Edição */
+.input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.input:disabled {
+  background-color: #ecf0f1;
+  cursor: not-allowed;
+  color: #7f8c8d;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #ecf0f1;
+}
+
+.actionButton {
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.cancelButton {
+  background-color: #ecf0f1;
+  color: #34495e;
+}
+.cancelButton:hover {
+    background-color: #bdc3c7;
+}
+
+.saveButton {
+  background-color: #27ae60;
+  color: white;
+}
+.saveButton:hover {
+    background-color: #229954;
+}
+
+.updateMessage {
+  padding: 1rem 2rem;
+  text-align: center;
+  font-weight: 500;
+}
+.updateMessage.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+.updateMessage.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.errorMessage {
+  color: #c0392b;
+  font-weight: bold;
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .infoGrid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .cardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}

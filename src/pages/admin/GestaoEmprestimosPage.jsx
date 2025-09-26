@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { getTodosEmprestimos, registrarEmprestimo, devolverLivro } from '../../services/emprestimoService';
 import { getTodasAsReservas } from '../../services/reservaService'; // Importa o serviço de reservas
+import styles from './GestaoEmprestimosPage.module.css';
 
 function GestaoEmprestimosPage() {
     const [emprestimos, setEmprestimos] = useState([]);
@@ -82,89 +83,91 @@ function GestaoEmprestimosPage() {
     };
 
     if (error) {
-        return <p style={{ color: 'red' }}>{error}</p>;
+        return <p className={styles.errorMessage}>{error}</p>;
     }
 
     return (
-        <div>
-            <h2>Gestão de Empréstimos e Reservas</h2>
-            {message && <p style={{ color: 'green', fontWeight: 'bold' }}>{message}</p>}
+        <div className={styles.pageContainer}>
+            <h1>Gestão de Empréstimos e Reservas</h1>
+            {message && <p className={styles.successMessage}>{message}</p>}
 
-            {/* SEÇÃO DA FILA DE RESERVAS ATIVAS */}
-            <div style={{ marginBottom: '40px', padding: '15px', border: '1px solid #007bff', borderRadius: '5px' }}>
-                <h3>Fila de Reservas Ativas</h3>
+            <section className={styles.section}>
+                <h2>Fila de Reservas Ativas</h2>
                 {loading ? <p>Carregando reservas...</p> : (
                     reservas.length > 0 ? (
-                        <table border="1" style={{ width: '100%', borderCollapse: 'collapse' }}>
-                            <thead>
-                                <tr>
-                                    <th>Livro</th>
-                                    <th>Usuário</th>
-                                    <th>Data da Reserva</th>
-                                    <th>Ação</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {reservas.map(reserva => (
-                                    <tr key={reserva.id}>
-                                        <td>{reserva.livro.titulo} (ID: {reserva.livro.id})</td>
-                                        <td>{reserva.usuario.nome} (ID: {reserva.usuario.id})</td>
-                                        <td>{formatarData(reserva.dataReserva)}</td>
-                                        <td>
-                                            <button onClick={() => handleConcederEmprestimo(reserva.usuario.id, reserva.livro.id, reserva.livro.titulo, reserva.usuario.nome)}>
-                                                Conceder Empréstimo
-                                            </button>
-                                        </td>
+                        <div className={styles.tableContainer}>
+                            <table className={styles.table}>
+                                <thead>
+                                    <tr>
+                                        <th>Livro</th>
+                                        <th>Usuário</th>
+                                        <th>Data da Reserva</th>
+                                        <th>Ação</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    ) : (
-                        <p>Nenhuma reserva ativa no momento.</p>
-                    )
+                                </thead>
+                                <tbody>
+                                    {reservas.map(reserva => (
+                                        <tr key={reserva.id}>
+                                            <td>{reserva.livro.titulo}</td>
+                                            <td>{reserva.usuario.nome}</td>
+                                            <td>{formatarData(reserva.dataReserva)}</td>
+                                            <td>
+                                                <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={() => handleConcederEmprestimo(reserva.usuario.id, reserva.livro.id, reserva.livro.titulo, reserva.usuario.nome)}>
+                                                    Conceder Empréstimo
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : <p className={styles.emptyMessage}>Nenhuma reserva ativa no momento.</p>
                 )}
-            </div>
+            </section>
 
-            {/* SEÇÃO DO HISTÓRICO DE EMPRÉSTIMOS */}
-            <h3>Histórico de Todos os Empréstimos</h3>
-            {loading ? <p>Carregando histórico de empréstimos...</p> : (
-                emprestimos.length > 0 ? (
-                    <table border="1" style={{ width: '100%', borderCollapse: 'collapse' }}>
-                        <thead>
-                            <tr>
-                                <th>ID Emp.</th>
-                                <th>Livro</th>
-                                <th>Usuário</th>
-                                <th>Data Empréstimo</th>
-                                <th>Status</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {emprestimos.map((emprestimo) => (
-                                <tr key={emprestimo.id}>
-                                    <td>{emprestimo.id}</td>
-                                    <td>{emprestimo.livro.titulo}</td>
-                                    <td>{emprestimo.usuario.nome}</td>
-                                    <td>{formatarData(emprestimo.dataEmprestimo)}</td>
-                                    <td style={{ fontWeight: 'bold', color: emprestimo.statusEmprestimo === 'ATRASADO' ? 'red' : 'inherit' }}>
-                                        {emprestimo.statusEmprestimo}
-                                    </td>
-                                    <td>
-                                        {emprestimo.statusEmprestimo !== 'FINALIZADO' && (
-                                            <button onClick={() => handleDevolverLivro(emprestimo.id)}>
-                                                Devolver
-                                            </button>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                ) : (
-                    <p>Nenhum empréstimo encontrado no sistema.</p>
-                )
-            )}
+            <section className={styles.section}>
+                <h2>Histórico de Todos os Empréstimos</h2>
+                {loading ? <p>Carregando histórico de empréstimos...</p> : (
+                    emprestimos.length > 0 ? (
+                        <div className={styles.tableContainer}>
+                            <table className={styles.table}>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Livro</th>
+                                        <th>Usuário</th>
+                                        <th>Data Empréstimo</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {emprestimos.map((emprestimo) => (
+                                        <tr key={emprestimo.id}>
+                                            <td>{emprestimo.id}</td>
+                                            <td>{emprestimo.livro.titulo}</td>
+                                            <td>{emprestimo.usuario.nome}</td>
+                                            <td>{formatarData(emprestimo.dataEmprestimo)}</td>
+                                            <td>
+                                                <span className={`${styles.status} ${styles[emprestimo.statusEmprestimo.toLowerCase()]}`}>
+                                                    {emprestimo.statusEmprestimo}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                {emprestimo.statusEmprestimo !== 'FINALIZADO' && (
+                                                    <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleDevolverLivro(emprestimo.id)}>
+                                                        Devolver
+                                                    </button>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : <p className={styles.emptyMessage}>Nenhum empréstimo encontrado no sistema.</p>
+                )}
+            </section>
         </div>
     );
 }

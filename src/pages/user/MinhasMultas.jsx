@@ -1,8 +1,9 @@
 // src/pages/MinhasMultasPage
 import React, { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import { getMultasPorUsuario } from '../services/multaService'; // Importa nosso novo serviço
+import { AuthContext } from '../../context/AuthContext';
+import { getMultasPorUsuario } from '../../services/multaService'; // Importa nosso novo serviço
 import { jwtDecode } from 'jwt-decode';
+import styles from './MinhasMultasPage.module.css';
 
 function MinhasMultasPage() {
   const { user } = useContext(AuthContext);
@@ -44,25 +45,39 @@ function MinhasMultasPage() {
   }
 
   if (error) {
-    return <p style={{ color: 'red' }}>{error}</p>;
+    return <p className={styles.errorMessage}>{error}</p>;
   }
 
   return (
-    <div>
-      <h2>Minhas Multas</h2>
+    <div className={styles.pageContainer}>
+      <h1>Minhas Multas</h1>
       {multas.length > 0 ? (
-        <ul style={{ listStyleType: 'none', padding: 0 }}>
-          {multas.map((multa) => (
-            <li key={multa.id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
-              <strong>Livro:</strong> {multa.tituloLivro} <br />
-              <strong>Valor:</strong> R$ {multa.valor.toFixed(2).replace('.', ',')} <br />
-              <strong>Status:</strong> {multa.statusMulta}
-              {/* No futuro, podemos adicionar um botão de pagamento aqui se o status for PENDENTE */}
-            </li>
-          ))}
-        </ul>
+        <div className={styles.tableContainer}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Livro</th>
+                <th>Valor</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {multas.map((multa) => (
+                <tr key={multa.id}>
+                  <td>{multa.tituloLivro}</td>
+                  <td>R$ {multa.valor.toFixed(2).replace('.', ',')}</td>
+                  <td>
+                    <span className={`${styles.status} ${styles[multa.statusMulta.toLowerCase()]}`}>
+                      {multa.statusMulta}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : (
-        <p>Você não possui nenhuma multa pendente.</p>
+        <p className={styles.emptyMessage}>Você não possui nenhuma multa no momento.</p>
       )}
     </div>
   );

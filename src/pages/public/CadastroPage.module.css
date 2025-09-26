@@ -1,0 +1,96 @@
+.pageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 1rem;
+  background-color: #f0f2f5;
+  min-height: calc(100vh - 100px); /* Opcional: desconta altura do header se houver */
+}
+
+.formContainer {
+  background-color: #ffffff;
+  padding: 2.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px; /* Aumentado para acomodar mais campos */
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c2c54;
+  font-size: 2rem;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Cria duas colunas */
+  gap: 1.5rem; /* Espaço entre os campos */
+}
+
+/* Faz o campo ocupar as duas colunas */
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: #f8f8f8;
+}
+
+.input:focus,
+.select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.submitButton {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #2c2c54;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 2rem;
+  transition: background-color 0.2s;
+}
+
+.submitButton:hover {
+  background-color: #1a1a3a;
+}
+
+.errorMessage {
+  text-align: center;
+  color: #d93025;
+  margin-top: 1.5rem;
+  font-weight: 500;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 640px) {
+  .formGrid {
+    grid-template-columns: 1fr; /* Uma coluna em telas pequenas */
+  }
+}

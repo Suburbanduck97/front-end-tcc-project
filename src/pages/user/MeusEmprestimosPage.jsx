@@ -1,8 +1,9 @@
 // src/pages/MeusEmprestimosPage
 import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from '../context/AuthContext';
-import { getEmprestimosPorUsuario } from '../services/emprestimoService';
+import { AuthContext } from '../../context/AuthContext';
+import { getEmprestimosPorUsuario } from '../../services/emprestimoService';
 import { jwtDecode } from 'jwt-decode';
+import styles from './MeusEmprestimosPage.module.css';
 
 function MeusEmprestimosPage() {
     const { user } = useContext(AuthContext); // Usamos o contexto para saber se estamos logados
@@ -58,27 +59,33 @@ function MeusEmprestimosPage() {
   }
 
   if (error) {
-    return <p style={{ color: 'red' }}>{error}</p>;
+    return <p className={styles.errorMessage}>{error}</p>;
   }
 
   return (
-    <div>
-        <h2>Meus Empréstimos</h2>
-        {emprestimos.length > 0 ? (
-            <ul style={{ listStyleType: 'none', padding: 0}}>
-                {emprestimos.map((emprestimo) => (
-                    <li key={emprestimo.id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px'}}>
-                        <strong>Livro:</strong> {emprestimo.livro.titulo} <br />
-                        <strong>Data do Empréstimo:</strong> {formatarData(emprestimo.dataEmprestimo)} <br />
-                        <strong>Data de Devolução Prevista:</strong> {formatarData(emprestimo.dataDevolucaoPrevista)} <br />
-                        <strong>Status:</strong> {emprestimo.statusEmprestimo}
-                    </li>
-                ))}
-            </ul>
-        ) : (
-            <p>Você não possui nenhum empréstimo no momento.</p>
-        )}
-    </div>
+    <div className={styles.pageContainer}>
+            <h1>Meus Empréstimos</h1>
+            {emprestimos.length > 0 ? (
+                <div className={styles.grid}>
+                    {emprestimos.map((emprestimo) => (
+                        <div key={emprestimo.id} className={styles.card}>
+                            <h3 className={styles.cardTitle}>{emprestimo.livro.titulo}</h3>
+                            <div className={styles.cardContent}>
+                                <p><strong>Data do Empréstimo:</strong> {formatarData(emprestimo.dataEmprestimo)}</p>
+                                <p><strong>Devolução Prevista:</strong> {formatarData(emprestimo.dataDevolucaoPrevista)}</p>
+                            </div>
+                            <div className={styles.cardFooter}>
+                                <span className={`${styles.status} ${styles[emprestimo.statusEmprestimo.toLowerCase()]}`}>
+                                    {emprestimo.statusEmprestimo}
+                                </span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <p className={styles.emptyMessage}>Você não possui nenhum empréstimo no momento.</p>
+            )}
+        </div>
   );
 }
 

@@ -1,8 +1,9 @@
 // src/pages/MinhasReservasPage.jsx
 import React from 'react';
 import { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import { getMinhasReservas } from '../services/reservaService'; // Importa nosso novo serviço
+import { AuthContext } from '../../context/AuthContext';
+import { getMinhasReservas } from '../../services/reservaService'; // Importa nosso novo serviço
+import styles from './MinhasReservasPage.module.css';
 
 function MinhasReservasPage() {
   const { user } = useContext(AuthContext);
@@ -51,24 +52,30 @@ function MinhasReservasPage() {
   }
 
   if (error) {
-    return <p style={{ color: 'red' }}>{error}</p>;
+    return <p className={styles.errorMessage}>{error}</p>;
   }
 
   return (
-    <div>
-      <h2>Minhas Reservas</h2>
+   <div className={styles.pageContainer}>
+      <h1>Minhas Reservas</h1>
       {reservas.length > 0 ? (
-        <ul style={{ listStyleType: 'none', padding: 0 }}>
+        <div className={styles.grid}>
           {reservas.map((reserva) => (
-            <li key={reserva.id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
-              <strong>Livro:</strong> {reserva.livro.titulo} <br />
-              <strong>Data da Reserva:</strong> {formatarData(reserva.dataReserva)} <br />
-              <strong>Status:</strong> {reserva.statusReserva}
-            </li>
+            <div key={reserva.id} className={styles.card}>
+              <h3 className={styles.cardTitle}>{reserva.livro.titulo}</h3>
+              <div className={styles.cardContent}>
+                <p><strong>Data da Reserva:</strong> {formatarData(reserva.dataReserva)}</p>
+              </div>
+              <div className={styles.cardFooter}>
+                <span className={`${styles.status} ${styles[reserva.statusReserva.toLowerCase()]}`}>
+                  {reserva.statusReserva}
+                </span>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
-        <p>Você não possui nenhuma reserva no momento.</p>
+        <p className={styles.emptyMessage}>Você não possui nenhuma reserva no momento.</p>
       )}
     </div>
   );

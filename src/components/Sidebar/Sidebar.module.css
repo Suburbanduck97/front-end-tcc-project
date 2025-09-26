@@ -1,0 +1,137 @@
+.sidebar {
+  background-color: #2c3e50; /* Um azul escuro mais moderno */
+  color: #ecf0f1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 1.5rem 1rem;
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 2.5rem;
+  padding: 0 0.5rem;
+}
+
+.logo {
+  height: 40px;
+  width: 40px;
+}
+
+.logoContainer h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+.navigation ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navigation a {
+  display: block;
+  color: #bdc3c7;
+  text-decoration: none;
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  transition: background-color 0.2s, color 0.2s;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.navigation a:hover {
+  background-color: #34495e;
+  color: #ffffff;
+}
+
+.navigation a.active {
+  background-color: #e67e22; /* Cor de destaque */
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.separator {
+  padding: 1.5rem 1rem 0.5rem;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #7f8c8d;
+}
+
+.sidebarBottom {
+  border-top: 1px solid #34495e;
+  padding-top: 1.5rem;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    padding: 0 1rem;
+    margin-bottom: 1rem;
+}
+
+.userInfo strong {
+    color: #fff;
+}
+
+.userInfo small {
+    color: #bdc3c7;
+    font-size: 0.8rem;
+}
+
+.logoutButton {
+  width: 100%;
+  padding: 0.7rem;
+  background-color: #c0392b;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.logoutButton:hover {
+  background-color: #e74c3c;
+}
+
+/* Responsividade */
+.menuToggle {
+  display: none; /* Escondido por padrão em telas grandes */
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1001;
+  background: #2c3e50;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+    box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+  }
+
+  .menuToggle {
+    display: block;
+  }
+}
