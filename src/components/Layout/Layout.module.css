@@ -1,0 +1,21 @@
+.appContainer {
+  display: flex;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 2rem;
+  margin-left: 250px; /* Espaço para a sidebar */
+  width: calc(100% - 250px);
+  transition: margin-left 0.3s ease-in-out;
+}
+
+/* Em telas pequenas, o conteúdo ocupa toda a largura */
+@media (max-width: 768px) {
+  .content {
+    margin-left: 0;
+    width: 100%;
+    padding: 1rem;
+    padding-top: 70px; /* Espaço para o botão do menu não sobrepor o conteúdo */
+  }
+}

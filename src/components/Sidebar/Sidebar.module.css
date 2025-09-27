@@ -61,17 +61,29 @@
   font-weight: bold;
 }
 
+/* SUBSTITUA O SEU .separator ATUAL POR ESTE */
 .separator {
+  /* Estilos para quando o separador tiver texto (como "Admin") */
   padding: 1.5rem 1rem 0.5rem;
   text-transform: uppercase;
   font-size: 0.75rem;
   font-weight: bold;
   color: #7f8c8d;
+  
+  /* Estilos que se aplicam a todos os separadores */
+  list-style: none; /* Garante que não tenha bolinha de lista */
+  cursor: default;  /* O cursor não muda ao passar por cima */
 }
 
-.sidebarBottom {
-  border-top: 1px solid #34495e;
-  padding-top: 1.5rem;
+/* Esta é a mágica! 
+  Quando um separador NÃO tiver texto dentro dele, 
+  nós aplicamos o estilo de linha.
+*/
+.separator:empty {
+  height: 1px; /* Espessura da linha */
+  background-color: #34495e; /* Cor da linha (um pouco mais clara que o fundo) */
+  margin: 1rem 0; /* Espaçamento em cima e embaixo da linha */
+  padding: 0; /* Remove o padding que definimos acima */
 }
 
 .userInfo {
