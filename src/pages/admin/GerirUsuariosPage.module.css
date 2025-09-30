@@ -6,7 +6,7 @@
 }
 
 .title {
-  color: #333;
+  color: #2a1e3b;
   margin-bottom: 1.5rem;
   border-bottom: 2px solid #f0f0f0;
   padding-bottom: 0.5rem;
@@ -84,7 +84,8 @@
 }
 
 .userTable th {
-  background-color: #f8f9fa;
+  background-color: #4D227E;
+  color: #ffff;
   font-weight: bold;
 }
 

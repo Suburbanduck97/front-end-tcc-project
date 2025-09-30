@@ -77,7 +77,7 @@ function DetalhesLivroPage() {
         
         <div className={styles.statusContainer}>
             <p><strong>Status:</strong> <span className={`${styles.status} ${styles[livro.statusLivro.toLowerCase()]}`}>{livro.statusLivro}</span></p>
-            <p><strong>Disponíveis:</strong> {livro.qdtDisponivel}</p>
+            <p><strong>Disponíveis:</strong> {livro.qtdDisponivel}</p>
         </div>
         
         <hr className={styles.separator} />

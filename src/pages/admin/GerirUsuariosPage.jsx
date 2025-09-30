@@ -123,16 +123,14 @@ function GerirUsuariosPage() {
               <tr>
                 <th>Nome</th>
                 <th>Email</th>
-                <th>CPF</th>
                 <th>Tipo</th>
               </tr>
             </thead>
             <tbody>
               {usuarios.map((usuario) => (
-                <tr key={usuario.cpf}> {/* Usando CPF como chave única */}
+                <tr key={usuario.email}> {/* Usando email como chave única */}
                   <td>{usuario.nome}</td>
                   <td>{usuario.email}</td>
-                  <td>{usuario.cpf}</td>
                   <td>{usuario.role === 'LEITOR' ? 'Leitor' : 'Bibliotecário'}</td>
                 </tr>
               ))}

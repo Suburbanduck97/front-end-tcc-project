@@ -67,7 +67,6 @@ const Sidebar = () => {
                     <li className={styles.separator}>Gestão</li>
                     <li><NavLink to="/admin/cadastrar-livro" className={({ isActive }) => isActive ? styles.active : ''} onClick={closeMenu}>Adicionar Livro</NavLink></li>
                     <li><NavLink to="/admin/emprestimos" className={({ isActive }) => isActive ? styles.active : ''} onClick={closeMenu}>Gerir Empréstimos</NavLink></li>
-                    <li><NavLink to="/admin/reservas" className={({ isActive }) => isActive ? styles.active : ''} onClick={closeMenu}>Gerir Reservas</NavLink></li>
                     <li><NavLink to="/admin/multas" className={({ isActive }) => isActive ? styles.active : ''} onClick={closeMenu}>Gerir Multas</NavLink></li>
                     <li><NavLink to="/admin/usuarios" className={({ isActive }) => isActive ? styles.active : ''} onClick={closeMenu}>Gerir Usuários</NavLink></li>
                     <li className={styles.separator}></li>

@@ -12,17 +12,16 @@ api.interceptors.request.use(
         // Pega o token no localStorage
         const token = localStorage.getItem('authToken');
 
-        // Se o token existir, adiciona ao cabeçalho de autorização
-        if (token) {
+        const publicEndpoints = ['/auth/signup', '/auth/login'];
+
+        if (token && !publicEndpoints.some(endpoint => config.url.includes(endpoint))) {
             config.headers.Authorization = `Bearer ${token}`;
         }
 
         return config; // Retorna a configuração da requisição (com ou sem token)
     },
-    (error) => {
-        // Faz algo com o erro da requisição
-        return Promise.reject(error);
-    }
+
+    (error) => Promise.reject(error)
 );
 
 export default api;
