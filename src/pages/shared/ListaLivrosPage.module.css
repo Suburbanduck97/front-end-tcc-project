@@ -5,36 +5,53 @@
 .pageContainer h1 {
   margin-top: 0;
   margin-bottom: 2rem;
-  color: #2c3e50;
+  color: #1c2b3a; /* Azul escuro */
 }
 
 .searchBar {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 2rem;
-  background-color: #fff;
+  background-color: #ffffff;
   padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
 }
 
 .searchInput {
   flex-grow: 1;
   padding: 0.75rem;
-  border: 1px solid #bdc3c7;
-  border-radius: 4px;
+  border: 1px solid #cbd5e1; /* Cinza claro */
+  border-radius: 6px;
   font-size: 1rem;
 }
 
-.searchButton, .clearButton {
+.searchButton,
+.clearButton {
   padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background-color 0.2s;
 }
-.searchButton { background-color: #2980b9; color: white; }
-.clearButton { background-color: #ecf0f1; color: #2c3e50; }
+
+.searchButton {
+  background-color: #1e3a8a; /* Azul escuro */
+  color: #ffffff;
+}
+.searchButton:hover {
+  background-color: #1d4ed8; /* Azul mais vivo */
+}
+
+.clearButton {
+  background-color: #f1f5f9; /* Cinza claro */
+  color: #1e293b; /* Azul grafite */
+}
+.clearButton:hover {
+  background-color: #e2e8f0;
+}
 
 .bookGrid {
   display: grid;
@@ -43,9 +60,9 @@
 }
 
 .bookCard {
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -54,10 +71,15 @@
 
 .bookCard:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
 
-.cardLink { text-decoration: none; color: inherit; flex-grow: 1; }
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  flex-grow: 1;
+}
+
 .cardContent {
   padding: 1.5rem;
   display: flex;
@@ -65,27 +87,48 @@
   gap: 0.5rem;
 }
 
-.cardContent h3 { margin: 0 0 0.5rem 0; color: #2c3e50; }
-.cardContent p { margin: 0; color: #7f8c8d; }
-.cardContent span { font-size: 0.9rem; color: #34495e; }
+.cardContent h3 {
+  margin: 0 0 0.5rem 0;
+  color: #1c2b3a; /* Azul escuro */
+}
+.cardContent p {
+  margin: 0;
+  color: #64748b; /* Cinza azulado */
+}
+.cardContent span {
+  font-size: 0.9rem;
+  color: #475569; /* Azul grafite */
+}
+
+.disponibilidade {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espaço entre o status e a quantidade */
+    margin-top: 10px;
+}
+
+.quantidade {
+    font-size: 0.9rem;
+    color: #555;
+}
 
 .status {
   margin-top: 1rem;
-  padding: 0.25rem 0.6rem;
-  border-radius: 12px;
+  padding: 0.35rem 0.8rem;
+  border-radius: 14px;
   font-size: 0.8rem;
   font-weight: bold;
   color: #fff;
   text-transform: uppercase;
   align-self: flex-start;
 }
-.status.disponivel { background-color: #27ae60; }
-.status.reservado { background-color: #f39c12; }
-.status.emprestado { background-color: #c0392b; }
+.status.disponivel { background-color: #16a34a; } /* Verde */
+.status.reservado { background-color: #f59e0b; } /* Laranja */
+.status.emprestado { background-color: #dc2626; } /* Vermelho */
 
 .adminActions {
   display: flex;
-  background-color: #f8f9fa;
+  background-color: #f8fafc; /* Cinza azulado suave */
   padding: 0.75rem 1.5rem;
   gap: 0.5rem;
 }
@@ -94,15 +137,30 @@
   flex-grow: 1;
   padding: 0.5rem 1rem;
   text-align: center;
-  border-radius: 4px;
+  border-radius: 6px;
   text-decoration: none;
   border: none;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 0.9rem;
+  transition: background-color 0.2s;
 }
-.btnEdit { background-color: #f1c40f; color: #333; }
-.btnDelete { background-color: #e74c3c; color: white; }
 
-.successMessage { color: #155724; }
-.errorMessage { color: #721c24; }
+.btnEdit {
+  background-color: #fbbf24; /* Amarelo ouro */
+  color: #1c1917;
+}
+.btnEdit:hover {
+  background-color: #f59e0b;
+}
+
+.btnDelete {
+  background-color: #ef4444; /* Vermelho */
+  color: white;
+}
+.btnDelete:hover {
+  background-color: #dc2626;
+}
+
+.successMessage { color: #166534; } /* Verde escuro */
+.errorMessage { color: #991b1b; } /* Vermelho escuro */

@@ -2,14 +2,14 @@
   background-color: #fff;
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
 .pageContainer h1 {
   margin-top: 0;
   margin-bottom: 2rem;
-  color: #2c3e50;
-  border-bottom: 2px solid #e67e22;
+  color: #1a237e; /* Azul escuro */
+  border-bottom: 2px solid #3949ab; /* Azul médio */
   padding-bottom: 0.5rem;
 }
 
@@ -18,7 +18,7 @@
 }
 
 .section h2 {
-  color: #34495e;
+  color: #1a237e; /* Azul escuro */
   margin-bottom: 1.5rem;
 }
 
@@ -35,13 +35,13 @@
 .table th,
 .table td {
   padding: 0.9rem 1rem;
-  border-bottom: 1px solid #ecf0f1;
+  border-bottom: 1px solid #e0e0e0; /* Cinza claro */
 }
 
 .table th {
-  background-color: #f8f9fa;
+  background-color: #f5f5f5;
   font-weight: 600;
-  color: #34495e;
+  color: #1a237e; /* Azul escuro */
 }
 
 .table tbody tr:hover {
@@ -62,12 +62,12 @@
 }
 
 .btnPrimary {
-  background-color: #27ae60;
+  background-color: #2e7d32; /* Verde principal */
   color: white;
 }
 
 .btnSecondary {
-  background-color: #f39c12;
+  background-color: #3949ab; /* Azul médio */
   color: white;
 }
 
@@ -81,15 +81,15 @@
 }
 
 .status.ativo {
-  background-color: #2980b9;
+  background-color: #2e7d32; /* Verde ativo */
 }
 
 .status.atrasado {
-  background-color: #c0392b;
+  background-color: #d32f2f; /* Vermelho mais suave */
 }
 
 .status.finalizado {
-  background-color: #7f8c8d;
+  background-color: #757575; /* Cinza neutro */
 }
 
 .emptyMessage {
@@ -97,7 +97,7 @@
   padding: 1rem;
   border-radius: 4px;
   text-align: center;
-  color: #7f8c8d;
+  color: #757575;
 }
 
 .successMessage,
@@ -110,12 +110,12 @@
 
 .successMessage {
   background-color: #d4edda;
-  color: #155724;
+  color: #2e7d32;
   border: 1px solid #c3e6cb;
 }
 
 .errorMessage {
   background-color: #f8d7da;
-  color: #721c24;
+  color: #d32f2f;
   border: 1px solid #f5c6cb;
 }

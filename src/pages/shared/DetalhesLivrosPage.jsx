@@ -85,7 +85,7 @@ function DetalhesLivroPage() {
         <div className={styles.actions}>
             <button 
               onClick={handleReservar} 
-              disabled={livro.statusLivro !== 'DISPONIVEL' || livro.qdtDisponivel <= 0}
+              disabled={livro.statusLivro !== 'DISPONIVEL' || livro.qtdDisponivel <= 0}
               className={styles.reserveButton}
             >
               Reservar Livro

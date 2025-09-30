@@ -2,14 +2,14 @@
   background-color: #fff;
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
 .pageContainer h1 {
   margin-top: 0;
   margin-bottom: 2rem;
-  color: #2c3e50;
-  border-bottom: 2px solid #e67e22;
+  color: #1a237e; /* Azul escuro */
+  border-bottom: 2px solid #3949ab; /* Azul médio */
   padding-bottom: 0.5rem;
 }
 
@@ -33,7 +33,7 @@
 .formGroup label {
   margin-bottom: 0.5rem;
   font-weight: 600;
-  color: #34495e;
+  color: #1a237e; /* Azul escuro para rótulos */
 }
 
 .formGroup input[type="text"],
@@ -42,7 +42,7 @@
 .formGroup textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #bdc3c7;
+  border: 1px solid #c5cae9; /* Cinza-azulado suave */
   border-radius: 4px;
   font-size: 1rem;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -51,8 +51,8 @@
 .formGroup input:focus,
 .formGroup textarea:focus {
   outline: none;
-  border-color: #e67e22;
-  box-shadow: 0 0 0 2px rgba(230, 126, 34, 0.2);
+  border-color: #3949ab; /* Azul médio */
+  box-shadow: 0 0 0 2px rgba(57, 73, 171, 0.2); /* Glow azul */
 }
 
 .formGroup textarea {
@@ -69,7 +69,7 @@
   padding: 0.8rem 1.5rem;
   border: none;
   border-radius: 4px;
-  background-color: #27ae60;
+  background-color: #2e7d32; /* Verde principal */
   color: white;
   font-size: 1.1rem;
   font-weight: bold;
@@ -78,17 +78,17 @@
 }
 
 .submitButton:hover {
-  background-color: #229954;
+  background-color: #1b5e20; /* Verde mais escuro */
 }
 
 .successMessage {
   margin-top: 1.5rem;
-  color: #27ae60;
+  color: #2e7d32; /* Verde */
   font-weight: 500;
 }
 
 .errorMessage {
   margin-top: 1.5rem;
-  color: #c0392b;
+  color: #d32f2f; /* Vermelho mais suave */
   font-weight: 500;
 }
