@@ -90,6 +90,24 @@ html, body {
   background-color: #f8f8f8;
 }
 
+.inputWrapper .input {
+  width: 100%;
+}
+
+.eyeIcon {
+  position: absolute;
+  right: 15px; /* Posição à direita do campo */
+  cursor: pointer;
+  color: #888; /* Cor cinza para o ícone */
+  display: flex;
+  align-items: center;
+}
+
+/* Opcional: Efeito hover para o ícone */
+.eyeIcon:hover {
+  color: #333;
+}
+
 .inputIcon {
   color: #000000;
   margin-right: 0.75rem;
@@ -165,6 +183,26 @@ html, body {
 
 .signupLink a:hover {
   text-decoration: underline;
+}
+
+.errorMessage {
+  color: #D8000C; /* Vermelho para erros */
+  background-color: #FFD2D2; /* Fundo vermelho claro */
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 15px;
+  text-align: center;
+  border: 1px solid #D8000C;
+}
+
+.successMessage {
+  color: #4F8A10; /* Verde para sucesso */
+  background-color: #DFF2BF; /* Fundo verde claro */
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 15px;
+  text-align: center;
+  border: 1px solid #4F8A10;
 }
 
 /* RESPONSIVIDADE */

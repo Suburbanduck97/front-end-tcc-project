@@ -2,27 +2,29 @@
 .pageContainer {
   display: flex;
   justify-content: center;
-  align-items: center; /* centraliza verticalmente */
+  /* ANTES: align-items: center; */
+  align-items: flex-start; /* DEPOIS: Alinha o form no topo */
   padding: 2rem;
   background-color: #f0f2f5;
   min-height: 100vh;
   box-sizing: border-box;
-  overflow-y: auto; /* scroll vertical apenas se necessário */
+  overflow-y: auto;
   overflow-x: hidden;
 }
 
 /* Container do formulário */
 .formContainer {
   background-color: #ffffff;
-  padding: 2rem 3rem; /* menos altura, mais largura */
+  padding: 2.5rem 3rem; /* Um pouco mais de padding lateral */
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-  width: 90%;           /* ocupa quase toda a largura da tela */
-  max-width: 800px;     /* largura máxima */
+  width: 90%;
+  max-width: 800px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  margin: 2rem 0; /* NOVO: Adiciona margem vertical */
 }
 
 /* Título do formulário */
@@ -59,6 +61,33 @@
   font-weight: 600;
   color: #555;
   font-size: 1rem;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* Garante que o input ocupe todo o espaço do wrapper */
+.inputWrapper .input {
+  width: 100%;
+}
+
+/* Estilo para o ícone do olho */
+.eyeIcon {
+  position: absolute;
+  right: 15px; /* Posição à direita do campo */
+  cursor: pointer;
+  color: #888; /* Cor cinza para o ícone */
+  display: flex;
+  align-items: center;
+}
+
+/* Opcional: Efeito hover para o ícone */
+.eyeIcon:hover {
+  color: #333;
 }
 
 /* Inputs e selects */
@@ -101,13 +130,24 @@
   transform: translateY(-2px);
 }
 
-/* Mensagem de erro */
 .errorMessage {
+  color: #D8000C; /* Vermelho para erros */
+  background-color: #FFD2D2; /* Fundo vermelho claro */
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 15px;
   text-align: center;
-  color: #d93025;
-  font-weight: 500;
-  margin-top: 1rem;
-  font-size: 0.95rem;
+  border: 1px solid #D8000C;
+}
+
+.successMessage {
+  color: #4F8A10; /* Verde para sucesso */
+  background-color: #DFF2BF; /* Fundo verde claro */
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 15px;
+  text-align: center;
+  border: 1px solid #4F8A10;
 }
 
 /* Responsividade */

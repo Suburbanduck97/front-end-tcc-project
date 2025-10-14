@@ -59,21 +59,61 @@
   background-color: #1a1a3a;
 }
 
-.message {
-  margin-top: 1.5rem;
-  padding: 0.8rem;
-  border-radius: 4px;
-  background-color: #e6f7ff;
-  border: 1px solid #91d5ff;
-  color: #0050b3;
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem; /* Adiciona espaçamento entre os campos */
 }
 
+.inputWrapper .input {
+  width: 100%;
+  padding-right: 40px; /* Adiciona espaço à direita no input para o ícone não sobrepor o texto */
+}
+
+/* Estilo para o ícone do olho */
+.eyeIcon {
+  position: absolute;
+  right: 15px;
+  cursor: pointer;
+  color: #888;
+}
+
+.eyeIcon:hover {
+  color: #333;
+}
+
+/* Estilos para Mensagens de Feedback */
+.errorMessage {
+  color: #D8000C;
+  background-color: #FFD2D2;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 15px;
+  text-align: center;
+  border: 1px solid #D8000C;
+  width: 100%;
+}
+
+.successMessage {
+  color: #4F8A10;
+  background-color: #DFF2BF;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 15px;
+  text-align: center;
+  border: 1px solid #4F8A10;
+  width: 100%;
+}
+
+/* Estilo para o link de voltar */
 .backLink {
   display: block;
-  margin-top: 1.5rem;
+  margin-top: 20px;
   color: #007bff;
   text-decoration: none;
-  font-weight: 500;
+  text-align: center;
 }
 
 .backLink:hover {

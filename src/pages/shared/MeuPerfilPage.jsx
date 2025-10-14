@@ -3,6 +3,7 @@ import { AuthContext } from "../../context/AuthContext";
 import api from '../../services/api';
 import { getEstados, getCidadesPorEstado } from '../../services/ibgeService';
 import styles from './MeuPerfilPage.module.css';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 // Ícones SVG para um visual mais profissional (Componentes locais)
 const UserIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>;
@@ -18,6 +19,12 @@ function MeuPerfilPage() {
     const [error, setError] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [updateMessage, setUpdateMessage] = useState({ type: '', content: '' });
+    
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const [showSenhaAtual, setShowSenhaAtual] = useState(false);
+    const [showNovaSenha, setShowNovaSenha] = useState(false);
+    const [showConfirmarNovaSenha, setShowConfirmarNovaSenha] = useState(false);
 
     const [estados, setEstados] = useState([]);
     const [cidades, setCidades] = useState([]);
@@ -88,6 +95,8 @@ function MeuPerfilPage() {
             return;
         }
 
+        setIsSubmitting(true);
+
         // Envia apenas os campos que podem ser alterados
         const dadosParaAtualizar = {
             nome: formData.nome,
@@ -118,6 +127,8 @@ function MeuPerfilPage() {
         } catch (err) {
             const errorMessage = err.response?.data?.message || "Não foi possível atualizar o perfil.";
             setUpdateMessage({ type: 'error', content: errorMessage });
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -179,14 +190,42 @@ function MeuPerfilPage() {
                         <hr className={styles.divider} />
                         <h4>Alterar Senha (opcional)</h4>
                         <div className={styles.infoGrid}>
-                             <div className={styles.infoItem}><label htmlFor="senhaAtual">Senha Atual</label><input type="password" id="senhaAtual" name="senhaAtual" value={formData.senhaAtual} onChange={handleChange} className={styles.input} placeholder="Deixe em branco se não for alterar"/></div>
-                             <div className={styles.infoItem}><label htmlFor="novaSenha">Nova Senha</label><input type="password" id="novaSenha" name="novaSenha" value={formData.novaSenha} onChange={handleChange} className={styles.input} placeholder="Mínimo 6 caracteres"/></div>
-                             <div className={styles.infoItem}><label htmlFor="confirmarNovaSenha">Confirmar Nova Senha</label><input type="password" id="confirmarNovaSenha" name="confirmarNovaSenha" value={formData.confirmarNovaSenha} onChange={handleChange} className={styles.input}/></div>
+                             <div className={styles.infoItem}>
+                                <label htmlFor="senhaAtual">Senha Atual</label>
+                                <div className={styles.inputWrapper}>
+                                    <input type={showSenhaAtual ? 'text' : 'password'} id="senhaAtual" name="senhaAtual" value={formData.senhaAtual} onChange={handleChange} className={styles.input} placeholder="Deixe em branco se não for alterar"/>
+                                    <span className={styles.eyeIcon} onClick={() => setShowSenhaAtual(!showSenhaAtual)}>
+                                        {showSenhaAtual ? <FaEyeSlash /> : <FaEye />}
+                                    </span>
+                                </div>
+                            </div>
+                             {/* MODIFICADO: Campo Nova Senha com ícone de olho */}
+                            <div className={styles.infoItem}>
+                                <label htmlFor="novaSenha">Nova Senha</label>
+                                <div className={styles.inputWrapper}>
+                                    <input type={showNovaSenha ? 'text' : 'password'} id="novaSenha" name="novaSenha" value={formData.novaSenha} onChange={handleChange} className={styles.input} placeholder="Mínimo 6 caracteres"/>
+                                    <span className={styles.eyeIcon} onClick={() => setShowNovaSenha(!showNovaSenha)}>
+                                        {showNovaSenha ? <FaEyeSlash /> : <FaEye />}
+                                    </span>
+                                </div>
+                            </div>
+                            {/* MODIFICADO: Campo Confirmar Senha com ícone de olho */}
+                            <div className={styles.infoItem}>
+                                <label htmlFor="confirmarNovaSenha">Confirmar Nova Senha</label>
+                                <div className={styles.inputWrapper}>
+                                    <input type={showConfirmarNovaSenha ? 'text' : 'password'} id="confirmarNovaSenha" name="confirmarNovaSenha" value={formData.confirmarNovaSenha} onChange={handleChange} className={styles.input}/>
+                                    <span className={styles.eyeIcon} onClick={() => setShowConfirmarNovaSenha(!showConfirmarNovaSenha)}>
+                                        {showConfirmarNovaSenha ? <FaEyeSlash /> : <FaEye />}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
 
                         <div className={styles.formActions}>
                             <button type="button" onClick={() => setIsEditing(false)} className={`${styles.actionButton} ${styles.cancelButton}`}>Cancelar</button>
-                            <button type="submit" className={`${styles.actionButton} ${styles.saveButton}`}>Salvar Alterações</button>
+                            <button type="submit" className={`${styles.actionButton} ${styles.saveButton}`} disabled={isSubmitting}>
+                                {isSubmitting ? 'Salvando...' : 'Salvar Alterações'}
+                            </button>
                         </div>
                     </form>
                 ) : (

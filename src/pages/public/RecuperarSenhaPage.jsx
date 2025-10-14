@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './RecuperarSenhaPage.module.css';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const RecuperarSenhaPage = () => {
     const navigate = useNavigate();
@@ -11,6 +12,9 @@ const RecuperarSenhaPage = () => {
     const [senha, setSenha] = useState('');
     const [confirmarSenha, setConfimarSenha] = useState('');
     
+    const [showSenha, setShowSenha] = useState(false);
+    const [showConfirmarSenha, setShowConfirmarSenha] = useState(false);
+
     // Estados para feedback
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
@@ -21,8 +25,8 @@ const RecuperarSenhaPage = () => {
         e.preventDefault();
         setLoading(true);
         setError('');
+        setMessage('');
         
-        // 🛑 VOCÊ PRECISARÁ CRIAR ESTE ENDPOINT NO SEU BACKEND
         try {
             const response = await fetch('http://localhost:8080/auth/recuperarSenha', {
                 method: 'POST',
@@ -34,11 +38,11 @@ const RecuperarSenhaPage = () => {
                 // E-mail verificado com sucesso, avança para o próximo passo
                 setStep(2);
             } else {
-                const errorText = await response.text();
-                setError(errorText || 'E-mail não encontrado ou inválido.');
+                const errorData = await response.json();
+                setError(errorData.message || 'E-mail não encontrado ou inválido.');
             }
         } catch {
-            setError('Erro ao conectar com o servidor.');
+            setError('Erro ao conectar com o servidor. Tente novamente mais tarde.');
         } finally {
             setLoading(false);
         }
@@ -56,7 +60,6 @@ const RecuperarSenhaPage = () => {
         setError('');
         setMessage('');
 
-        // 🛑 VOCÊ PRECISARÁ CRIAR ESTE ENDPOINT NO SEU BACKEND
         try {
             const response = await fetch('http://localhost:8080/auth/novaSenha', {
                 method: 'POST',
@@ -64,16 +67,16 @@ const RecuperarSenhaPage = () => {
                 body: JSON.stringify({ email, novaSenha: senha }),
             });
 
-            const responseText = await response.text();
+            const responseData = await response.json();
 
             if (response.ok) {
-                setMessage(responseText + ' Redirecionando para o login em 5 segundos...');
+                setMessage(responseData.message + ' Redirecionando para o login em 5 segundos...');
                 setTimeout(() => navigate('/login'), 5000);
             } else {
-                setError(responseText || 'Não foi possível redefinir a senha.');
+                setError(responseData.message || 'Não foi possível redefinir a senha.');
             }
         } catch {
-            setError('Erro ao conectar com o servidor.');
+            setError('Erro ao conectar com o servidor. Tente novamente mais tarde.');
         } finally {
             setLoading(false);
         }
@@ -107,22 +110,35 @@ const RecuperarSenhaPage = () => {
                         <h2>Definir Nova Senha</h2>
                         <p>Digite sua nova senha para o e-mail: <strong>{email}</strong></p>
                         <form onSubmit={handleResetPassword}>
-                            <input
-                                type="password"
-                                value={senha}
-                                onChange={(e) => setSenha(e.target.value)}
-                                placeholder="Nova Senha"
-                                required
-                                className={styles.input}
-                            />
-                            <input
-                                type="password"
-                                value={confirmarSenha}
-                                onChange={(e) => setConfimarSenha(e.target.value)}
-                                placeholder="Confirmar Nova Senha"
-                                required
-                                className={styles.input}
-                            />
+                            <div className={styles.inputWrapper}>
+                                <input
+                                    // MODIFICADO: Tipo dinâmico
+                                    type={showSenha ? "text" : "password"}
+                                    value={senha}
+                                    onChange={(e) => setSenha(e.target.value)}
+                                    placeholder="Nova Senha"
+                                    required
+                                    className={styles.input}
+                                />
+                                <span className={styles.eyeIcon} onClick={() => setShowSenha(!showSenha)}>
+                                    {showSenha ? <FaEyeSlash /> : <FaEye />}
+                                </span>
+                            </div>
+                            
+                            <div className={styles.inputWrapper}>
+                                <input
+                                    // MODIFICADO: Tipo dinâmico
+                                    type={showConfirmarSenha ? "text" : "password"}
+                                    value={confirmarSenha}
+                                    onChange={(e) => setConfimarSenha(e.target.value)}
+                                    placeholder="Confirmar Nova Senha"
+                                    required
+                                    className={styles.input}
+                                />
+                                <span className={styles.eyeIcon} onClick={() => setShowConfirmarSenha(!showConfirmarSenha)}>
+                                    {showConfirmarSenha ? <FaEyeSlash /> : <FaEye />}
+                                </span>
+                            </div>
                             <button type="submit" disabled={loading} className={styles.button}>
                                 {loading ? 'Redefinindo...' : 'Redefinir Senha'}
                             </button>
