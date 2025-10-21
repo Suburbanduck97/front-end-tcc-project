@@ -22,7 +22,6 @@ function MeuPerfilPage() {
     
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const [showSenhaAtual, setShowSenhaAtual] = useState(false);
     const [showNovaSenha, setShowNovaSenha] = useState(false);
     const [showConfirmarNovaSenha, setShowConfirmarNovaSenha] = useState(false);
 
@@ -44,17 +43,17 @@ function MeuPerfilPage() {
 
 
     const fetchPerfil = async () => {
-       if (!user) { setLoading(false); setError("Você precisa estar logado."); return; }
-        try {
-            const response = await api.get('/usuario/meuPerfil');
-            setPerfil(response.data);
-            const dataFormatada = response.data.dataNascimento ? response.data.dataNascimento.split('T')[0] : '';
-            setFormData({ ...response.data, dataNascimento: dataFormatada, senhaAtual: '', novaSenha: '', confirmarNovaSenha: '' });
-        } catch{
-            setError("Não foi possível carregar os dados do perfil.");
-        } finally {
-            setLoading(false);
-        }
+        if (!user) { setLoading(false); setError("Você precisa estar logado."); return; }
+            try {
+                const response = await api.get('/usuario/meuPerfil');
+                setPerfil(response.data);
+                const dataFormatada = response.data.dataNascimento ? response.data.dataNascimento.split('T')[0] : '';
+                setFormData({ ...response.data, dataNascimento: dataFormatada, senhaAtual: '', novaSenha: '', confirmarNovaSenha: '' });
+            } catch{
+                setError("Não foi possível carregar os dados do perfil.");
+            } finally {
+                setLoading(false);
+            }
     };
 
     
@@ -190,16 +189,7 @@ function MeuPerfilPage() {
                         <hr className={styles.divider} />
                         <h4>Alterar Senha (opcional)</h4>
                         <div className={styles.infoGrid}>
-                             <div className={styles.infoItem}>
-                                <label htmlFor="senhaAtual">Senha Atual</label>
-                                <div className={styles.inputWrapper}>
-                                    <input type={showSenhaAtual ? 'text' : 'password'} id="senhaAtual" name="senhaAtual" value={formData.senhaAtual} onChange={handleChange} className={styles.input} placeholder="Deixe em branco se não for alterar"/>
-                                    <span className={styles.eyeIcon} onClick={() => setShowSenhaAtual(!showSenhaAtual)}>
-                                        {showSenhaAtual ? <FaEyeSlash /> : <FaEye />}
-                                    </span>
-                                </div>
-                            </div>
-                             {/* MODIFICADO: Campo Nova Senha com ícone de olho */}
+                             {/* Campo Nova Senha com ícone de olho */}
                             <div className={styles.infoItem}>
                                 <label htmlFor="novaSenha">Nova Senha</label>
                                 <div className={styles.inputWrapper}>
@@ -209,7 +199,7 @@ function MeuPerfilPage() {
                                     </span>
                                 </div>
                             </div>
-                            {/* MODIFICADO: Campo Confirmar Senha com ícone de olho */}
+                            {/* Campo Confirmar Senha com ícone de olho */}
                             <div className={styles.infoItem}>
                                 <label htmlFor="confirmarNovaSenha">Confirmar Nova Senha</label>
                                 <div className={styles.inputWrapper}>
@@ -247,7 +237,7 @@ function MeuPerfilPage() {
                 )}
             </div>
         </div>
-    );
+    ); 
 }
 
 export default MeuPerfilPage;

@@ -1,72 +1,89 @@
-// src/services/livrosService
 import api from './api';
 
+/**
+ * Busca todos os livros cadastrados, ordenados por título.
+ * @returns {Promise<Array>} Uma lista de livros.
+ */
 export const getTodosLivros = async () => {
-  const response = await api.get('/livros');
-  return response.data;
+    const response = await api.get('/livros');
+    return response.data;
 };
 
-
-export const buscarLivrosPorTitulo = async (titulo) => {
-  // A rota é /livros/buscar/titulo/{titulo}
-  const response = await api.get(`/livros/buscar/titulo/${titulo}`);
-  return response.data;
+/**
+ * Busca os detalhes completos de um livro por ID, incluindo se o usuário atual já o reservou.
+ * @param {number} id O ID do livro.
+ * @returns {Promise<object>} Os detalhes completos do livro.
+ */
+export const getLivroDetalhes = async (id) => {
+    const response = await api.get(`/livros/detalhes/${id}`);
+    return response.data;
 };
 
-export const buscarLivrosPorAutor = async (autor) => {
-  // A rota é /livros/buscar/autor/{autor}
-  const response = await api.get(`/livros/buscar/autor/${autor}`);
-  return response.data;
-};
-
-export default async (termo) => {
-  // Isso irá gerar a URL: /livros/buscar?termo=valor_do_termo
-  const response = await api.get('/livros/buscar', { params: { termo } });
-  return response.data;
-};
-
-
+/**
+ * Busca um livro por seu ID (versão simplificada).
+ * @param {number} idLivro O ID do livro.
+ * @returns {Promise<object>} Os dados do livro.
+ */
 export const getLivroPorId = async (idLivro) => {
-  // Supõe que a rota GET /livros/{id} existe no back-end
-  const response = await api.get(`/livros/${idLivro}`);
-  return response.data;
+    const response = await api.get(`/livros/${idLivro}`);
+    return response.data;
 };
 
+/**
+ * Realiza uma busca geral por título, autor ou categoria.
+ * @param {string} termo O termo a ser buscado.
+ * @returns {Promise<Array>} Uma lista de livros que correspondem ao termo.
+ */
+export const buscarLivrosPorTermoGeral = async (termo) => {
+    // A rota no backend deve ser capaz de receber este parâmetro
+    const response = await api.get('/livros/buscar', { params: { termo } });
+    return response.data;
+};
+
+
+/**
+ * Cadastra um novo livro, incluindo a imagem da capa.
+ * @param {object} livroData Os dados textuais do livro.
+ * @param {File} capaFile O arquivo de imagem da capa.
+ * @returns {Promise<object>} O livro recém-cadastrado.
+ */
 export const cadastrarLivro = async (livroData, capaFile) => {
-  // 1. Criamos um objeto FormData. É assim que se envia arquivos.
-  const formData = new FormData();
+    const formData = new FormData();
 
-  // 2. Adicionamos cada campo de texto ao formData.
-  // As chaves ('titulo', 'autor', etc.) devem ser EXATAMENTE as mesmas
-  // que o @RequestParam espera no seu LivroController.
-  Object.keys(livroData).forEach(key => {
-    formData.append(key, livroData[key]);
-  });
+    Object.keys(livroData).forEach(key => {
+        formData.append(key, livroData[key]);
+    });
 
-  // 3. Adicionamos o arquivo da capa, se ele existir.
-  if (capaFile) {
-    formData.append('capa', capaFile);
-  }
+    if (capaFile) {
+        formData.append('capa', capaFile);
+    }
 
-  // 4. Fazemos a chamada POST, enviando o formData.
-  // É CRUCIAL definir o Content-Type como 'multipart/form-data'.
-  const response = await api.post('/livros/cadastrar', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-
-  return response.data;
+    const response = await api.post('/livros/cadastrar', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+    return response.data;
 };
 
-// Lista os livros
+/**
+ * Atualiza os dados de um livro existente.
+ * @param {number} idLivro O ID do livro a ser atualizado.
+ * @param {object} dadosAtualizados Os campos a serem atualizados.
+ * @returns {Promise<object>} O livro com os dados atualizados.
+ */
 export const atualizarLivro = async (idLivro, dadosAtualizados) => {
-  const response = await api.put(`/livros/atualizar/${idLivro}`, dadosAtualizados);
-  return response.data;
+    const response = await api.put(`/livros/atualizar/${idLivro}`, dadosAtualizados);
+    return response.data;
 };
 
-// deleta os livros pelos seus respectivos id
+/**
+ * Deleta um livro pelo seu ID.
+ * @param {number} idLivro O ID do livro a ser deletado.
+ * @returns {Promise<object>} A resposta da API.
+ */
 export const deletarLivro = async (idLivro) => {
-  const response = await api.delete(`/livros/remover/${idLivro}`);
-  return response.data;
+    const response = await api.delete(`/livros/remover/${idLivro}`);
+    return response.data;
 };
+

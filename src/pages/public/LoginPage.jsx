@@ -109,7 +109,7 @@ function LoginPage() {
                             </div>
                         </div>
                         <p className={styles.forgotPasswordLink}>
-                            Esqueceu a senha? <Link to="/recuperarSenha">recuperar</Link>
+                            Esqueceu a senha? <Link to="/solicitar-redefinicao">recuperar</Link>
                         </p>
                         <button type="submit" className={styles.mainButton} disabled={isLoading}>
                             {isLoading ? 'Entrando...' : 'Entrar'}

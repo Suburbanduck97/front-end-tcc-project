@@ -82,6 +82,50 @@ function GerirMultasPage() {
     return data.toLocaleDateString('pt-BR');
   };
 
+  const renderContent = () => {
+        if (loading) {
+            return <div className={styles.messageContainer}>Carregando...</div>;
+        }
+        if (error) {
+            return <div className={`${styles.messageContainer} ${styles.errorMessage}`}>{error}</div>;
+        }
+        if (multas.length === 0) { // ou usuarios.length === 0
+            return <div className={`${styles.messageContainer} ${styles.emptyMessage}`}>Nenhum item encontrado.</div>;
+        }
+
+        return (
+            <table className={styles.multasTable}>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Usuário</th>
+                <th>Livro</th>
+                <th>Valor</th>
+                <th>Data</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {multas.map((multa) => (
+                <tr key={multa.id}>
+                  <td>{multa.id}</td>
+                  <td>{multa.usuarioNome}</td>
+                  <td>{multa.livroTitulo}</td>
+                  <td>{`R$ ${multa.valor.toFixed(2)}`}</td>
+                  <td>{formatarData(multa.dataMulta)}</td>
+                  <td>
+                    <span className={`${styles.status} ${multa.statusMulta === 'PENDENTE' ? styles.statusPendente : styles.statusPago}`}>
+                      {multa.statusMulta}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        );
+      };
+
+
   return (
     <div className={styles.pageContainer}>
       <h2 className={styles.title}>Gerenciar Multas</h2>
@@ -113,47 +157,10 @@ function GerirMultasPage() {
           </select>
         </div>
       </div>
-
-      {/* Conteúdo: Tabela de Multas */}
       <div className={styles.content}>
-        {loading ? (
-          <p>Carregando multas...</p>
-        ) : error ? (
-          <p className={styles.errorMessage}>{error}</p>
-        ) : multas.length === 0 ? (
-          <p>Nenhuma multa encontrada.</p>
-        ) : (
-          <table className={styles.multasTable}>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Usuário</th>
-                <th>Livro</th>
-                <th>Valor</th>
-                <th>Data</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {multas.map((multa) => (
-                <tr key={multa.id}>
-                  <td>{multa.id}</td>
-                  <td>{multa.usuarioNome}</td>
-                  <td>{multa.livroTitulo}</td>
-                  <td>{`R$ ${multa.valor.toFixed(2)}`}</td>
-                  <td>{formatarData(multa.dataMulta)}</td>
-                  <td>
-                    <span className={`${styles.status} ${multa.statusMulta === 'PENDENTE' ? styles.statusPendente : styles.statusPago}`}>
-                      {multa.statusMulta}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+          {renderContent()}
       </div>
-    </div>
+      </div>
   );
 }
 

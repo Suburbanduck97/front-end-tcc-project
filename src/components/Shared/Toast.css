@@ -1,0 +1,77 @@
+/* Estilo para o container que vai segurar todos os toasts */
+.toastContainer {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Estilo base para cada notificação */
+.toast {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    min-width: 300px;
+    animation: slideIn 0.3s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animação de entrada */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Estilos específicos para cada tipo de toast */
+.toast.success {
+    background-color: #28a745; /* Verde */
+}
+
+.toast.error {
+    background-color: #dc3545; /* Vermelho */
+}
+
+/* Ícone dentro do toast */
+.toastIcon {
+    margin-right: 15px;
+    font-size: 1.5rem;
+}
+
+/* Mensagem */
+.toastMessage {
+    flex-grow: 1;
+}
+
+/* Barra de progresso para o tempo de vida */
+.progressBar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.7);
+    animation: shrink 5s linear forwards; /* 'forwards' mantém o estado final */
+}
+
+@keyframes shrink {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0%;
+    }
+}
+

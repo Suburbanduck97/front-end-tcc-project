@@ -28,10 +28,11 @@ function MinhasMultasPage() {
         if (!idUsuario) throw new Error("ID do usuário não encontrado no token.");
 
         const data = await getMultasPorUsuario(idUsuario);
-        setMultas(data);
+        setMultas(data || []);
       } catch (err) {
         console.error("Erro ao buscar multas:", err);
-        setError("Não foi possível carregar suas multas.");
+        const errorMessage = err.response?.data?.message || "Não foi possível carregar suas multas.";
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }
@@ -40,19 +41,19 @@ function MinhasMultasPage() {
     fetchMultas();
   }, [user]);
 
-  if (loading) {
-    return <p>Carregando suas multas...</p>;
-  }
+  const renderContent = () => {
+        if (loading) {
+            return <div className={styles.messageContainer}>Carregando suas multas...</div>;
+        }
+        if (error) {
+            return <div className={`${styles.messageContainer} ${styles.errorMessage}`}>{error}</div>;
+        }
+        if (multas.length === 0) {
+            return <div className={`${styles.messageContainer} ${styles.emptyMessage}`}>Você não possui nenhuma multa no momento.</div>;
+        }
 
-  if (error) {
-    return <p className={styles.errorMessage}>{error}</p>;
-  }
-
-  return (
-    <div className={styles.pageContainer}>
-      <h1>Minhas Multas</h1>
-      {multas.length > 0 ? (
-        <div className={styles.tableContainer}>
+        return (
+          <div className={styles.tableContainer}>
           <table className={styles.table}>
             <thead>
               <tr>
@@ -76,9 +77,13 @@ function MinhasMultasPage() {
             </tbody>
           </table>
         </div>
-      ) : (
-        <p className={styles.emptyMessage}>Você não possui nenhuma multa no momento.</p>
-      )}
+        );
+      };
+
+  return (
+    <div className={styles.pageContainer}>
+      <h1>Minhas Multas</h1>
+        {renderContent()}
     </div>
   );
 }

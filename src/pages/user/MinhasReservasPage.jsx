@@ -22,15 +22,11 @@ function MinhasReservasPage() {
       try {
         // A chamada de API agora é mais simples, não precisamos do ID!
         const data = await getMinhasReservas();
-        setReservas(data);
+        setReservas(data || []);
       } catch (err) {
         console.error("Erro ao buscar reservas:", err);
-        // Verifica se a resposta é a mensagem "Você não possui nenhuma reserva."
-        if (err.response && err.response.status === 200) {
-            setReservas([]);
-        } else {
-            setError("Não foi possível carregar suas reservas.");
-        }
+        const errorMessage = err.response?.data?.message || "Não foi possível carregar suas reservas.";
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }
@@ -47,19 +43,19 @@ function MinhasReservasPage() {
     });
   };
 
-  if (loading) {
-    return <p>Carregando suas reservas...</p>;
-  }
+  const renderContent = () => {
+        if (loading) {
+            return <div className={styles.messageContainer}>Carregando suas reservas...</div>;
+        }
+        if (error) {
+            return <div className={`${styles.messageContainer} ${styles.errorMessage}`}>{error}</div>;
+        }
+        if (reservas.length === 0) {
+            return <div className={`${styles.messageContainer} ${styles.emptyMessage}`}>Você não possui nenhuma reserva no momento.</div>;
+        }
 
-  if (error) {
-    return <p className={styles.errorMessage}>{error}</p>;
-  }
-
-  return (
-   <div className={styles.pageContainer}>
-      <h1>Minhas Reservas</h1>
-      {reservas.length > 0 ? (
-        <div className={styles.grid}>
+        return (
+          <div className={styles.grid}>
           {reservas.map((reserva) => (
             <div key={reserva.id} className={styles.card}>
               <h3 className={styles.cardTitle}>{reserva.livro.titulo}</h3>
@@ -74,9 +70,14 @@ function MinhasReservasPage() {
             </div>
           ))}
         </div>
-      ) : (
-        <p className={styles.emptyMessage}>Você não possui nenhuma reserva no momento.</p>
-      )}
+        );
+
+  };
+
+  return (
+   <div className={styles.pageContainer}>
+      <h1>Minhas Reservas</h1>
+        {renderContent()}
     </div>
   );
 }

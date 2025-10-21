@@ -1,17 +1,18 @@
-// src/pages/admin/EditarLivroPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getLivroPorId, atualizarLivro } from '../../services/livroService'; // 1. Importa a função de atualizar
+import { getLivroPorId, atualizarLivro } from '../../services/livroService';
 import styles from './EditarLivroPage.module.css';
 
 function EditarLivroPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   
-  const [livroOriginal, setLivroOriginal] = useState(null); // Guarda o estado original
+  const [livroOriginal, setLivroOriginal] = useState(null); 
   const [formData, setFormData] = useState(null);
+  
   const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false); // <-- Estado de envio
+  const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -25,10 +26,10 @@ function EditarLivroPage() {
           descricao: data.descricao || ''
         };
         setFormData(dadosFormulario);
-        setLivroOriginal(dadosFormulario); // Salva uma cópia dos dados originais
+        setLivroOriginal(dadosFormulario); 
       } catch (error) {
         console.error("Erro ao carregar livro para edição:", error);
-        setMessage('Erro ao carregar dados do livro.');
+        setError(error.response?.data?.message || 'Erro ao carregar dados do livro.');
       } finally {
         setLoading(false);
       }
@@ -41,38 +42,52 @@ function EditarLivroPage() {
     setFormData(prevState => ({ ...prevState, [id]: value }));
   };
 
+  // <-- CORRIGIDO 1: Adicionada a função de cancelar
+  const handleCancel = () => {
+    navigate(-1); // Simplesmente volta para a página anterior
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage('');
+    setSuccess('');
     setError('');
+    setIsSubmitting(true); // <-- CORRIGIDO 2: Ativa o estado de envio
 
-    // 2. Compara os dados do formulário com os originais para encontrar o que mudou
     const dadosAtualizados = {};
     for (const key in formData) {
-      if (formData[key] !== livroOriginal[key]) {
-        dadosAtualizados[key] = formData[key];
+      // Converte valores numéricos para comparação correta
+      const formValue = (key === 'anoPublicacao' || key === 'qtdTotal') ? Number(formData[key]) : formData[key];
+      const originalValue = (key === 'anoPublicacao' || key === 'qtdTotal') ? Number(livroOriginal[key]) : livroOriginal[key];
+
+      if (formValue !== originalValue) {
+        dadosAtualizados[key] = formValue;
       }
     }
 
     if (Object.keys(dadosAtualizados).length === 0) {
-      setMessage("Nenhuma alteração foi feita.");
+      setError("Nenhuma alteração foi feita.");
+      setIsSubmitting(false); // <-- Importante: parar o envio aqui também
       return;
     }
 
     try {
-      // 3. Envia apenas os dados que foram alterados para a API
       await atualizarLivro(id, dadosAtualizados);
-      alert('Livro atualizado com sucesso!');
-      navigate('/livros');
-    } catch (error) {
-      console.error("Erro ao atualizar livro:", error);
-      setMessage(error.response?.data?.message || 'Não foi possível atualizar o livro.');
+      setSuccess('Livro atualizado com sucesso! Redirecionando...');
+      
+      // Atualiza o "livroOriginal" para que o usuário não possa salvar de novo sem novas mudanças
+      setLivroOriginal(formData); 
+      
+      setTimeout(() => navigate(`/livros/${id}`), 2000); // Redireciona para a pág. de detalhes
+    } catch (err) {
+      console.error("Erro ao atualizar livro:", err);
+      setError(err.response?.data?.message  || 'Não foi possível atualizar o livro.');
+    } finally {
+      setIsSubmitting(false); // Desativa o estado de envio, ocorrendo sucesso ou erro
     }
   };
 
-  if (loading) return <p>Carregando livro para edição...</p>;
-  if (error) return <p className={styles.errorMessage}>{error}</p>;
-  if (!formData) return <p>Nenhum dado de livro encontrado.</p>;
+  if (loading) return <p>Carregando...</p>;
+  if (!formData) return <p className={styles.errorMessage}>Erro ao carregar dados do livro.</p>;
 
   return (
     <div className={styles.pageContainer}>
@@ -108,9 +123,18 @@ function EditarLivroPage() {
             <textarea id="descricao" value={formData.descricao} onChange={handleChange}></textarea>
           </div>
         </div>
-        <button type="submit" className={styles.submitButton}>Salvar Alterações</button>
+        <div className={styles.formActions}>
+          {/* <-- CORRIGIDO 3: Botões agora usam 'isSubmitting' --> */}
+          <button type="submit" className={styles.saveButton} disabled={isSubmitting}>
+            {isSubmitting ? 'Salvando...' : 'Salvar Alterações'}
+          </button>
+          <button type="button" onClick={handleCancel} className={styles.cancelButton} disabled={isSubmitting}>
+            Cancelar
+          </button>
+        </div>
       </form>
-      {message && <p className={styles.infoMessage}>{message}</p>}
+      {success && <p className={styles.successMessage}>{success}</p>}
+      {error && <p className={styles.errorMessage}>{error}</p>}
     </div>
   );
 }

@@ -76,7 +76,38 @@ function GerirUsuariosPage() {
       setLoading(false);
     }
   };
+  const renderContent = () => {
+        if (loading) {
+            return <div className={styles.messageContainer}>Carregando...</div>;
+        }
+        if (error) {
+            return <div className={`${styles.messageContainer} ${styles.errorMessage}`}>{error}</div>;
+        }
+        if (usuarios.length === 0) {
+            return <div className={`${styles.messageContainer} ${styles.emptyMessage}`}>Nenhum item encontrado.</div>;
+        }
 
+        return (
+          <table className={styles.userTable}>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Tipo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {usuarios.map((usuario) => (
+                <tr key={usuario.email}> {/* Usando email como chave única */}
+                  <td>{usuario.nome}</td>
+                  <td>{usuario.email}</td>
+                  <td>{usuario.role === 'LEITOR' ? 'Leitor' : 'Bibliotecário'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        );
+      };
   return (
     <div className={styles.pageContainer}>
       <h2 className={styles.title}>Gerenciar Usuários</h2>
@@ -108,37 +139,11 @@ function GerirUsuariosPage() {
           </select>
         </div>
       </div>
-
-      {/* Exibição da Lista de Usuários */}
       <div className={styles.content}>
-        {loading ? (
-          <p>Carregando usuários...</p>
-        ) : error ? (
-          <p className={styles.errorMessage}>{error}</p>
-        ) : usuarios.length === 0 ? (
-          <p>Nenhum usuário encontrado.</p>
-        ) : (
-          <table className={styles.userTable}>
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Email</th>
-                <th>Tipo</th>
-              </tr>
-            </thead>
-            <tbody>
-              {usuarios.map((usuario) => (
-                <tr key={usuario.email}> {/* Usando email como chave única */}
-                  <td>{usuario.nome}</td>
-                  <td>{usuario.email}</td>
-                  <td>{usuario.role === 'LEITOR' ? 'Leitor' : 'Bibliotecário'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+          {renderContent()}
       </div>
-    </div>
+      </div>
+  
   );
 }
 

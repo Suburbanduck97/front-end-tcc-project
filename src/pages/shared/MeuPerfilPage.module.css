@@ -147,6 +147,29 @@
   padding: 2rem;
 }
 
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.inputWrapper .input {
+  width: 100%;
+  padding-right: 40px; /* Espaço para o ícone não sobrepor o texto */
+}
+
+.eyeIcon {
+  position: absolute;
+  right: 15px;
+  cursor: pointer;
+  color: #888;
+}
+
+.eyeIcon:hover {
+  color: #333;
+}
+
 /* Responsividade */
 @media (max-width: 768px) {
   .infoGrid {

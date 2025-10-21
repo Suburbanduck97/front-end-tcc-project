@@ -1,188 +1,191 @@
-/* Container principal da página */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+/* --- NOVAS VARIÁVEIS DE COR --- */
+:root {
+  --primary-color: #612B9F; 
+  --primary-hover-color: #7700ff;
+  --primary-color-link: #0E0F30;
+}
+
 .pageContainer {
-  display: flex;
-  justify-content: center;
-  /* ANTES: align-items: center; */
-  align-items: flex-start; /* DEPOIS: Alinha o form no topo */
-  padding: 2rem;
-  background-color: #f0f2f5;
-  min-height: 100vh;
-  box-sizing: border-box;
-  overflow-y: auto;
-  overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    padding: 2rem;
+    background-color: #f0f2f5;
+    min-height: 100vh;
 }
 
-/* Container do formulário */
 .formContainer {
-  background-color: #ffffff;
-  padding: 2.5rem 3rem; /* Um pouco mais de padding lateral */
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-  width: 90%;
-  max-width: 800px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin: 2rem 0; /* NOVO: Adiciona margem vertical */
+    background-color: #ffffff;
+    padding: 2.5rem 3rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 1400px; /* Mantido largo */
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
-/* Título do formulário */
 .title {
-  text-align: center;
-  margin-bottom: 1.5rem;
-  color: #2c2c54;
-  font-size: 2rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--primary-color-link); /* ATUALIZADO */
+    font-size: 2rem;
+    font-weight: 700;
 }
 
-/* Grid de campos do formulário */
 .formGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr); /* 12 colunas */
+    gap: 1.2rem 1.5rem;
 }
 
-/* Campo que ocupa toda a largura */
-.fullWidth {
-  grid-column: 1 / -1;
+.sectionTitle {
+    grid-column: 1 / -1; /* Ocupa a largura inteira */
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary-color); /* ATUALIZADO */
+    border-bottom: 1px solid #dee2e6;
+}
+.sectionTitle:first-of-type {
+    margin-top: 0;
 }
 
-/* Grupo de label + input */
+/* --- CLASSES DE COLUNA ATUALIZADAS (incluindo as menores) --- */
+.col_1 { grid-column: span 1; }
+.col_2 { grid-column: span 2; }
+.col_3 { grid-column: span 3; }
+.col_4 { grid-column: span 4; }
+.col_5 { grid-column: span 5; }
+.col_6 { grid-column: span 6; }
+.col_7 { grid-column: span 7; }
+.col_8 { grid-column: span 8; }
+.col_9 { grid-column: span 9; }
+.col_10 { grid-column: span 10; }
+.col_11 { grid-column: span 11; }
+.col_12 { grid-column: span 12; }
+
 .formGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
 }
 
-/* Labels */
 .label {
-  font-weight: 600;
-  color: #555;
-  font-size: 1rem;
+    font-weight: 500;
+    color: #495057;
+    font-size: 0.9rem;
 }
 
 .inputWrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
 }
 
-/* Garante que o input ocupe todo o espaço do wrapper */
 .inputWrapper .input {
-  width: 100%;
+    width: 100%;
+    padding-right: 40px;
 }
 
-/* Estilo para o ícone do olho */
 .eyeIcon {
-  position: absolute;
-  right: 15px; /* Posição à direita do campo */
-  cursor: pointer;
-  color: #888; /* Cor cinza para o ícone */
-  display: flex;
-  align-items: center;
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    color: #888;
 }
 
-/* Opcional: Efeito hover para o ícone */
-.eyeIcon:hover {
-  color: #333;
-}
-
-/* Inputs e selects */
 .input,
 .select {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  background-color: #f8f8f8;
-  transition: all 0.2s;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #f8f9fa;
+    transition: all 0.2s;
 }
 
 .input:focus,
 .select:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
-  background-color: #fff;
+    outline: none;
+    border-color: var(--primary-color); /* ATUALIZADO */
+    /* ATUALIZADO: Sombra com a cor primária (RGB de #612B9F é 97, 43, 159) */
+    box-shadow: 0 0 0 3px rgba(97, 43, 159, 0.25); 
+    background-color: #fff;
 }
 
-/* Botão de envio */
 .submitButton {
-  width: 100%;
-  padding: 0.9rem;
-  border: none;
-  border-radius: 8px;
-  background-color: #2c2c54;
-  color: white;
-  font-size: 1.1rem;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 1.5rem;
-  transition: all 0.2s ease-in-out;
+    width: 100%;
+    padding: 0.9rem;
+    border: none;
+    border-radius: 8px;
+    /* ATUALIZADO: Gradiente com novas cores */
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-hover-color));
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    transition: all 0.3s ease;
 }
 
 .submitButton:hover {
-  background-color: #1a1a3a;
-  transform: translateY(-2px);
+    transform: translateY(-2px);
+    /* ATUALIZADO: Sombra com a cor de hover (RGB de #7700ff é 119, 0, 255) */
+    box-shadow: 0 4px 15px rgba(119, 0, 255, 0.3);
 }
 
-.errorMessage {
-  color: #D8000C; /* Vermelho para erros */
-  background-color: #FFD2D2; /* Fundo vermelho claro */
-  padding: 10px;
-  border-radius: 5px;
-  margin-top: 15px;
-  text-align: center;
-  border: 1px solid #D8000C;
+.submitButton:disabled {
+    background: #a0a0b8;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
-.successMessage {
-  color: #4F8A10; /* Verde para sucesso */
-  background-color: #DFF2BF; /* Fundo verde claro */
-  padding: 10px;
-  border-radius: 5px;
-  margin-top: 15px;
-  text-align: center;
-  border: 1px solid #4F8A10;
-}
-
-/* Responsividade */
+/* --- RESPONSIVIDADE (ATUALIZADA para incluir novas classes) --- */
 @media (max-width: 1024px) {
-  .formContainer {
-    max-width: 700px;
-    padding: 2rem 2rem;
-  }
+    .formGrid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+    .col_1, .col_2 { grid-column: span 2; } /* Ajuste para colunas pequenas */
+    .col_3, .col_4 { grid-column: span 3; }
+    .col_5, .col_6, .col_7, .col_8, .col_9, .col_10, .col_11, .col_12 { grid-column: span 6; }
 }
 
 @media (max-width: 768px) {
-  .formGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .formContainer {
-    padding: 1.8rem 1.5rem;
-  }
-
-  .title {
-    font-size: 1.8rem;
-  }
+    .formContainer {
+        padding: 2rem 1.5rem;
+    }
+    .formGrid {
+        grid-template-columns: 1fr;
+    }
+    /* ATUALIZADO: Garante que TODAS as colunas ocupem a largura total */
+    .col_1, .col_2, .col_3, .col_4, .col_5, .col_6, .col_7, .col_8, .col_9, .col_10, .col_11, .col_12 {
+        grid-column: span 1;
+    }
 }
 
-@media (max-width: 480px) {
-  .formContainer {
-    padding: 1.5rem 1rem;
-  }
+.formContainer::-webkit-scrollbar { width: 8px; }
+.formContainer::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+.formContainer::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
+.formContainer::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
 
-  .submitButton {
-    padding: 0.8rem;
-    font-size: 1rem;
-  }
-
-  .title {
-    font-size: 1.6rem;
-  }
+.errorMessage,
+.successMessage {
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 1rem;
+    text-align: center;
+    border-style: solid;
+    border-width: 1px;
+    width: 100%;
+    grid-column: 1 / -1;
 }
+.errorMessage { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
+.successMessage { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }

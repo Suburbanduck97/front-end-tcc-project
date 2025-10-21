@@ -92,3 +92,40 @@
 .userTable tbody tr:hover {
   background-color: #f1f1f1;
 }
+
+/* Para mensagens de sucesso e erro em formulários */
+.successMessage {
+  color: #4F8A10;
+  background-color: #DFF2BF;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 15px;
+  text-align: center;
+  border: 1px solid #4F8A10;
+}
+
+.errorMessage {
+  color: #D8000C;
+  background-color: #FFD2D2;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 15px;
+  text-align: center;
+  border: 1px solid #D8000C;
+}
+
+/* Para mensagens de status em páginas de listagem (GerirMultas, GerirUsuarios) */
+.messageContainer {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-top: 20px;
+  font-size: 1.1rem;
+  color: #555;
+  border: 1px solid #eee;
+}
+
+.emptyMessage {
+  color: #666;
+}

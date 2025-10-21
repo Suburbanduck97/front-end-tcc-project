@@ -47,7 +47,7 @@
 
 .statusContainer {
   display: flex;
-  gap: 2rem;
+  gap: 5rem;
   align-items: center;
   margin-bottom: 1.5rem;
   color: #1a237e;
@@ -62,9 +62,12 @@
   text-transform: uppercase;
 }
 
+/* --- CORRIGIDO: Adicionado fallback para status nulo --- */
 .status.disponivel { background-color: #2e7d32; } /* Verde */
 .status.reservado  { background-color: #3949ab; } /* Azul médio */
 .status.emprestado { background-color: #d32f2f; } /* Vermelho */
+.status.indisponivel { background-color: #616161; } /* Cinza */
+
 
 .separator {
   border: none;
@@ -76,10 +79,11 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  width: 100%; /* Garante que os containers de ação ocupem o espaço */
 }
 
 .reserveButton {
-  padding: 0.8rem 1.5rem;
+  padding: 0.6rem 1.5rem;
   border: none;
   border-radius: 4px;
   background-color: #2e7d32; /* Verde principal */
@@ -88,6 +92,7 @@
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s;
+  max-width: 300px; /* Limite opcional */
 }
 
 .reserveButton:hover:not(:disabled) {
@@ -104,6 +109,7 @@
   padding: 0.8rem;
   border-radius: 4px;
   width: 100%;
+  box-sizing: border-box; /* Garante padding correto */
 }
 
 .successMessage {
@@ -121,6 +127,51 @@
   color: #3949ab; /* Azul médio */
 }
 
+/* --- ESTILOS ADICIONADOS --- */
+
+/* Container para os botões de admin */
+.adminActions {
+  display: flex; /* Coloca os botões lado a lado */
+  gap: 1rem;     /* Espaçamento entre os botões */
+  width: 100%;   /* O container ocupa a largura */
+  /* Os botões NÃO vão mais esticar */
+}
+
+/* Classe base do botão de admin */
+.btn {
+  /* REMOVIDO: flex-grow: 1; */ 
+  padding: 0.6rem 1.5rem; /* Padding ajustado (mais sutil) */
+  text-align: center;
+  border-radius: 6px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem; /* Fonte menor */
+  transition: all 0.2s;
+}
+
+.btnEdit {
+  background-color: #fbbf24; /* Amarelo ouro */
+  color: #1c1917;
+}
+.btnEdit:hover {
+  background-color: #f59e0b;
+  transform: translateY(-2px);
+}
+
+.btnDelete {
+  background-color: #ef4444; /* Vermelho */
+  color: white;
+}
+.btnDelete:hover {
+  background-color: #dc2626;
+  transform: translateY(-2px);
+}
+
+/* --- FIM DOS ESTILOS ADICIONADOS --- */
+
+
 @media (max-width: 768px) {
   .pageContainer {
     flex-direction: column;
@@ -137,5 +188,11 @@
   .actions {
     align-items: center;
     width: 100%;
+  }
+  .reserveButton {
+    max-width: none; /* Ocupa 100% no mobile */
+  }
+  .adminActions {
+    flex-direction: column; /* Empilha os botões de admin no mobile */
   }
 }

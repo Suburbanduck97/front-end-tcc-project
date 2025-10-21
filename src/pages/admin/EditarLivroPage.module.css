@@ -87,6 +87,56 @@
   background-color: #1b5e20; /* Verde mais escuro */
 }
 
+/* --- Estilos dos Botões de Ação do Formulário --- */
+
+.formActions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  align-items: center;
+}
+
+.saveButton {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #2e7d32; /* Verde principal (igual ao submitButton antigo) */
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.saveButton:hover:not(:disabled) {
+  background-color: #1b5e20; /* Verde mais escuro */
+}
+
+/* Estilo para "Cancelar" (botão secundário/fantasma) */
+.cancelButton {
+  padding: 0.6rem 1.2rem;
+  border: 1px solid #6c757d; /* Borda cinza neutra */
+  border-radius: 4px;
+  background-color: #8a8a8a;
+  color: #ffffff; /* Texto cinza neutro */
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer; 
+  transition: all 0.2s;
+}
+
+.cancelButton:hover:not(:disabled) {
+  background-color: #a7a7a7; /* Fundo cinza bem claro ao passar o mouse */
+  color: #212529; /* Texto escurece */
+}
+
+/* Estilos para botões desativados (durante o envio) */
+.saveButton:disabled,
+.cancelButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
 .infoMessage {
   margin-top: 1.5rem;
   color: #3949ab; /* Azul médio para info */
@@ -97,4 +147,41 @@
   margin-top: 1.5rem;
   color: #d32f2f; /* Vermelho mais suave */
   font-weight: 500;
+}
+
+/* Para mensagens de sucesso e erro em formulários */
+.successMessage {
+  color: #4F8A10;
+  background-color: #DFF2BF;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 15px;
+  text-align: center;
+  border: 1px solid #4F8A10;
+}
+
+.errorMessage {
+  color: #D8000C;
+  background-color: #FFD2D2;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 15px;
+  text-align: center;
+  border: 1px solid #D8000C;
+}
+
+/* Para mensagens de status em páginas de listagem (GerirMultas, GerirUsuarios) */
+.messageContainer {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-top: 20px;
+  font-size: 1.1rem;
+  color: #555;
+  border: 1px solid #eee;
+}
+
+.emptyMessage {
+  color: #666;
 }

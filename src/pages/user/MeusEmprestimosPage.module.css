@@ -87,3 +87,27 @@
   color: #64748b;
   font-size: 1.1rem;
 }
+
+/* Container genérico para todas as mensagens de feedback */
+.messageContainer {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-top: 20px;
+  font-size: 1.1rem;
+  color: #555;
+  border: 1px solid #eee;
+}
+
+/* Estilo específico para mensagens de erro */
+.errorMessage {
+  background-color: #FFD2D2;
+  color: #D8000C;
+  border-color: #D8000C;
+}
+
+/* Estilo específico para mensagens de "vazio" (pode ser o mesmo que o padrão) */
+.emptyMessage {
+  color: #666;
+}

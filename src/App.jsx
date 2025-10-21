@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
+import { ToastProvider } from './context/ToastContext.jsx';
 // 1. Importe os componentes necessários
 import Layout from './components/Layout/Layout.jsx';
 import AdminRoute from './components/AdminRoute.jsx';
@@ -9,7 +9,9 @@ import ProtectedRoute from './components/ProtectedRoute.jsx';
 // Páginas Públicas
 import LoginPage from './pages/public/LoginPage.jsx';
 import CadastroPage from './pages/public/CadastroPage.jsx';
-import RecuperarSenhaPage from './pages/public/RecuperarSenhaPage.jsx';;
+import SolicitarRedefinicaoPage from './pages/public/SolicitarRedefinicaoPage.jsx';
+import ResetarSenhaPage from './pages/public/ResetarSenhaPage.jsx';
+
 
 // Páginas Protegidas
 import ListaLivrosPage from './pages/shared/ListaLivrosPage.jsx';
@@ -17,7 +19,7 @@ import DetalhesLivroPage from './pages/shared/DetalhesLivrosPage.jsx';
 import MeuPerfilPage from './pages/shared/MeuPerfilPage.jsx';
 import MeusEmprestimosPage from './pages/user/MeusEmprestimosPage.jsx';
 import MinhasReservasPage from './pages/user/MinhasReservasPage.jsx';
-import MinhasMultasPage from './pages/user/MinhasMultas.jsx';
+import MinhasMultasPage from './pages/user/MinhasMultasPage.jsx';
 
 // Páginas de Admin
 import CadastrarLivroPage from './pages/admin/CadastrarLivroPage.jsx';
@@ -32,13 +34,15 @@ import './App.css';
 
 function App() {
   return (
+    <ToastProvider> 
     <Router>
       <Routes>
         {/* === ROTAS PÚBLICAS (Sem Sidebar) === */}
         <Route path='/login' element={<LoginPage />} />
         <Route path='/cadastro' element={<CadastroPage />} />
         <Route path='/' element={<LoginPage />} />
-        <Route path='/recuperarSenha' element={<RecuperarSenhaPage />} />
+        <Route path='/solicitar-redefinicao' element={<SolicitarRedefinicaoPage />} />
+        <Route path='/resetar-senha' element={<ResetarSenhaPage />} />
     
         {/* === ROTAS PROTEGIDAS (Com Sidebar, envolvidas pelo Layout) === */}
         <Route path='/livros' element={<ProtectedRoute><Layout><ListaLivrosPage /></Layout></ProtectedRoute>} />
@@ -58,6 +62,7 @@ function App() {
 
       </Routes>
     </Router>
+    </ToastProvider>
   );
 }
 

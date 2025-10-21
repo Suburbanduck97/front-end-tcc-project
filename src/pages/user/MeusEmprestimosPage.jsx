@@ -14,7 +14,7 @@ function MeusEmprestimosPage() {
     useEffect(() => {
         const fetchEmprestimo = async () => {
             if (!user) {
-                setError("Autenticação necessária para ver os empréstimos.");
+                setError("Você precisa estar logado para ver seus empréstimos.");
                 setLoading(false);
                 return;
             }
@@ -33,11 +33,12 @@ function MeusEmprestimosPage() {
                 }
 
                 const data = await getEmprestimosPorUsuario(idUsuario);
-                setEmprestimos(data);
+                setEmprestimos(data || []);
             
             } catch (err) {
                 console.error("Erro ao buscar empréstimos:", err);
-                setError("Não foi possível carregar seus empréstimos.")
+                const errorMessage = err.response?.data?.message || "Não foi possível carregar seus empréstimos.";
+                setError(errorMessage);
             } finally {
                 setLoading(false);
             }
@@ -54,19 +55,21 @@ function MeusEmprestimosPage() {
     });
   };
 
-  if (loading) {
-    return <p>Carregando seus empréstimos...</p>;
-  }
+    const renderContent = () => {
+        if (loading) {
+            return <div className={styles.messageContainer}>Carregando seus empréstimos...</div>;
+        }
 
-  if (error) {
-    return <p className={styles.errorMessage}>{error}</p>;
-  }
+        if (error) {
+            return <div className={`${styles.messageContainer} ${styles.errorMessage}`}>{error}</div>;
+        }
 
-  return (
-    <div className={styles.pageContainer}>
-            <h1>Meus Empréstimos</h1>
-            {emprestimos.length > 0 ? (
-                <div className={styles.grid}>
+        if (emprestimos.length === 0) {
+            return <div className={`${styles.messageContainer} ${styles.emptyMessage}`}>Você não possui nenhum empréstimo no momento.</div>;
+        }
+        
+        return (
+            <div className={styles.grid}>
                     {emprestimos.map((emprestimo) => (
                         <div key={emprestimo.id} className={styles.card}>
                             <h3 className={styles.cardTitle}>{emprestimo.livro.titulo}</h3>
@@ -82,9 +85,13 @@ function MeusEmprestimosPage() {
                         </div>
                     ))}
                 </div>
-            ) : (
-                <p className={styles.emptyMessage}>Você não possui nenhum empréstimo no momento.</p>
-            )}
+        );
+    };
+
+  return (
+    <div className={styles.pageContainer}>
+            <h1>Meus Empréstimos</h1>
+            {renderContent()}
         </div>
   );
 }

@@ -1,15 +1,12 @@
 // src/pages/ListaLivros
-import { useContext, useEffect, useState } from 'react';
-
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../../context/AuthContext'; // Importa o AuthContext
-// Importa as novas funções do nosso serviço de livros
-import buscarLivrosPorTermoGeral, { deletarLivro, getTodosLivros } from '../../services/livroService';
+import { AuthContext } from '../../context/AuthContext';
+import buscarLivrosPorTermoGeral, {getTodosLivros } from '../../services/livroService';
 import styles from './ListaLivrosPage.module.css';
 
 function ListaLivros() {
 
-  const { user } = useContext(AuthContext); // Pega o usuário logado do contexto
   const [livros, setLivros] = useState([]);
   const [message, setMessage] = useState('');
   const [isError, setIsError] = useState(false);
@@ -64,23 +61,6 @@ function ListaLivros() {
     }
   };
 
-  // Função para excluir
-  const handleExcluir = async (idLivro) => {
-    setMessage('');
-    if (window.confirm('Tem certeza que deseja excluir este livro? Esta ação não pode ser desfeita.')) {
-      try {
-        await deletarLivro(idLivro);
-        setMessage('Livro excluído com sucesso!');
-        setIsError(false);
-        carregarTodosLivros();
-      } catch (error) {
-        const errorMessage = error.response?.data?.mensagem || 'Não foi possível excluir o livro.';
-        setMessage(errorMessage);
-        setIsError(true);
-      }
-    }
-  };
-  
   const messageClass = isError ? styles.errorMessage : styles.successMessage;
 
   return (
@@ -116,14 +96,6 @@ function ListaLivros() {
                 </div>
               </Link>
               
-              {user?.role === 'BIBLIOTECARIO' && (
-                <div className={styles.adminActions}>
-                  <Link to={`/admin/editar-livro/${livro.id}`} className={`${styles.btn} ${styles.btnEdit}`}>Editar</Link>
-                  <button onClick={() => handleExcluir(livro.id, livro.titulo)} className={`${styles.btn} ${styles.btnDelete}`}>
-                    Excluir
-                  </button>
-                </div>
-              )}
             </div>
           ))}
         </div>

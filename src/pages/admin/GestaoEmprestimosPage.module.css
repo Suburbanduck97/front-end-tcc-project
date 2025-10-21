@@ -92,30 +92,39 @@
   background-color: #757575; /* Cinza neutro */
 }
 
-.emptyMessage {
-  background-color: #f8f9fa;
-  padding: 1rem;
-  border-radius: 4px;
-  text-align: center;
-  color: #757575;
-}
-
-.successMessage,
-.errorMessage {
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  border-radius: 4px;
-  font-weight: 500;
-}
-
+/* Para mensagens de sucesso e erro em formulários */
 .successMessage {
-  background-color: #d4edda;
-  color: #2e7d32;
-  border: 1px solid #c3e6cb;
+  color: #4F8A10;
+  background-color: #DFF2BF;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 15px;
+  text-align: center;
+  border: 1px solid #4F8A10;
 }
 
 .errorMessage {
-  background-color: #f8d7da;
-  color: #d32f2f;
-  border: 1px solid #f5c6cb;
+  color: #D8000C;
+  background-color: #FFD2D2;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 15px;
+  text-align: center;
+  border: 1px solid #D8000C;
+}
+
+/* Para mensagens de status em páginas de listagem (GerirMultas, GerirUsuarios) */
+.messageContainer {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-top: 20px;
+  font-size: 1.1rem;
+  color: #555;
+  border: 1px solid #eee;
+}
+
+.emptyMessage {
+  color: #666;
 }
