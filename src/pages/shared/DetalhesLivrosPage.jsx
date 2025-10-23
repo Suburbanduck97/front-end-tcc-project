@@ -1,26 +1,26 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getLivroDetalhes, deletarLivro } from '../../services/livroService';
-import { solicitarReserva } from '../../services/reservaService';
+import { criarReserva } from '../../services/reservaService';
 import { AuthContext } from '../../context/AuthContext';
 import { useToast } from '../../context/useToast';
 import Modal from '../../components/Shared/Modal';
 import { FaArrowLeft, FaEdit, FaTrash } from 'react-icons/fa';
-// CORREÇÃO AQUI: O nome do arquivo CSS agora está no singular para corresponder
+// O nome do arquivo CSS importado está correto
 import styles from './DetalhesLivroPage.module.css';
 
 function DetalhesLivroPage() {
     // --- HOOKS E CONTEXTOS ---
     const { id } = useParams();
     const navigate = useNavigate();
-    const { user } = useContext(AuthContext); // Para saber o papel do usuário
-    const { addToast } = useToast(); // Para todas as notificações
+    const { user } = useContext(AuthContext);
+    const { addToast } = useToast();
 
     // --- ESTADOS DE DADOS E UI ---
     const [livro, setLivro] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [isSubmitting, setIsSubmitting] = useState(false); // Controla o estado de "carregando" das ações
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [modalState, setModalState] = useState({ isOpen: false, title: '', message: '', onConfirm: null });
 
     // --- CARREGAMENTO INICIAL DOS DADOS ---
@@ -28,7 +28,7 @@ function DetalhesLivroPage() {
         const fetchDetalhes = async () => {
             try {
                 setLoading(true);
-                const data = await getLivroDetalhes(id); // Usa o novo serviço que traz 'usuarioJaReservou'
+                const data = await getLivroDetalhes(id);
                 setLivro(data);
             } catch (err) {
                 console.error("Erro ao buscar detalhes do livro:", err);
@@ -43,16 +43,14 @@ function DetalhesLivroPage() {
 
     // --- AÇÕES DO USUÁRIO ---
 
-    // Ação de voltar para a página anterior
     const handleVoltar = () => navigate(-1);
 
-    // Ação do LEITOR para solicitar uma reserva
     const handleReservar = async () => {
         setIsSubmitting(true);
         try {
-            await solicitarReserva(livro.id);
+            await criarReserva(livro.id);
             addToast(`Reserva para "${livro.titulo}" solicitada com sucesso!`, 'success');
-            setLivro(prev => ({ ...prev, usuarioJaReservou: true })); // Atualiza a UI imediatamente
+            setLivro(prev => ({ ...prev, usuarioJaReservou: true, qtdDisponivel: prev.qtdDisponivel - 1 })); // Atualiza UI
         } catch (err) {
             const errorMsg = err.response?.data?.message || err.response?.data || "Não foi possível realizar a reserva.";
             addToast(errorMsg, 'error');
@@ -61,26 +59,23 @@ function DetalhesLivroPage() {
         }
     };
 
-    // Ação do ADMIN para excluir o livro
     const handleExcluir = () => {
-        // 1. Abre o modal de confirmação
         setModalState({
             isOpen: true,
             title: "Confirmar Exclusão",
             message: `Tem certeza que deseja excluir o livro "${livro.titulo}"? Esta ação não pode ser desfeita.`,
-            // 2. Define o que acontece se o usuário clicar em "Confirmar"
             onConfirm: async () => {
                 setIsSubmitting(true);
                 try {
                     await deletarLivro(livro.id);
                     addToast('Livro excluído com sucesso!', 'success');
-                    navigate('/livros'); // Redireciona para a lista de livros
+                    navigate('/livros');
                 } catch (error) {
                     const errorMessage = error.response?.data?.message || 'Não foi possível excluir o livro.';
                     addToast(errorMessage, 'error');
                 } finally {
                     setIsSubmitting(false);
-                    setModalState({ isOpen: false }); // Fecha o modal
+                    setModalState({ isOpen: false });
                 }
             }
         });
@@ -92,7 +87,6 @@ function DetalhesLivroPage() {
     if (error) return <div className={styles.error}>{error}</div>;
     if (!livro) return null;
 
-    // Lógica para desabilitar o botão de reserva do LEITOR
     let disabledReason = '';
     if (user?.role === 'LEITOR') {
         if (livro.usuarioJaReservou) disabledReason = 'Você já possui uma reserva ativa para este livro.';
@@ -100,15 +94,83 @@ function DetalhesLivroPage() {
     }
     const isBotaoReservaDisabled = isSubmitting || !!disabledReason;
 
+    // Determina a classe de status
+    const statusClass = livro.qtdDisponivel > 0 ? styles.disponivel : styles.indisponivel;
+    const statusText = livro.qtdDisponivel > 0 ? 'Disponível' : 'Indisponível';
+
     return (
         <>
+            {/* Botão Voltar agora fica no topo da página */}
+            <button onClick={handleVoltar} className={styles.backButton}>
+                <FaArrowLeft />
+                Voltar ao Catálogo
+            </button>
+            
+            {/* O layout principal é flex (ou grid) como na Imagem 2 */}
             <div className={styles.pageContainer}>
-                <div className={styles.header}>
-                    <button onClick={handleVoltar} className={styles.backButton}>
-                        <FaArrowLeft />
-                        Voltar ao Catálogo
-                    </button>
-                    {/* Ações que só o ADMIN pode ver */}
+                
+                {/* Coluna 1: Capa */}
+                <div className={styles.coverContainer}>
+                    {livro.capa ? (
+                        <img src={`data:image/jpeg;base64,${livro.capa}`} alt={`Capa de ${livro.titulo}`} className={styles.coverImage} />
+                    ) : (
+                        <div className={styles.placeholderImage}>Capa Indisponível</div>
+                    )}
+                </div>
+
+                {/* Coluna 2: Detalhes */}
+                <div className={styles.detailsContainer}>
+                    <h1 className={styles.title}>{livro.titulo}</h1>
+                    <h2 className={styles.author}>por {livro.autor}</h2>
+                    
+                    {/* Grid de Informações (como na Imagem 2) */}
+                    <div className={styles.infoGrid}>
+                        <div>
+                            <p><strong>Editora:</strong> {livro.editora || 'N/A'}</p>
+                            <p><strong>ISBN:</strong> {livro.isbn}</p>
+                        </div>
+                        <div>
+                            <p><strong>Ano:</strong> {livro.anoPublicacao || 'N/A'}</p>
+                            <p><strong>Categoria:</strong> {livro.categoria}</p>
+                        </div>
+                    </div>
+
+                    {/* Descrição (movida para cá) */}
+                    <div className={styles.description}>
+                        <strong>Descrição:</strong>
+                        <p>{livro.descricao || "Nenhuma descrição disponível."}</p>
+                    </div>
+
+                    {/* Status e Disponíveis (como na Imagem 2) */}
+                    <div className={styles.statusContainer}>
+                        <p>
+                            <strong>Status:</strong>
+                            <span className={`${styles.status} ${statusClass}`}>
+                                {statusText}
+                            </span>
+                        </p>
+                        <p><strong>Disponíveis:</strong> {livro.qtdDisponivel} de {livro.qtdTotal}</p>
+                    </div>
+
+                    <hr className={styles.separator} />
+
+                    {/* Ações do Leitor */}
+                    {user?.role === 'LEITOR' && (
+                        <div className={styles.actions}>
+                            <button 
+                                className={styles.reserveButton}
+                                onClick={handleReservar}
+                                disabled={isBotaoReservaDisabled}
+                            >
+                                {isSubmitting ? 'Processando...' : 'Solicitar Reserva'}
+                            </button>
+                            {disabledReason && <p className={styles.disabledReason}>{disabledReason}</p>}
+                            {/* Mensagens de sucesso/erro/loading podem ser tratadas pelo useToast, 
+                                mas se precisar de mensagens inline, elas viriam aqui. */}
+                        </div>
+                    )}
+
+                    {/* Ações do Admin (movidas para cá) */}
                     {user?.role === 'BIBLIOTECARIO' && (
                         <div className={styles.adminActions}>
                             <Link to={`/admin/editar-livro/${livro.id}`} className={`${styles.btn} ${styles.btnEdit}`}>
@@ -120,50 +182,9 @@ function DetalhesLivroPage() {
                         </div>
                     )}
                 </div>
-
-                <div className={styles.contentGrid}>
-                    <div className={styles.cover}>
-                        {livro.capa ? (
-                            <img src={`data:image/jpeg;base64,${livro.capa}`} alt={`Capa de ${livro.titulo}`} className={styles.coverImage} />
-                        ) : (
-                            <div className={styles.placeholderImage}>Capa Indisponível</div>
-                        )}
-                    </div>
-                    <div className={styles.info}>
-                        <h1>{livro.titulo}</h1>
-                        <h2>por {livro.autor}</h2>
-                        
-                        <ul className={styles.detailsList}>
-                            <li><strong>ISBN:</strong> {livro.isbn}</li>
-                            <li><strong>Editora:</strong> {livro.editora || 'N/A'}</li>
-                            <li><strong>Ano:</strong> {livro.anoPublicacao || 'N/A'}</li>
-                            <li><strong>Categoria:</strong> {livro.categoria}</li>
-                            <li><strong>Disponíveis:</strong> {livro.qtdDisponivel} de {livro.qtdTotal}</li>
-                        </ul>
-
-                        {/* Ações que só o LEITOR pode ver */}
-                        {user?.role === 'LEITOR' && (
-                            <div className={styles.actions}>
-                                <button 
-                                    className={styles.reserveButton}
-                                    onClick={handleReservar}
-                                    disabled={isBotaoReservaDisabled}
-                                >
-                                    {isSubmitting ? 'Processando...' : 'Solicitar Reserva'}
-                                </button>
-                                {disabledReason && <p className={styles.disabledReason}>{disabledReason}</p>}
-                            </div>
-                        )}
-                    </div>
-                </div>
-
-                <div className={styles.description}>
-                    <h3>Descrição</h3>
-                    <p>{livro.descricao || "Nenhuma descrição disponível."}</p>
-                </div>
             </div>
             
-            {/* O componente Modal fica aqui, invisível até ser ativado */}
+            {/* Modal de Confirmação */}
             <Modal
                 isOpen={modalState.isOpen}
                 onClose={() => setModalState({ isOpen: false })}

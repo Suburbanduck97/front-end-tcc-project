@@ -1,8 +1,8 @@
 // src/pages/ListaLivros
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../../context/AuthContext';
-import buscarLivrosPorTermoGeral, {getTodosLivros } from '../../services/livroService';
+import { buscarLivrosPorTermoGeral, getTodosLivros } from '../../services/livroService';
+import useDebounce from '../../hooks/useDebounce';
 import styles from './ListaLivrosPage.module.css';
 
 function ListaLivros() {
@@ -13,61 +13,48 @@ function ListaLivros() {
   const [loading, setLoading] = useState(true);
   const [termoBusca, setTermoBusca] = useState('');
 
-  // Função para carregar todos os livros inicialmente
-  const carregarTodosLivros = async () => {
-    setLoading(true);
-    setMessage('');
-    try {
-      const data = await getTodosLivros();
-      setLivros(data);
-    } catch (err) {
-      console.error("Erro ao carregar livros:", err);
-      setLivros([]); // Limpa a lista em caso de erro
-      setMessage("Não foi possível carregar os livros.");
-      setIsError(true);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const debouncedTermoBusca = useDebounce(termoBusca, 500);
   
-  // useEffect agora só carrega os livros na primeira vez que a página abre
   useEffect(() => {
-    carregarTodosLivros();
-  }, []);
-
-  // Função para lidar com a busca
-  const handleBusca = async (e) => {
-    e.preventDefault(); // Previne o recarregamento da página pelo formulário
-    if (!termoBusca.trim()) {
-        carregarTodosLivros();
-        return;
-    }
-    setLoading(true);
-    setMessage('');
-    try {
-      const data = await buscarLivrosPorTermoGeral (termoBusca);
-      setLivros(data || []); // Garante que livros seja um array mesmo se a resposta for 204
-      if (!data || data.length === 0) {
-        setMessage('Nenhum livro encontrado para os critérios de busca.');
-        setIsError(false);
+    const fetchData = async () => {
+      setLoading(true);
+      setMessage('');
+      setIsError(false);
+      
+      try {
+        let data;
+        // Prioridade 1: Busca por termo
+        if (debouncedTermoBusca.trim()) {
+          data = await buscarLivrosPorTermoGeral(debouncedTermoBusca);
+        } 
+        // Prioridade 2: Carregar todos
+        else {
+          data = await getTodosLivros();
+        }
+        
+        setLivros(data || []);
+        if (!data || data.length === 0) {
+          setMessage('Nenhum livro encontrado.');
+        }
+      } catch (err) {
+        console.error("Erro ao buscar livros:", err);
+        setLivros([]);
+        setMessage("Erro ao realizar a busca.");
+        setIsError(true);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Erro na busca:", err);
-      setLivros([]); // Limpa a lista em caso de erro na busca
-      setMessage("Erro ao realizar a busca.");
-      setIsError(true);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    fetchData();
+  }, [debouncedTermoBusca]);
 
   const messageClass = isError ? styles.errorMessage : styles.successMessage;
 
   return (
     <div className={styles.pageContainer}>
       <h1>Catálogo de Livros</h1>
-      
-      <form onSubmit={handleBusca} className={styles.searchBar}>
+      <div className={styles.searchBar}>
         <input 
           type="text"
           placeholder="Buscar por título, autor ou categoria..."
@@ -75,9 +62,14 @@ function ListaLivros() {
           onChange={(e) => setTermoBusca(e.target.value)}
           className={styles.searchInput}
         />
-        <button type="submit" className={styles.searchButton}>Buscar</button>
-        <button type="button" onClick={() => { setTermoBusca(''); carregarTodosLivros(); }} className={styles.clearButton}>Limpar</button>
-      </form>
+        <button 
+          type="button" 
+          onClick={() => setTermoBusca('')} // Apenas limpa o estado
+          className={styles.clearButton}
+        >
+          Limpar
+        </button>
+      </div>
 
       {message && <p className={messageClass}>{message}</p>}
       

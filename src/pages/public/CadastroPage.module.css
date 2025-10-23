@@ -13,7 +13,17 @@
     align-items: center; 
     padding: 2rem;
     background-color: #f0f2f5;
-    min-height: 100vh;
+    min-height: calc(100vh - 5rem);
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.pageContainer h1 {
+    margin-top: 0;
+    margin-bottom: 2rem;
+    color: #1a237e; 
+    border-bottom: 2px solid #3949ab; 
+    padding-bottom: 0.5rem;
 }
 
 .formContainer {
@@ -160,15 +170,20 @@
 
 @media (max-width: 768px) {
     .formContainer {
-        padding: 2rem 1.5rem;
+        padding:  1.5rem;
+    }
+    .pageContainer h1 {
+        font-size: 1.8rem;
     }
     .formGrid {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
-    /* ATUALIZADO: Garante que TODAS as colunas ocupem a largura total */
-    .col_1, .col_2, .col_3, .col_4, .col_5, .col_6, .col_7, .col_8, .col_9, .col_10, .col_11, .col_12 {
-        grid-column: span 1;
+    .submitButton {
+        align-self: stretch; 
+        width: 100%;
     }
+    
 }
 
 .formContainer::-webkit-scrollbar { width: 8px; }

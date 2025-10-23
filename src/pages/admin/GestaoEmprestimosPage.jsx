@@ -42,14 +42,16 @@ function GestaoEmprestimosPage() {
         try {
             await registrarEmprestimo(reserva.usuario.id, reserva.livro.id);
             addToast('Empréstimo concedido com sucesso!', 'success');
-            await fetchDados(); // Recarrega os dados
+            await fetchDados(); 
         } catch (err) {
-            const errorMsg = err.response?.data?.message || 'Não foi possível conceder o empréstimo.';
+        // ProblemDetail usa o campo "detail" para a mensagem principal
+            const errorMsg = err.response?.data?.detail || 'Não foi possível conceder o empréstimo.';
             addToast(errorMsg, 'error');
         } finally {
             setSubmittingAction({ type: null, id: null });
-            setModalState({ isOpen: false }); // Fecha o modal
+            setModalState({ isOpen: false });
         }
+        
     };
 
     // 5. Lógica de "Devolver" também foi separada

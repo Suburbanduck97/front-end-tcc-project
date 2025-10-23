@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { listarTodasMultas, buscarMultaPorId, filtrarMultasPorStatus } from '../../services/multaService';
+import useDebounce from '../../hooks/useDebounce';
 import styles from './GerirMultasPage.module.css';
 
 function GerirMultasPage() {
@@ -11,70 +12,48 @@ function GerirMultasPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('TODAS'); // 'TODAS', 'PENDENTE', 'PAGO'
 
-  // Função genérica para buscar a lista inicial de todas as multas
-  const fetchTodasMultas = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await listarTodasMultas();
-      setMultas(response.data);
-    } catch (err) {
-      console.error("Erro ao buscar multas:", err);
-      setError(err.response?.data?.message || 'Não foi possível carregar as multas.');
-      setMultas([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-  // Carrega a lista inicial quando o componente é montado
   useEffect(() => {
-    fetchTodasMultas();
-  }, []);
-
-  // Função para lidar com a busca por ID
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!searchTerm.trim()) {
-      fetchTodasMultas(); // Se a busca estiver vazia, carrega todas
-      return;
-    }
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await buscarMultaPorId(searchTerm);
-      // A API retorna um único objeto, mas o state espera um array para a tabela.
-      setMultas([response.data]); 
-    } catch (err) {
-      console.error("Erro na busca por ID:", err);
-      setError(err.response?.status === 404 ? `Nenhuma multa encontrada com o ID: ${searchTerm}` : 'Erro ao buscar multa.');
-      setMultas([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Função para lidar com a mudança no filtro de status
-  const handleFilterChange = async (status) => {
-    setFilterStatus(status);
-    setLoading(true);
-    setError(null);
-    try {
-      let response;
-      if (status === 'TODAS') {
-        response = await listarTodasMultas();
-      } else {
-        response = await filtrarMultasPorStatus(status);
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        let response;
+        
+        // Prioridade 1: Busca por ID
+        if (debouncedSearchTerm.trim()) {
+          response = await buscarMultaPorId(debouncedSearchTerm);
+          // A API retorna um objeto, mas a tabela espera um array
+          setMultas([response.data]); 
+        } 
+        // Prioridade 2: Filtro por Status
+        else if (filterStatus !== 'TODAS') {
+          response = await filtrarMultasPorStatus(filterStatus);
+          setMultas(response.data);
+        } 
+        // Prioridade 3: Carregar todas
+        else {
+          response = await listarTodasMultas();
+          setMultas(response.data);
+        }
+      } catch (err) {
+        console.error("Erro ao buscar dados:", err);
+        const idNotFound = err.response?.status === 404 && debouncedSearchTerm.trim();
+        const errorMessage = idNotFound
+          ? `Nenhuma multa encontrada com o ID: ${debouncedSearchTerm}`
+          : (err.response?.data?.message || 'Nenhum item encontrado.');
+        setError(errorMessage);
+        setMultas([]);
+      } finally {
+        setLoading(false);
       }
-      setMultas(response.data);
-    } catch (err) {
-      console.error("Erro ao filtrar multas:", err);
-      setError(err.response?.data?.message || 'Erro ao aplicar o filtro.');
-      setMultas([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    // A API de ID só é chamada se o "debouncedSearchTerm" existir.
+    // Se não existir, a lógica de filtro/todos é chamada.
+    fetchData();
+  }, [debouncedSearchTerm, filterStatus]);
   
   // Função para formatar a data
   const formatarData = (dataString) => {
@@ -127,41 +106,43 @@ function GerirMultasPage() {
 
 
   return (
-    <div className={styles.pageContainer}>
-      <h2 className={styles.title}>Gerenciar Multas</h2>
+   <div className={styles.pageContainer}>
+     <h2 className={styles.title}>Gerenciar Multas</h2>
 
-      {/* Controles de Busca e Filtro */}
-      <div className={styles.controlsContainer}>
-        <form onSubmit={handleSearch} className={styles.searchForm}>
-          <input
-            type="number"
-            placeholder="Buscar por ID da multa..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className={styles.searchInput}
-          />
-          <button type="submit" className={styles.searchButton}>Buscar</button>
-        </form>
+     <div className={styles.controlsContainer}>
+      {/* MUDANÇA: Removemos o <form> e o onSubmit */}
+       <input
+       type="number"
+       placeholder="Buscar por ID da multa..."
+       value={searchTerm}
+       onChange={(e) => setSearchTerm(e.target.value)}
+       className={styles.searchInput}
+      />
+      {/* MUDANÇA: Removemos o botão "Buscar" */}
 
-        <div className={styles.filterGroup}>
-          <label htmlFor="status-filter">Filtrar por status:</label>
-          <select
-            id="status-filter"
-            value={filterStatus}
-            onChange={(e) => handleFilterChange(e.target.value)}
+     <div className={styles.filterGroup}>
+       <label htmlFor="status-filter">Filtrar por status:</label>
+         <select
+             id="status-filter"
+             value={filterStatus}
+             // MUDANÇA: Ao trocar o filtro, limpamos a busca
+             onChange={(e) => {
+              setFilterStatus(e.target.value);
+              setSearchTerm(''); // Limpa a busca
+            }}
             className={styles.filterSelect}
-          >
+            >
             <option value="TODAS">Todas</option>
             <option value="PENDENTE">Pendentes</option>
             <option value="PAGO">Pagas</option>
           </select>
-        </div>
       </div>
-      <div className={styles.content}>
-          {renderContent()}
+    </div>
+    <div className={styles.content}>
+        {renderContent()}
       </div>
-      </div>
-  );
+    </div>
+    );
 }
 
 export default GerirMultasPage;

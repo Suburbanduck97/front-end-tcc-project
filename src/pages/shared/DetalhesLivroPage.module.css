@@ -5,10 +5,15 @@
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+  max-height: calc(100vh - 5rem); 
+  overflow-y: auto;
 }
 
+/* Coluna da Capa */
 .coverContainer {
   flex-shrink: 0;
+  text-align: center;
 }
 
 .coverImage {
@@ -17,9 +22,25 @@
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
+/* ESTILO ADICIONADO: Fallback de Imagem */
+.placeholderImage {
+  width: 250px;
+  height: 380px; /* Altura aproximada de um livro */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6;
+  border: 1px dashed #d1d5db;
+  border-radius: 8px;
+  color: #6b7280;
+}
 
+
+/* Coluna de Detalhes */
 .detailsContainer {
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .title {
@@ -27,6 +48,7 @@
   margin-bottom: 0.5rem;
   color: #1a237e; /* Azul escuro */
   font-size: 2.5rem;
+  font-weight: 700; /* Mais peso no título */
 }
 
 .author {
@@ -37,20 +59,47 @@
   font-size: 1.2rem;
 }
 
+/* Grid de Infos (Editora, ISBN, Ano, Categoria) */
 .infoGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 1rem 2rem; /* Mais espaço horizontal */
   margin-bottom: 1.5rem;
-  color: #1a237e; /* Azul escuro */
+  color: #374151; /* Cor de texto mais suave */
 }
 
+.infoGrid p {
+  margin: 0.25rem 0;
+}
+
+/* ESTILO ADICIONADO: Descrição */
+.description {
+  margin-bottom: 1.5rem;
+  color: #374151;
+}
+.description strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: #1a237e;
+}
+.description p {
+  margin: 0;
+  line-height: 1.6;
+}
+/* Status e Disponíveis */
 .statusContainer {
   display: flex;
-  gap: 5rem;
+  gap: 2rem; /* Espaçamento reduzido */
   align-items: center;
   margin-bottom: 1.5rem;
-  color: #1a237e;
+  color: #374151;
+}
+
+.statusContainer p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .status {
@@ -62,24 +111,65 @@
   text-transform: uppercase;
 }
 
-/* --- CORRIGIDO: Adicionado fallback para status nulo --- */
 .status.disponivel { background-color: #2e7d32; } /* Verde */
 .status.reservado  { background-color: #3949ab; } /* Azul médio */
 .status.emprestado { background-color: #d32f2f; } /* Vermelho */
 .status.indisponivel { background-color: #616161; } /* Cinza */
 
-
 .separator {
   border: none;
   border-top: 1px solid #e0e0e0;
-  margin: 2rem 0;
+  margin: 1.5rem 0; /* Margem ajustada */
 }
 
+/* Ações do Leitor */
 .actions {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 100%; /* Garante que os containers de ação ocupem o espaço */
+  width: 100%;
+  margin-top: 0.5rem; /* Espaço após o separador */
+}
+
+.reserveButton {
+  padding: 0.7rem 1.8rem; /* Botão um pouco maior */
+  border: none;
+  border-radius: 6px;
+  background-color: #2e7d32; /* Verde principal */
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.reserveButton:hover:not(:disabled) {
+  background-color: #1b5e20; /* Verde escuro */
+}
+
+.reserveButton:disabled {
+  background-color: #bdbdbd; /* Cinza desativado */
+  cursor: not-allowed;
+}
+/* --- ESTILO ADICIONADO: Botão Voltar --- */
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #f1f5f9; /* Cinza claro */
+  color: #334155; /* Cinza escuro */
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.backButton:hover {
+  background-color: #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .reserveButton {
@@ -104,14 +194,22 @@
   cursor: not-allowed;
 }
 
+/* ESTILO ADICIONADO: Mensagem de botão desabilitado */
+.disabledReason {
+  margin-top: 0.75rem;
+  color: #d32f2f; /* Vermelho */
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Mensagens de feedback (do CSS antigo - podem ser removidas se usar Toasts) */
 .reservaMessage {
   margin-top: 1rem;
   padding: 0.8rem;
   border-radius: 4px;
   width: 100%;
-  box-sizing: border-box; /* Garante padding correto */
+  box-sizing: border-box; 
 }
-
 .successMessage {
   background-color: #d4edda;
   color: #2e7d32; /* Verde */
@@ -129,26 +227,28 @@
 
 /* --- ESTILOS ADICIONADOS --- */
 
-/* Container para os botões de admin */
+/* Ações do Admin (no final da coluna) */
 .adminActions {
-  display: flex; /* Coloca os botões lado a lado */
-  gap: 1rem;     /* Espaçamento entre os botões */
-  width: 100%;   /* O container ocupa a largura */
-  /* Os botões NÃO vão mais esticar */
+  display: flex; 
+  gap: 1rem;   
+  width: 100%; 
+  margin-top: auto; /* Empurra para o final da coluna flex */
+  padding-top: 1rem; /* Espaço acima dos botões */
 }
 
-/* Classe base do botão de admin */
 .btn {
-  /* REMOVIDO: flex-grow: 1; */ 
-  padding: 0.6rem 1.5rem; /* Padding ajustado (mais sutil) */
+  padding: 0.6rem 1.5rem; 
   text-align: center;
   border-radius: 6px;
   text-decoration: none;
   border: none;
   cursor: pointer;
   font-weight: 600;
-  font-size: 0.9rem; /* Fonte menor */
+  font-size: 0.95rem; /* Fonte levemente maior */
   transition: all 0.2s;
+  display: inline-flex; /* Para alinhar ícone e texto */
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .btnEdit {
@@ -169,30 +269,58 @@
   transform: translateY(-2px);
 }
 
-/* --- FIM DOS ESTILOS ADICIONADOS --- */
+/* Loading e Erro (do JSX original) */
+.loading, .error {
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 2rem;
+  color: #616161;
+}
+.error {
+  color: #d32f2f;
+}
 
 
+/* --- Media Queries --- */
 @media (max-width: 768px) {
   .pageContainer {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    padding: 1rem;
+  }
+  .detailsContainer {
+    align-items: center; /* Centraliza conteúdo no mobile */
   }
   .infoGrid {
     grid-template-columns: 1fr;
+    text-align: left; /* Mantém texto do grid alinhado à esquerda */
+    width: 100%;
+  }
+  .description {
     text-align: left;
   }
   .statusContainer {
     justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap; /* Permite quebrar linha se necessário */
   }
-  .actions {
-    align-items: center;
+  .actions, .adminActions {
+    align-items: stretch; /* Botões ocupam 100% */
     width: 100%;
-  }
-  .reserveButton {
-    max-width: none; /* Ocupa 100% no mobile */
+    margin-top: 1rem;
   }
   .adminActions {
-    flex-direction: column; /* Empilha os botões de admin no mobile */
+    flex-direction: column; /* Empilha os botões de admin */
+  }
+  .reserveButton {
+    width: 100%;
+  }
+  .title {
+    font-size: 2rem;
+  }
+  .author {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
   }
 }

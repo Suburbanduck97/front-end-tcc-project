@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { listarTodosUsuarios, buscarUsuarioPorNome, filtrarUsuarioPorRole } from '../../services/usuarioService';
+import useDebounce from '../../hooks/useDebounce';
 import styles from './GerirUsuariosPage.module.css';
 
 function GerirUsuariosPage() {
@@ -11,71 +12,44 @@ function GerirUsuariosPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRole, setFilterRole] = useState('TODOS'); // 'TODOS', 'LEITOR', 'BIBLIOTECARIO'
 
-  const fetchUsuarios = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await listarTodosUsuarios();
-      setUsuarios(response.data);
-    } catch (err) {
-      console.error("Erro ao buscar usuários:", err);
-      const errorMessage = err.response?.data?.message || 'Não foi possível carregar os usuários.';
-      setError(errorMessage);
-      setUsuarios([]); // Limpa a lista em caso de erro
-    } finally {
-      setLoading(false);
-    }
-  };
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   // Carrega a lista inicial de usuários quando o componente é montado
   useEffect(() => {
-    fetchUsuarios();
-  }, []);
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        let response;
 
-  // Função para lidar com a busca por nome
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!searchTerm.trim()) {
-      fetchUsuarios(); // Se a busca estiver vazia, carrega todos
-      return;
-    }
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await buscarUsuarioPorNome(searchTerm);
-      setUsuarios(response.data);
-    } catch (err) {
-      console.error("Erro na busca:", err);
-      const errorMessage = err.response?.data?.message || 'Nenhum usuário encontrado.';
-      setError(errorMessage);
-      setUsuarios([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Função para lidar com a mudança no filtro de tipo
-  const handleFilterChange = async (role) => {
-    setFilterRole(role);
-    setLoading(true);
-    setError(null);
-    try {
-      let response;
-      if (role === 'TODOS') {
-        response = await listarTodosUsuarios();
-      } else {
-        response = await filtrarUsuarioPorRole(role);
+        // Prioridade 1: Busca por nome (se o termo "atrasado" não estiver vazio)
+        if (debouncedSearchTerm.trim()) {
+          response = await buscarUsuarioPorNome(debouncedSearchTerm);
+        }
+        // Prioridade 2: Filtro por tipo (se não houver busca)
+        else if (filterRole !== 'TODOS') {
+          response = await filtrarUsuarioPorRole(filterRole);
+        }
+        // Prioridade 3: Carregar todos (sem busca e sem filtro)
+        else {
+          response = await listarTodosUsuarios();
+        }
+        setUsuarios(response.data);
+      } catch (err) {
+        console.error("Erro ao buscar dados:", err);
+        const errorMessage = err.response?.data?.message || 'Nenhum item encontrado.';
+        setError(errorMessage);
+        setUsuarios([]);
+      } finally {
+        setLoading(false);
       }
-      setUsuarios(response.data);
-    } catch (err) {
-      console.error("Erro ao filtrar:", err);
-      const errorMessage = err.response?.data?.message || `Nenhum usuário do tipo ${role} encontrado.`;
-      setError(errorMessage);
-      setUsuarios([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    fetchData();
+  }, [debouncedSearchTerm, filterRole]);
+
+
+
   const renderContent = () => {
         if (loading) {
             return <div className={styles.messageContainer}>Carregando...</div>;
@@ -112,39 +86,41 @@ function GerirUsuariosPage() {
     <div className={styles.pageContainer}>
       <h2 className={styles.title}>Gerenciar Usuários</h2>
 
-      {/* Controles de Busca e Filtro */}
       <div className={styles.controlsContainer}>
-        <form onSubmit={handleSearch} className={styles.searchForm}>
-          <input
-            type="text"
-            placeholder="Buscar por nome..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className={styles.searchInput}
-          />
-          <button type="submit" className={styles.searchButton}>Buscar</button>
-        </form>
+        {/* MUDANÇA: Removemos o <form> e o onSubmit */}
+        <input
+          type="text"
+          placeholder="Buscar por nome..."
+          value={searchTerm}
+                      // Apenas atualiza o estado. O useEffect/debounce faz o resto.
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className={styles.searchInput}
+        />
+        {/* MUDANÇA: Removemos o botão "Buscar" */}
 
         <div className={styles.filterGroup}>
           <label htmlFor="role-filter">Filtrar por tipo:</label>
           <select
             id="role-filter"
             value={filterRole}
-            onChange={(e) => handleFilterChange(e.target.value)}
-            className={styles.filterSelect}
-          >
-            <option value="TODOS">Todos</option>
-            <option value="LEITOR">Leitores</option>
-            <option value="BIBLIOTECARIO">Bibliotecários</option>
-          </select>
-        </div>
-      </div>
-      <div className={styles.content}>
-          {renderContent()}
-      </div>
-      </div>
-  
-  );
+            // MUDANÇA: Ao trocar o filtro, limpamos a busca
+            onChange={(e) => {
+                        setFilterRole(e.target.value);
+                        setSearchTerm(''); // Limpa a busca
+                        }}
+              className={styles.filterSelect}
+            >
+              <option value="TODOS">Todos</option>
+              <option value="LEITOR">Leitores</option>
+              <option value="BIBLIOTECARIO">Bibliotecários</option>
+                </select>
+              </div>
+            </div>
+            <div className={styles.content}>
+                {renderContent()}
+            </div>
+          </div>
+        );
 }
 
 export default GerirUsuariosPage;
