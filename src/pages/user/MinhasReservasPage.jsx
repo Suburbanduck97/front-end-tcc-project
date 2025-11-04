@@ -43,6 +43,25 @@ function MinhasReservasPage() {
     });
   };
 
+  const RenderReservasGrid = ({ listaReservas }) => (
+    <div className={styles.grid}>
+      {listaReservas.map((reserva) => (
+        <div key={reserva.id} className={styles.card}>
+          <h3 className={styles.cardTitle}>{reserva.livro.titulo}</h3>
+          <div className={styles.cardContent}>
+            <p><strong>Autor:</strong> {reserva.livro.autor || 'Desconhecido'}</p>
+            <p><strong>Data da Reserva:</strong> {formatarData(reserva.dataReserva)}</p>
+          </div>
+          <div className={styles.cardFooter}>
+            <span className={`${styles.status} ${styles[reserva.statusReserva.toLowerCase()]}`}>
+              {reserva.statusReserva}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
   const renderContent = () => {
         if (loading) {
             return <div className={styles.messageContainer}>Carregando suas reservas...</div>;
@@ -54,25 +73,31 @@ function MinhasReservasPage() {
             return <div className={`${styles.messageContainer} ${styles.emptyMessage}`}>Você não possui nenhuma reserva no momento.</div>;
         }
 
-        return (
-          <div className={styles.grid}>
-          {reservas.map((reserva) => (
-            <div key={reserva.id} className={styles.card}>
-              <h3 className={styles.cardTitle}>{reserva.livro.titulo}</h3>
-              <div className={styles.cardContent}>
-                <p><strong>Data da Reserva:</strong> {formatarData(reserva.dataReserva)}</p>
-              </div>
-              <div className={styles.cardFooter}>
-                <span className={`${styles.status} ${styles[reserva.statusReserva.toLowerCase()]}`}>
-                  {reserva.statusReserva}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-        );
+        const reservasAtivas = reservas.filter(r => r.statusReserva === 'ATIVA');
+        const reservasHistorico = reservas.filter(r => r.statusReserva !== 'ATIVA');
 
-  };
+        return (
+          <>
+            <div className={styles.sectionContainer}>
+              <h2 className={styles.sectionTitle}>Reservas Ativas</h2>
+              {reservasAtivas.length > 0 ? (
+                <RenderReservasGrid listaReservas={reservasAtivas} />
+              ) : (
+                <div className={styles.emptySectionMessage}>Você não possui reservas ativas.</div>
+              )}
+            </div>
+
+            <div className={styles.sectionContainer}>
+              <h2 className={styles.sectionTitle}>Histórico de Reservas</h2>
+              {reservasHistorico.length > 0 ? (
+                <RenderReservasGrid listaReservas={reservasHistorico} />
+              ) : (
+                <div className={styles.emptySectionMessage}>Você não possui histórico de reservas.</div>
+              )}
+            </div>
+          </>
+        );
+    };
 
   return (
    <div className={styles.pageContainer}>

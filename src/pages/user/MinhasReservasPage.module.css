@@ -35,35 +35,62 @@
 
 .cardTitle {
   margin: 0;
-  padding: 1.25rem 1.5rem;
+  padding: 1rem 1.5rem;
   background-color: #4D227E;
   color: #ffffff; 
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 600;
   border-bottom: 1px solid #e2e8f0;
 }
 
 .cardContent {
-  padding: 1.5rem;
+  padding: 1.25rem 1.5rem;
   flex-grow: 1;
 }
 
 .cardContent p {
-  margin: 0;
-  color: #475569; /* Cinza azulado */
+  margin: 0 0 0.5rem 0;
+  color: #475569; 
+  font-size: 0.9rem;
+}
+
+.cardContent p:last-child {
+  margin-bottom: 0;
 }
 
 .cardFooter {
-  padding: 1rem 1.5rem;
+  padding: 0.75rem 1.5rem;
   background-color: #ffffff;
   text-align: right;
+}
+
+.sectionContainer {
+  margin-bottom: 2.5rem;
+}
+
+.sectionTitle {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.emptySectionMessage {
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  text-align: center;
+  color: #777;
+  font-size: 0.95rem;
 }
 
 /* Status */
 .status {
   padding: 0.3rem 0.8rem;
   border-radius: 15px;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: bold;
   color: #fff;
   text-transform: uppercase;

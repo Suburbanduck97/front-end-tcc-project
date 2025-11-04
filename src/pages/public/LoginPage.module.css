@@ -71,7 +71,8 @@ html, body {
 
 .title {
   font-size: 2.5rem;
-  font-weight: bold;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
   color: #0E0F30;
   margin-bottom: 2.5rem;
 }

@@ -32,7 +32,7 @@
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     width: 90%;
-    max-width: 1400px; /* Mantido largo */
+    max-width: 1400px;
     max-height: 90vh;
     overflow-y: auto;
 }
@@ -40,32 +40,32 @@
 .title {
     text-align: center;
     margin-bottom: 2rem;
-    color: var(--primary-color-link); /* ATUALIZADO */
+    color: var(--primary-color-link); 
     font-size: 2rem;
     font-weight: 700;
 }
 
 .formGrid {
     display: grid;
-    grid-template-columns: repeat(12, 1fr); /* 12 colunas */
+    grid-template-columns: repeat(12, 1fr);
     gap: 1.2rem 1.5rem;
 }
 
 .sectionTitle {
-    grid-column: 1 / -1; /* Ocupa a largura inteira */
+    grid-column: 1 / -1;
     margin-top: 1rem;
     margin-bottom: 0.5rem;
     padding-bottom: 0.75rem;
     font-size: 1.1rem;
     font-weight: 600;
-    color: var(--primary-color); /* ATUALIZADO */
+    color: var(--primary-color);
     border-bottom: 1px solid #dee2e6;
 }
 .sectionTitle:first-of-type {
     margin-top: 0;
 }
 
-/* --- CLASSES DE COLUNA ATUALIZADAS (incluindo as menores) --- */
+
 .col_1 { grid-column: span 1; }
 .col_2 { grid-column: span 2; }
 .col_3 { grid-column: span 3; }
@@ -124,8 +124,7 @@
 .input:focus,
 .select:focus {
     outline: none;
-    border-color: var(--primary-color); /* ATUALIZADO */
-    /* ATUALIZADO: Sombra com a cor primária (RGB de #612B9F é 97, 43, 159) */
+    border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(97, 43, 159, 0.25); 
     background-color: #fff;
 }
@@ -135,7 +134,6 @@
     padding: 0.9rem;
     border: none;
     border-radius: 8px;
-    /* ATUALIZADO: Gradiente com novas cores */
     background: linear-gradient(90deg, var(--primary-color), var(--primary-hover-color));
     color: white;
     font-size: 1.1rem;
@@ -147,7 +145,6 @@
 
 .submitButton:hover {
     transform: translateY(-2px);
-    /* ATUALIZADO: Sombra com a cor de hover (RGB de #7700ff é 119, 0, 255) */
     box-shadow: 0 4px 15px rgba(119, 0, 255, 0.3);
 }
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { cadastrarLivro } from '../../services/livroService';
-import { useToast } from '../../context/useToast'; // 1. Importar o useToast
+import { useToast } from '../../context/useToast'; 
 import styles from './CadastrarLivroPage.module.css';
 
 function CadastrarLivroPage() {
@@ -24,7 +24,7 @@ function CadastrarLivroPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-        
+
         try {
             const livroCadastrado = await cadastrarLivro(formData, capa);
             // 3. Usa o toast para a mensagem de sucesso
@@ -41,9 +41,25 @@ function CadastrarLivroPage() {
         } catch (err) {
             console.error("Erro ao cadastrar livro:", err);
             // 4. Extrai a mensagem de erro específica do backend
-            const errorMessage = err.response?.data?.message || 'Ocorreu um erro no cadastro.';
-            // 5. Usa o toast para a mensagem de erro
+            let errorMessage = 'Ocorreu um erro. Verifique os dados e tente novamente.';
+
+            const data = err.response?.data;
+
+            if (data) {
+                if (data.mensagem) { 
+                    errorMessage = data.mensagem;
+                } else if (data.message) { 
+                    errorMessage = data.message;
+                } else if (data.erro) {
+                    errorMessage = data.erro;
+                } else if (typeof data.errors === 'object') {
+                    const errorMessages = Object.values(data.errors).map(msg => `${msg}`);
+                    errorMessage = `Por favor, corrija os seguintes erros:\n${errorMessages.join('\n')}`;
+                }
+            }
+
             addToast(errorMessage, 'error');
+
         } finally {
             setIsSubmitting(false); 
         }
@@ -98,8 +114,6 @@ function CadastrarLivroPage() {
                     {isSubmitting ? 'Cadastrando...' : 'Cadastrar Livro'}
                 </button>
             </form>
-
-            {/* 6. REMOVEMOS as mensagens estáticas daqui, pois o Toast agora cuida disso */}
         </div>
     );
 }

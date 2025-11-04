@@ -1,3 +1,7 @@
+:root {
+  --cover-height: 165px; /* Altere aqui a altura da capa */
+}
+
 .pageContainer {
   width: 100%;
   box-sizing: border-box;
@@ -25,11 +29,13 @@
 .searchInput {
   flex-grow: 1;
   padding: 0.75rem;
-  border: 1px solid #cbd5e1; /* Cinza claro */
+  border: 1px solid #612B9F; 
   border-radius: 6px;
   font-size: 1rem;
   box-sizing: border-box;
 }
+
+
 
 .searchButton,
 .clearButton {
@@ -42,25 +48,18 @@
   transition: background-color 0.2s;
 }
 
-.searchButton {
-  background-color: #1e3a8a; /* Azul escuro */
-  color: #ffffff;
-}
-.searchButton:hover {
-  background-color: #1d4ed8; /* Azul mais vivo */
+.clearButton {
+  background-color: #2b2b68; /* Cinza claro */
+  color: #ffffff; /* Azul grafite */
 }
 
-.clearButton {
-  background-color: #f1f5f9; /* Cinza claro */
-  color: #1e293b; /* Azul grafite */
-}
 .clearButton:hover {
-  background-color: #e2e8f0;
+  background-color: #612B9F;
 }
 
 .bookGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
 }
 
@@ -83,13 +82,42 @@
   text-decoration: none;
   color: inherit;
   flex-grow: 1;
+  display: flex; 
+  flex-direction: column;
+  height: 100%;
 }
 
+/* --- ESTILOS DA IMAGEM E CAPA --- */
+
+.cardImageContainer {
+  width: 100%;
+  height: var(--cover-height);
+  overflow: hidden;
+  background-color: #f1f5f9;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease-out;
+}
+
+.bookCard:hover .cardImage {
+  transform: scale(1.05);
+}
+
+/* --- FIM DOS ESTILOS DE IMAGEM --- */
+
 .cardContent {
-  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.5rem; /* Espaço entre os elementos de texto */
+  flex-grow: 1;
+  padding: 0; /* O padding é aplicado aos filhos */
 }
 
 .cardContent h3 {
@@ -105,20 +133,32 @@
   color: #475569; /* Azul grafite */
 }
 
+.cardContent h3, 
+.cardContent p,
+.cardContent span,
+.cardContent .status {
+  margin-left: 1.5rem;
+margin-right: 1.5rem;
+}
+.cardContent .status {
+  margin-bottom: 1.5rem;
+  margin-top: 0.5rem;
+  align-self: flex-start;
+}
+
 .disponibilidade {
-    display: flex;
-    align-items: center;
-    gap: 8px; /* Espaço entre o status e a quantidade */
-    margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+  margin-top: 10px;
 }
 
 .quantidade {
-    font-size: 0.9rem;
-    color: #555;
+  font-size: 0.9rem;
+  color: #555;
 }
 
 .status {
-  margin-top: 1rem;
   padding: 0.35rem 0.8rem;
   border-radius: 14px;
   font-size: 0.8rem;
@@ -172,23 +212,26 @@
 
 /* --- Media Queries (SÓ PARA LAYOUT MOBILE) --- */
 @media (max-width: 768px) {
-  .pageContainer {
-    padding: 1rem; /* Padding menor */
-    /* As regras de max-height e overflow-y já estão ativas */
-  }
+.pageContainer {
+  padding: 1rem; /* Padding menor */
+}
 
-  .pageContainer h1 {
-    font-size: 1.8rem; /* Título menor */
-  }
+.pageContainer h1 {
+  font-size: 1.8rem; /* Título menor */
+}
 
-  .searchBar {
-    flex-direction: column; /* Empilha a barra de busca */
-    padding: 1rem;
-  }
+.searchBar {
+  flex-direction: column; /* Empilha a barra de busca */
+  padding: 1rem;
+}
 
-  /* O grid auto-fill já é responsivo, mas 1fr garante uma coluna */
-  .bookGrid {
-    grid-template-columns: 1fr; 
-    gap: 1rem;
+.bookGrid {
+  grid-template-columns: 1fr; 
+  gap: 1rem;
+}
+
+  /* Ajusta a altura da capa em telas menores */
+  :root {
+    --cover-height: 280px; 
   }
 }

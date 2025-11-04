@@ -98,7 +98,7 @@ return (
                     {/* --- SEÇÃO DADOS PESSOAIS --- */}
                     <h3 className={styles.sectionTitle}>Dados Pessoais</h3>
 
-                    {/* Nome (ocupa 2/3) e CPF (ocupa 1/3) */}
+                    {/* Nome (ocupa 2/3) e CPF */}
                     <div className={`${styles.formGroup} ${styles.col_8}`}>
                         <label htmlFor="nome" className={styles.label}>Nome Completo</label>
                         <input type="text" id="nome" className={styles.input} value={formData.nome} onChange={handleChange} required disabled={isSubmitting}/>
@@ -108,7 +108,7 @@ return (
                         <input type="text" id="cpf" className={styles.input} placeholder="Somente números" value={formData.cpf} onChange={handleChange} required disabled={isSubmitting}/>
                     </div>
 
-                    {/* Data, Sexo e Telefone (cada um ocupa 1/3, preenchendo uma linha) */}
+                    {/* Data, Sexo e Telefone */}
                     <div className={`${styles.formGroup} ${styles.col_4}`}>
                         <label htmlFor="dataNascimento" className={styles.label}>Data de Nascimento</label>
                         <input type="date" id="dataNascimento" className={styles.input} value={formData.dataNascimento} onChange={handleChange} required disabled={isSubmitting}/>
@@ -129,7 +129,7 @@ return (
                     {/* --- SEÇÃO ENDEREÇO --- */}
                     <h3 className={styles.sectionTitle}>Endereço</h3>
 
-                     {/* Estado, Cidade e Bairro (cada um ocupa 1/3) */}
+                     {/* Estado, Cidade e Bairro */}
                     <div className={`${styles.formGroup} ${styles.col_4}`}>
                         <label htmlFor="estado" className={styles.label}>Estado</label>
                         <select id="estado" className={styles.select} value={formData.estado} onChange={handleChange} required disabled={isSubmitting}>
@@ -172,7 +172,6 @@ return (
                         </div>
                     </div>
 
-                    {/* Tipo de Conta e Código Admin (se aplicável) */}
                     <div className={`${styles.formGroup} ${styles.col_12}`}>
                         <label htmlFor="role" className={styles.label}>Tipo de Conta</label>
                         <select id="role" className={styles.select} value={formData.role} onChange={handleChange} required disabled={isSubmitting}>

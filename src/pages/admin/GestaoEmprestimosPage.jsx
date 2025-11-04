@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getTodosEmprestimos, registrarEmprestimo, devolverLivro } from '../../services/emprestimoService';
+import { getTodosEmprestimos, registrarEmprestimo, confirmarRetirada, devolverLivro } from '../../services/emprestimoService';
 import { getTodasAsReservas } from '../../services/reservaService';
 import styles from './GestaoEmprestimosPage.module.css';
 import Modal from '../../components/Shared/Modal';      // 1. Importa o Modal
@@ -13,6 +13,7 @@ function GestaoEmprestimosPage() {
     
     // 3. Estado para controlar o Modal (se está aberto, qual a mensagem, etc.)
     const [modalState, setModalState] = useState({ isOpen: false, onConfirm: null, title: '', message: '' });
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const { addToast } = useToast(); // Hook para as notificações (toasts)
 
     const fetchDados = async () => {
@@ -38,35 +39,61 @@ function GestaoEmprestimosPage() {
 
     // 4. Lógica de "Conceder" foi separada: agora ela é chamada APÓS a confirmação no modal
     const handleConcederEmprestimo = async (reserva) => {
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
         setSubmittingAction({ type: 'conceder', id: reserva.id });
         try {
             await registrarEmprestimo(reserva.usuario.id, reserva.livro.id);
             addToast('Empréstimo concedido com sucesso!', 'success');
             await fetchDados(); 
         } catch (err) {
-        // ProblemDetail usa o campo "detail" para a mensagem principal
             const errorMsg = err.response?.data?.detail || 'Não foi possível conceder o empréstimo.';
             addToast(errorMsg, 'error');
         } finally {
+            setIsSubmitting(false);
             setSubmittingAction({ type: null, id: null });
             setModalState({ isOpen: false });
         }
         
     };
 
-    // 5. Lógica de "Devolver" também foi separada
+    // Lógica de confirmar retirada do livro
+    const handleConfirmarRetirada = async (emprestimo) => {
+        if (isSubmitting) return;
+        setIsSubmitting(true);
+        setSubmittingAction({ type: 'retirar', id: emprestimo.id});
+
+        try{
+            await confirmarRetirada(emprestimo.id);
+            addToast('Retirada confirmada! O prazo do empréstimo começou.', 'success');
+            await fetchDados();
+        } catch (err) {
+            const errorMsg = err.response?.data?.detail || 'Não foi possível confirmar a retirada.';
+            addToast(errorMsg, 'error');
+        } finally {
+            setIsSubmitting(false);
+            setSubmittingAction({ type: null, id: null});
+            setModalState({ isOpen: false});
+        }
+    };
+
     const handleDevolverLivro = async (emprestimo) => {
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
         setSubmittingAction({ type: 'devolver', id: emprestimo.id });
         try {
             await devolverLivro(emprestimo.id);
             addToast(`Devolução registrada com sucesso!`, 'success');
-            await fetchDados(); // Recarrega os dados
+            await fetchDados();
         } catch (err) {
             const errorMsg = err.response?.data?.message || 'Não foi possível registrar a devolução.';
             addToast(errorMsg, 'error');
         } finally {
+            setIsSubmitting(false);
             setSubmittingAction({ type: null, id: null });
-            setModalState({ isOpen: false }); // Fecha o modal
+            setModalState({ isOpen: false }); 
         }
     };
 
@@ -77,6 +104,15 @@ function GestaoEmprestimosPage() {
             onConfirm: () => handleConcederEmprestimo(reserva),
             title: 'Confirmar Empréstimo',
             message: `Deseja realmente conceder o livro "${reserva.livro.titulo}" para o usuário "${reserva.usuario.nome}"?`
+        });
+    };
+
+    const openConfirmarRetiradaModal = (emprestimo) => {
+        setModalState({
+            isOpen: true,
+            onConfirm: () => handleConfirmarRetirada(emprestimo),
+            title: 'Confirmar Retirada',
+            message: `Confirmar que o usuário "${emprestimo.usuario.nome}" retirou o livro "${emprestimo.livro.titulo}"? O prazo de devolução começará a contar agora.`
         });
     };
 
@@ -104,22 +140,29 @@ function GestaoEmprestimosPage() {
     return (
         <div className={styles.pageContainer}>
             <h1>Gestão de Empréstimos e Reservas</h1>
-            
-            {/* O conteúdo é renderizado normalmente */}
+
             <section className={styles.section}>
                 <h2>Fila de Reservas Ativas</h2>
                 {reservas.length > 0 ? (
                     <div className={styles.tableContainer}>
                         <table className={styles.table}>
-                            {/* ... cabeçalho da tabela ... */}
+                            <thead>
+                                <tr>
+                                    <th>Prioridade</th>
+                                    <th>Livro</th>
+                                    <th>Usuário</th>
+                                    <th>Data Reserva</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
                             <tbody>
-                                {reservas.map(reserva => (
+                                {reservas.map((reserva, index) => (
                                     <tr key={reserva.id}>
+                                        <td className={styles.priorityCell}>{index + 1}</td>
                                         <td>{reserva.livro.titulo}</td>
                                         <td>{reserva.usuario.nome}</td>
                                         <td>{formatarData(reserva.dataReserva)}</td>
                                         <td>
-                                            {/* 7. O OnClick agora chama a função para ABRIR o modal */}
                                             <button 
                                                 className={`${styles.btn} ${styles.btnPrimary}`} 
                                                 onClick={() => openConcederModal(reserva)}
@@ -141,7 +184,17 @@ function GestaoEmprestimosPage() {
                 {emprestimos.length > 0 ? (
                     <div className={styles.tableContainer}>
                          <table className={styles.table}>
-                            {/* ... cabeçalho da tabela ... */}
+                           <thead>
+                              <tr>
+                                <th>ID</th>
+                                <th>Livro</th>
+                                <th>Usuário</th>
+                                <th>Data Empréstimo</th>
+                                <th>Devolução Prevista</th>
+                                <th>Status</th>
+                                <th>Ação</th>
+                              </tr>
+                           </thead>
                             <tbody>
                                 {emprestimos.map((emprestimo) => (
                                     <tr key={emprestimo.id}>
@@ -149,21 +202,32 @@ function GestaoEmprestimosPage() {
                                         <td>{emprestimo.livro.titulo}</td>
                                         <td>{emprestimo.usuario.nome}</td>
                                         <td>{formatarData(emprestimo.dataEmprestimo)}</td>
+                                        <td>{emprestimo.statusEmprestimo !== 'FINALIZADO' ? formatarData(emprestimo.dataPrevistaDevolucao) : '---'}</td>
                                         <td>
                                             <span className={`${styles.status} ${styles[emprestimo.statusEmprestimo.toLowerCase()]}`}>
-                                                {emprestimo.statusEmprestimo}
+                                                {emprestimo.statusEmprestimo.replace('_', ' ')}
                                             </span>
                                         </td>
                                         <td>
-                                            {emprestimo.statusEmprestimo !== 'FINALIZADO' && (
-                                                // 8. O OnClick aqui também chama a função para abrir o modal
+                                            {emprestimo.statusEmprestimo === 'AGUARDANDO_RETIRADA' && (
                                                 <button 
+                                                    className={`${styles.btn} ${styles.btnPrimary}`} 
+                                                    onClick={() => openConfirmarRetiradaModal(emprestimo)}
+                                                    disabled={submittingAction.id === emprestimo.id}
+                                                >
+                                                    {submittingAction.type === 'retirar' && submittingAction.id === emprestimo.id ? 'Confirmando...' : 'Confirmar Retirada'}
+                                                </button>
+                                            )}
+
+                                            {(emprestimo.statusEmprestimo === 'ATIVO' || emprestimo.statusEmprestimo === 'ATRASADO') && (
+                                                <button
                                                     className={`${styles.btn} ${styles.btnSecondary}`} 
                                                     onClick={() => openDevolverModal(emprestimo)}
                                                     disabled={submittingAction.id === emprestimo.id}
                                                 >
                                                     {submittingAction.type === 'devolver' && submittingAction.id === emprestimo.id ? 'Processando...' : 'Devolver'}
                                                 </button>
+            
                                             )}
                                         </td>
                                     </tr>
@@ -174,7 +238,6 @@ function GestaoEmprestimosPage() {
                 ) : <p className={styles.emptyMessage}>Nenhum empréstimo encontrado no sistema.</p>}
             </section>
             
-            {/* 9. O componente Modal é renderizado aqui. Ele fica invisível até que isOpen seja true */}
             <Modal
                 isOpen={modalState.isOpen}
                 onClose={() => setModalState({ isOpen: false })}

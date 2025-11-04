@@ -6,7 +6,7 @@
   margin-top: 0;
   margin-bottom: 2rem;
   color: #2a1e3b;
-  border-bottom: 2px solid #612B9F; /* Laranja destaque */
+  border-bottom: 2px solid #612B9F; 
   padding-bottom: 0.5rem;
 }
 
@@ -33,22 +33,27 @@
 
 .cardTitle {
   margin: 0;
-  padding: 1.25rem 1.5rem;
-  background-color: #4D227E; /* Cinza claro */
-  color: #ffffff; /* Azul/cinza forte */
-  font-size: 1.2rem;
+  padding: 1rem 1.5rem;
+  background-color: #4D227E; 
+  color: #ffffff; 
+  font-size: 1.1rem;
   font-weight: 600;
   border-bottom: 1px solid #e2e8f0;
 }
 
 .cardContent {
-  padding: 1.5rem;
+  padding: 1.25rem 1.5rem;
   flex-grow: 1;
 }
 
 .cardContent p {
-  margin: 0 0 0.75rem 0;
-  color: #475569; /* Cinza azulado */
+  margin: 0 0 0.5rem 0;
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.cardContent p:last-child {
+  margin-bottom: 0;
 }
 
 .cardContent p:last-child {
@@ -56,26 +61,48 @@
 }
 
 .cardFooter {
-  padding: 1rem 1.5rem;
+  padding: 0.75rem  1.5rem;
   background-color: #ffffff;
   text-align: right;
+}
+
+.sectionContainer {
+  margin-bottom: 2.5rem;
+}
+
+.sectionTitle {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.emptySectionMessage {
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  text-align: center;
+  color: #777;
+  font-size: 0.95rem;
 }
 
 /* Status */
 .status {
   padding: 0.3rem 0.8rem;
   border-radius: 15px;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: bold;
   color: #fff;
   text-transform: uppercase;
 }
-.status.ativo { background-color: #2563eb; }     /* Azul médio */
-.status.atrasado { background-color: #dc2626; }  /* Vermelho */
-.status.finalizado { background-color: #6b7280; } /* Cinza neutro */
+.status.ativo { background-color: #2563eb; }    
+.status.atrasado { background-color: #dc2626; } 
+.status.finalizado { background-color: #6b7280; } 
 
 .errorMessage {
-  color: #dc2626; /* Vermelho forte */
+  color: #dc2626;
   font-weight: bold;
 }
 
@@ -88,7 +115,6 @@
   font-size: 1.1rem;
 }
 
-/* Container genérico para todas as mensagens de feedback */
 .messageContainer {
   text-align: center;
   padding: 40px 20px;
@@ -100,14 +126,12 @@
   border: 1px solid #eee;
 }
 
-/* Estilo específico para mensagens de erro */
 .errorMessage {
   background-color: #FFD2D2;
   color: #D8000C;
   border-color: #D8000C;
 }
 
-/* Estilo específico para mensagens de "vazio" (pode ser o mesmo que o padrão) */
 .emptyMessage {
   color: #666;
 }

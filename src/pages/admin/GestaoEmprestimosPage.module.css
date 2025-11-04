@@ -48,6 +48,13 @@
   background-color: #f1f3f5;
 }
 
+.priorityCell {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #4D227E;
+  text-align: center;
+}
+
 .btn {
   padding: 0.5rem 1rem;
   border: none;
@@ -89,7 +96,11 @@
 }
 
 .status.finalizado {
-  background-color: #757575; /* Cinza neutro */
+  background-color: #757575;
+}
+
+.status.aguardando_retirada {
+  background-color: #f59e0b;
 }
 
 /* Para mensagens de sucesso e erro em formulários */

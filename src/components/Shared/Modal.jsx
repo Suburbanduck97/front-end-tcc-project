@@ -1,6 +1,6 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
-import './Modal.css'; // Certifique-se que o caminho está correto
+import './Modal.css';
 
 const Modal = ({ isOpen, onClose, onConfirm, title, children }) => {
     if (!isOpen) {

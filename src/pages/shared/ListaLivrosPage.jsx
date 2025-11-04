@@ -5,6 +5,8 @@ import { buscarLivrosPorTermoGeral, getTodosLivros } from '../../services/livroS
 import useDebounce from '../../hooks/useDebounce';
 import styles from './ListaLivrosPage.module.css';
 
+const API_BASE_URL = 'http://localhost:8080';
+
 function ListaLivros() {
 
   const [livros, setLivros] = useState([]);
@@ -76,19 +78,26 @@ function ListaLivros() {
       {loading ? <p>Carregando...</p> : (
         <div className={styles.bookGrid}>
           {livros.map((livro) => (
-            <div key={livro.id} className={styles.bookCard}>
-              <Link to={`/livros/${livro.id}`} className={styles.cardLink}>
-                <div className={styles.cardContent}>
-                  <h3>{livro.titulo}</h3>
-                  <p>por {livro.autor}</p>
-                  <span>Categoria: {livro.categoria}</span>
-                  <div className={`${styles.status} ${styles[livro.statusLivro.toLowerCase()]}`}>
-                    {livro.statusLivro}
-                  </div>
-                </div>
-              </Link>
-              
+          <div key={livro.id} className={styles.bookCard}>
+          <Link to={`/livros/${livro.id}`} className={styles.cardLink}>
+          <div className={styles.cardImageContainer}>
+          <img
+          className={styles.cardImage}
+          src={`${API_BASE_URL}/livros/${livro.id}/capa`} 
+          alt={`Capa do livro ${livro.titulo}`}
+                                onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/300x420/f1f5f9/64748b?text=Sem+Capa' }}
+          />
+          </div>
+          <div className={styles.cardContent}>
+            <h3>{livro.titulo}</h3>
+            <p>por {livro.autor}</p>
+            <span>Categoria: {livro.categoria}</span>
+            <div className={`${styles.status} ${styles[livro.statusLivro.toLowerCase()]}`}>
+                {livro.statusLivro}
             </div>
+          </div>
+          </Link>
+          </div>
           ))}
         </div>
       )}

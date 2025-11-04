@@ -26,13 +26,13 @@
 .table th,
 .table td {
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid #e2e8f0; /* Cinza claro */
+  border-bottom: 1px solid #e2e8f0; 
 }
 
 .table th {
-  background-color: #f8fafc;
+  background-color: #4D227E;
   font-weight: 600;
-  color: #334155; /* Azul/cinza forte */
+  color: #ffffff; 
   text-transform: uppercase;
   font-size: 0.9rem;
 }
@@ -50,13 +50,8 @@
   color: #fff;
   text-transform: uppercase;
 }
-.status.pendente { background-color: #f59e0b; } /* Laranja */
-.status.paga { background-color: #16a34a; }     /* Verde */
-
-.errorMessage {
-  color: #dc2626; /* Vermelho consistente */
-  font-weight: bold;
-}
+.status.pendente { background-color: #f59e0b; } 
+.status.pago { background-color: #16a34a; }     
 
 .emptyMessage {
   background-color: #f1f5f9;
@@ -84,9 +79,10 @@
   background-color: #FFD2D2;
   color: #D8000C;
   border-color: #D8000C;
+  font-weight: bold;
+  
 }
 
-/* Estilo específico para mensagens de "vazio" (pode ser o mesmo que o padrão) */
 .emptyMessage {
   color: #666;
 }

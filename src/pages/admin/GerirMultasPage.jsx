@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { listarTodasMultas, buscarMultaPorId, filtrarMultasPorStatus } from '../../services/multaService';
+import { listarTodasMultas, buscarMultaPorId, filtrarMultasPorStatus, pagarMulta } from '../../services/multaService';
 import useDebounce from '../../hooks/useDebounce';
 import styles from './GerirMultasPage.module.css';
+import Modal from '../../components/Shared/Modal';
+import { useToast } from '../../context/useToast'; 
 
 function GerirMultasPage() {
   const [multas, setMultas] = useState([]);
@@ -10,7 +12,12 @@ function GerirMultasPage() {
 
   // Estados para os controles de busca e filtro
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState('TODAS'); // 'TODAS', 'PENDENTE', 'PAGO'
+  const [filterStatus, setFilterStatus] = useState('TODAS');
+
+  const [modalState, setModalState] = useState({ isOpen: false, onConfirm: null, title: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submittingId, setSubmittingId] = useState(null); 
+  const { addToast } = useToast(); 
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
@@ -49,9 +56,6 @@ function GerirMultasPage() {
         setLoading(false);
       }
     };
-
-    // A API de ID só é chamada se o "debouncedSearchTerm" existir.
-    // Se não existir, a lógica de filtro/todos é chamada.
     fetchData();
   }, [debouncedSearchTerm, filterStatus]);
   
@@ -61,6 +65,43 @@ function GerirMultasPage() {
     return data.toLocaleDateString('pt-BR');
   };
 
+  const handlePagarMulta = async (idMulta) => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    setSubmittingId(idMulta);
+
+    try {
+      await pagarMulta(idMulta);
+      addToast(`Baixa registrada com sucesso para a multa ID: ${idMulta}!`, 'success'); // NOVO: Toast
+
+      if (filterStatus === 'PENDENTE') {
+        setMultas(prevMultas => prevMultas.filter(m => m.id !== idMulta));
+      } else {
+        setMultas(prevMultas => prevMultas.map(multa => 
+            multa.id === idMulta ? { ...multa, statusMulta: 'PAGO' } : multa
+        ));
+      }
+    } catch (err) {
+      console.error("Erro ao dar baixa na multa:", err);
+      const errorMsg = err.response?.data?.message || 'Erro ao processar baixa.';
+      addToast(errorMsg, 'error');
+    } finally {
+      setIsSubmitting(false);
+      setSubmittingId(null);
+      setModalState({ isOpen: false }); 
+    }
+  };
+
+  const openPagarMultaModal = (multa) => {
+    setModalState({
+      isOpen: true,
+      onConfirm: () => handlePagarMulta(multa.id), // Ação que será executada
+      title: 'Confirmar Baixa de Multa',
+      message: `Deseja realmente dar baixa no pagamento da multa ID: ${multa.id}? (Usuário: ${multa.nomeUsuario} | Valor: R$ ${multa.valor.toFixed(2)})`
+    });
+  };
+
   const renderContent = () => {
         if (loading) {
             return <div className={styles.messageContainer}>Carregando...</div>;
@@ -68,7 +109,7 @@ function GerirMultasPage() {
         if (error) {
             return <div className={`${styles.messageContainer} ${styles.errorMessage}`}>{error}</div>;
         }
-        if (multas.length === 0) { // ou usuarios.length === 0
+        if (multas.length === 0) {
             return <div className={`${styles.messageContainer} ${styles.emptyMessage}`}>Nenhum item encontrado.</div>;
         }
 
@@ -82,20 +123,32 @@ function GerirMultasPage() {
                 <th>Valor</th>
                 <th>Data</th>
                 <th>Status</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody>
               {multas.map((multa) => (
                 <tr key={multa.id}>
                   <td>{multa.id}</td>
-                  <td>{multa.usuarioNome}</td>
-                  <td>{multa.livroTitulo}</td>
+                  <td>{multa.nomeUsuario}</td>
+                  <td>{multa.tituloLivro}</td>
                   <td>{`R$ ${multa.valor.toFixed(2)}`}</td>
                   <td>{formatarData(multa.dataMulta)}</td>
                   <td>
                     <span className={`${styles.status} ${multa.statusMulta === 'PENDENTE' ? styles.statusPendente : styles.statusPago}`}>
                       {multa.statusMulta}
                     </span>
+                  </td>
+                  <td>
+                    {multa.statusMulta === 'PENDENTE' && (
+                      <button
+                        className={styles.payButton}
+                        onClick={() => openPagarMultaModal(multa)}
+                        disabled={submittingId === multa.id}
+                        >
+                          {submittingId === multa.id ? 'Processando...' : 'Dar Baixa'}
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -110,7 +163,6 @@ function GerirMultasPage() {
      <h2 className={styles.title}>Gerenciar Multas</h2>
 
      <div className={styles.controlsContainer}>
-      {/* MUDANÇA: Removemos o <form> e o onSubmit */}
        <input
        type="number"
        placeholder="Buscar por ID da multa..."
@@ -118,17 +170,15 @@ function GerirMultasPage() {
        onChange={(e) => setSearchTerm(e.target.value)}
        className={styles.searchInput}
       />
-      {/* MUDANÇA: Removemos o botão "Buscar" */}
 
      <div className={styles.filterGroup}>
        <label htmlFor="status-filter">Filtrar por status:</label>
          <select
              id="status-filter"
              value={filterStatus}
-             // MUDANÇA: Ao trocar o filtro, limpamos a busca
              onChange={(e) => {
               setFilterStatus(e.target.value);
-              setSearchTerm(''); // Limpa a busca
+              setSearchTerm('');
             }}
             className={styles.filterSelect}
             >
@@ -141,6 +191,17 @@ function GerirMultasPage() {
     <div className={styles.content}>
         {renderContent()}
       </div>
+
+      <Modal
+          isOpen={modalState.isOpen}
+          onClose={() => setModalState({ isOpen: false })}
+          onConfirm={modalState.onConfirm}
+          title={modalState.title}
+          isSubmitting={isSubmitting}
+      >
+          <p>{modalState.message}</p>
+      </Modal>
+
     </div>
     );
 }

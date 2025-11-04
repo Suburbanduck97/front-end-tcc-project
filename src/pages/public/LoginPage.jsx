@@ -4,9 +4,10 @@ import {login} from '../../services/authService'; //Importa a função de login
 import { AuthContext } from '../../context/AuthContext'; // 2. Importando o AuthContext
 import styles from './LoginPage.module.css';
 import { FaUser, FaLock,FaEye, FaEyeSlash } from 'react-icons/fa';
-import logoImage from '../../assets/logoEstanteGira.png'; 
+
 
 function LoginPage() {
+    const logo = "/logoEstanteGira.png";
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
 
@@ -63,7 +64,7 @@ function LoginPage() {
             <div className={styles.leftPanel}>
                 <div className={styles.logoContainer}>
                     {/* Renderiza a imagem da logo */}
-                    <img src={logoImage} alt="Estante Gira Logo" className={styles.logoImage} />
+                    <img src={logo} alt="Estante Gira Logo" className={styles.logoImage} />
                     {/* Renderiza o texto da logo, se parte da imagem não for */}
                     <h1 className={styles.logoText}>Estante Gira</h1>
                 </div>

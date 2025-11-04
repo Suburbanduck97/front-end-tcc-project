@@ -55,6 +55,30 @@ function MeusEmprestimosPage() {
     });
   };
 
+    const RenderEmprestimosGrid = ({ listaEmprestimos }) => (
+    <div className={styles.grid}>
+      {listaEmprestimos.map((emprestimo) => (
+        <div key={emprestimo.id} className={styles.card}>
+          <h3 className={styles.cardTitle}>{emprestimo.livro.titulo}</h3>
+          <div className={styles.cardContent}>
+            <p><strong>Autor:</strong> {emprestimo.livro.autor || 'Desconhecido'}</p>
+            <p><strong>Data do Empréstimo:</strong> {formatarData(emprestimo.dataEmprestimo)}</p>
+            <p><strong>Devolução Prevista:</strong> {formatarData(emprestimo.dataDevolucaoPrevista)}</p>
+            
+            {emprestimo.statusEmprestimo === 'FINALIZADO' && emprestimo.dataDevolucaoReal && (
+                <p><strong>Devolvido em:</strong> {formatarData(emprestimo.dataDevolucaoReal)}</p>
+            )}
+          </div>
+          <div className={styles.cardFooter}>
+            <span className={`${styles.status} ${styles[emprestimo.statusEmprestimo.toLowerCase()]}`}>
+              {emprestimo.statusEmprestimo}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
     const renderContent = () => {
         if (loading) {
             return <div className={styles.messageContainer}>Carregando seus empréstimos...</div>;
@@ -67,27 +91,32 @@ function MeusEmprestimosPage() {
         if (emprestimos.length === 0) {
             return <div className={`${styles.messageContainer} ${styles.emptyMessage}`}>Você não possui nenhum empréstimo no momento.</div>;
         }
+
+        const emprestimosAtivos = emprestimos.filter(e => e.statusEmprestimo === 'ATIVO' || e.statusEmprestimo === 'ATRASADO');
+        const emprestimosHistorico = emprestimos.filter(e => e.statusEmprestimo === 'FINALIZADO');
         
         return (
-            <div className={styles.grid}>
-                    {emprestimos.map((emprestimo) => (
-                        <div key={emprestimo.id} className={styles.card}>
-                            <h3 className={styles.cardTitle}>{emprestimo.livro.titulo}</h3>
-                            <div className={styles.cardContent}>
-                                <p><strong>Data do Empréstimo:</strong> {formatarData(emprestimo.dataEmprestimo)}</p>
-                                <p><strong>Devolução Prevista:</strong> {formatarData(emprestimo.dataDevolucaoPrevista)}</p>
-                            </div>
-                            <div className={styles.cardFooter}>
-                                <span className={`${styles.status} ${styles[emprestimo.statusEmprestimo.toLowerCase()]}`}>
-                                    {emprestimo.statusEmprestimo}
-                                </span>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+            <>
+            <div className={styles.sectionContainer}>
+              <h2 className={styles.sectionTitle}>Empréstimos Ativos</h2>
+              {emprestimosAtivos.length > 0 ? (
+                <RenderEmprestimosGrid listaEmprestimos={emprestimosAtivos} />
+              ) : (
+                <div className={styles.emptySectionMessage}>Você não possui empréstimos ativos.</div>
+              )}
+            </div>
+
+            <div className={styles.sectionContainer}>
+              <h2 className={styles.sectionTitle}>Histórico de Empréstimos</h2>
+              {emprestimosHistorico.length > 0 ? (
+                <RenderEmprestimosGrid listaEmprestimos={emprestimosHistorico} />
+              ) : (
+                <div className={styles.emptySectionMessage}>Você não possui histórico de empréstimos.</div>
+              )}
+            </div>
+          </>
         );
     };
-
   return (
     <div className={styles.pageContainer}>
             <h1>Meus Empréstimos</h1>

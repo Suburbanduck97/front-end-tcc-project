@@ -92,9 +92,9 @@
 }
 
 .multasTable th {
-  background-color: #f8f9fa;
+  background-color: #4D227E;
   font-weight: 600;
-  color: #495057;
+  color: #ffffff;
 }
 
 .multasTable tbody tr:hover {
@@ -117,6 +117,22 @@
 
 .statusPago {
   background-color: #28a745; /* Verde */
+}
+
+.payButton {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  background-color: #28a745;
+  color: white;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.payButton:hover {
+  background-color: #218838;
 }
 
 /* Para mensagens de sucesso e erro em formulários */

@@ -1,8 +1,9 @@
 import { useContext, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import logo from '../../assets/logoEstanteGira.png'; // 1. Importe a imagem
 import { AuthContext } from '../../context/AuthContext';
 import styles from './Sidebar.module.css';
+
+const logo = "/logoEstanteGira.png";
 
 // Ícones simples para o menu (opcional, mas melhora a UI)
 const MenuIcon = () => (

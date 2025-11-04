@@ -23,3 +23,8 @@ export const devolverLivro = async (idEmprestimo) => {
   const response = await api.put(`/emprestimos/devolver/${idEmprestimo}`);
   return response.data;
 };
+
+export const confirmarRetirada = async (idEmprestimo) => {
+  const response = await api.post(`/emprestimos/confirmar-retirada/${idEmprestimo}`);
+  return response.data;
+}
