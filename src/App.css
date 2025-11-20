@@ -1,14 +1,24 @@
 /* Este arquivo agora pode ser usado para estilos de layout globais */
 .appContainer {
   display: flex;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
 }
 
 .content {
-  flex-grow: 1;
-  padding: 2rem;
-  margin-left: 250px; /* Espaço para a sidebar */
+  margin-left: 250px; 
   width: calc(100% - 250px);
-  transition: margin-left 0.3s ease-in-out;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: auto;
+  min-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin: 0;
 }
 
 /* Em telas pequenas, o conteúdo ocupa toda a largura */
@@ -17,6 +27,6 @@
     margin-left: 0;
     width: 100%;
     padding: 1rem;
-    padding-top: 70px; /* Espaço para o botão do menu não sobrepor o conteúdo */
+    padding-top: 70px;
   }
 }

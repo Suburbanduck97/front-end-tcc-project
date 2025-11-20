@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useContext, useEffect, useState } from "react";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { AuthContext } from "../../context/AuthContext";
 import api from '../../services/api';
-import { getEstados, getCidadesPorEstado } from '../../services/ibgeService';
+import { getCidadesPorEstado, getEstados } from '../../services/ibgeService';
 import styles from './MeuPerfilPage.module.css';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 // Ícones SVG para um visual mais profissional (Componentes locais)
 const UserIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>;

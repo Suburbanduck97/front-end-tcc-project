@@ -16,10 +16,13 @@ body {
   margin: 0;
   background-color: var(--color-background);
   color: var(--color-text);
-  min-height: 100vh;
 }
 
 /* Um reset básico */
 * {
   box-sizing: border-box;
+}
+
+#root {
+  min-height: 100vh;
 }

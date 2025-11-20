@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { listarTodasMultas, buscarMultaPorId, filtrarMultasPorStatus, pagarMulta } from '../../services/multaService';
-import useDebounce from '../../hooks/useDebounce';
-import styles from './GerirMultasPage.module.css';
+import { useEffect, useState } from 'react';
 import Modal from '../../components/Shared/Modal';
-import { useToast } from '../../context/useToast'; 
+import { useToast } from '../../context/useToast';
+import useDebounce from '../../hooks/useDebounce';
+import { buscarMultaPorId, filtrarMultasPorStatus, listarTodasMultas, pagarMulta } from '../../services/multaService';
+import styles from './GerirMultasPage.module.css';
 
 function GerirMultasPage() {
   const [multas, setMultas] = useState([]);

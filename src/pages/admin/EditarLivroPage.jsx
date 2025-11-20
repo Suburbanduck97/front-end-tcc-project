@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { getLivroPorId, atualizarLivro } from '../../services/livroService';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { atualizarLivro, getLivroPorId } from '../../services/livroService';
 import styles from './EditarLivroPage.module.css';
 
 function EditarLivroPage() {
@@ -23,7 +23,8 @@ function EditarLivroPage() {
           titulo: data.titulo || '', autor: data.autor || '',
           categoria: data.categoria || '', editora: data.editora || '',
           anoPublicacao: data.anoPublicacao || '', qtdTotal: data.qtdTotal || 0,
-          descricao: data.descricao || ''
+          descricao: data.descricao || '',
+          capa: null 
         };
         setFormData(dadosFormulario);
         setLivroOriginal(dadosFormulario); 
@@ -38,51 +39,75 @@ function EditarLivroPage() {
   }, [id]);
 
   const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData(prevState => ({ ...prevState, [id]: value }));
+    const { id, value, type, files } = e.target;
+
+    if(type === 'file'){
+      setFormData(prevState => ({ ...prevState, [id]: files[0]}));
+    }else{
+      setFormData(prevState => ({ ...prevState, [id]: value}));
+    }
+
   };
 
-  // <-- CORRIGIDO 1: Adicionada a função de cancelar
   const handleCancel = () => {
-    navigate(-1); // Simplesmente volta para a página anterior
+    navigate('/livros');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSuccess('');
     setError('');
-    setIsSubmitting(true); // <-- CORRIGIDO 2: Ativa o estado de envio
+    setIsSubmitting(true);
 
     const dadosAtualizados = {};
+    let mudancasTexto = false;
+
     for (const key in formData) {
+      if(key === 'capa') continue;
+
       // Converte valores numéricos para comparação correta
       const formValue = (key === 'anoPublicacao' || key === 'qtdTotal') ? Number(formData[key]) : formData[key];
       const originalValue = (key === 'anoPublicacao' || key === 'qtdTotal') ? Number(livroOriginal[key]) : livroOriginal[key];
 
       if (formValue !== originalValue) {
         dadosAtualizados[key] = formValue;
+        mudancasTexto = true;
       }
     }
 
-    if (Object.keys(dadosAtualizados).length === 0) {
+    const novaCapa = formData.capa instanceof File;
+
+    if(!mudancasTexto && !novaCapa){
       setError("Nenhuma alteração foi feita.");
-      setIsSubmitting(false); // <-- Importante: parar o envio aqui também
+      setIsSubmitting(false);
       return;
     }
 
-    try {
-      await atualizarLivro(id, dadosAtualizados);
+    try{
+      const dadosParaEnvio = new FormData();
+
+      for(const key in dadosAtualizados){
+        dadosParaEnvio.append(key, dadosAtualizados[key]);
+      }
+
+      if(novaCapa){
+        dadosParaEnvio.append('capa', formData.capa);
+      }
+
+      await atualizarLivro(id, dadosParaEnvio);
+
       setSuccess('Livro atualizado com sucesso! Redirecionando...');
-      
-      // Atualiza o "livroOriginal" para que o usuário não possa salvar de novo sem novas mudanças
-      setLivroOriginal(formData); 
-      
-      setTimeout(() => navigate(`/livros/${id}`), 2000); // Redireciona para a pág. de detalhes
-    } catch (err) {
+
+      const novoOriginal = { ...livroOriginal, ...dadosAtualizados};
+      setLivroOriginal(novoOriginal);
+      setFormData({ ...novoOriginal, capa: null});
+
+      setTimeout(() => navigate(`/livros/${id}`), 2000);
+    }catch (err){
       console.error("Erro ao atualizar livro:", err);
-      setError(err.response?.data?.message  || 'Não foi possível atualizar o livro.');
-    } finally {
-      setIsSubmitting(false); // Desativa o estado de envio, ocorrendo sucesso ou erro
+      setError(err.response?.data?.message || 'Não foi possível atualizar o livro.');
+    }finally{
+      setIsSubmitting(false);
     }
   };
 
@@ -122,9 +147,12 @@ function EditarLivroPage() {
             <label htmlFor="descricao">Descrição</label>
             <textarea id="descricao" value={formData.descricao} onChange={handleChange}></textarea>
           </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="capa">Capa do Livro</label>
+            <input type="file" id="capa" onChange={handleChange} accept="image/png, image/jpeg" />
+          </div>
         </div>
         <div className={styles.formActions}>
-          {/* <-- CORRIGIDO 3: Botões agora usam 'isSubmitting' --> */}
           <button type="submit" className={styles.saveButton} disabled={isSubmitting}>
             {isSubmitting ? 'Salvando...' : 'Salvar Alterações'}
           </button>

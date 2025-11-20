@@ -5,15 +5,16 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Remove qualquer scroll */
+  overflow: hidden;
+  font-family: 'Poppins', Arial, sans-serif;
 }
 
 .loginPage {
   display: flex;
-  flex-direction: row; /* Painéis lado a lado */
-  height: 100vh;       /* Altura total da viewport */
-  width: 100vw;        /* Largura total da viewport */
-  overflow: hidden;    /* Garante que não haja scroll */
+  flex-direction: row; 
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
 }
 
 .leftPanel {
@@ -34,7 +35,8 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
+  gap: 5px;
+  margin-bottom: 1.5rem;
 }
 
 .logoImage {
@@ -74,7 +76,7 @@ html, body {
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
   color: #0E0F30;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
 }
 
 .formGroup {

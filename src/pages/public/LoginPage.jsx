@@ -1,9 +1,9 @@
-import React, {useState, useContext} from 'react'; // Importando o useContext
-import { useNavigate, Link } from 'react-router-dom';
-import {login} from '../../services/authService'; //Importa a função de login
+import { useContext, useState } from 'react'; // Importando o useContext
+import { FaEye, FaEyeSlash, FaLock, FaUser } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext'; // 2. Importando o AuthContext
+import { login } from '../../services/authService'; //Importa a função de login
 import styles from './LoginPage.module.css';
-import { FaUser, FaLock,FaEye, FaEyeSlash } from 'react-icons/fa';
 
 
 function LoginPage() {

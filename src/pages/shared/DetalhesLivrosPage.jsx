@@ -1,11 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { getLivroDetalhes, deletarLivro } from '../../services/livroService';
-import { criarReserva } from '../../services/reservaService';
+import { useContext, useEffect, useState } from 'react';
+import { FaArrowLeft, FaEdit, FaTrash } from 'react-icons/fa';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import Modal from '../../components/Shared/Modal';
 import { AuthContext } from '../../context/AuthContext';
 import { useToast } from '../../context/useToast';
-import Modal from '../../components/Shared/Modal';
-import { FaArrowLeft, FaEdit, FaTrash } from 'react-icons/fa';
+import { deletarLivro, getLivroDetalhes } from '../../services/livroService';
+import { criarReserva } from '../../services/reservaService';
 // O nome do arquivo CSS importado está correto
 import styles from './DetalhesLivroPage.module.css';
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastProvider } from './context/ToastContext.jsx';
+
 // 1. Importe os componentes necessários
 import Layout from './components/Layout/Layout.jsx';
 import AdminRoute from './components/AdminRoute.jsx';
@@ -20,6 +21,7 @@ import MeuPerfilPage from './pages/shared/MeuPerfilPage.jsx';
 import MeusEmprestimosPage from './pages/user/MeusEmprestimosPage.jsx';
 import MinhasReservasPage from './pages/user/MinhasReservasPage.jsx';
 import MinhasMultasPage from './pages/user/MinhasMultasPage.jsx';
+import NotificacaoPage from './pages/shared/NotificacaoPage.jsx';
 
 // Páginas de Admin
 import CadastrarLivroPage from './pages/admin/CadastrarLivroPage.jsx';
@@ -51,7 +53,8 @@ function App() {
         <Route path='/meus-emprestimos' element={<ProtectedRoute><Layout><MeusEmprestimosPage /></Layout></ProtectedRoute>} />
         <Route path='/minhas-reservas' element={<ProtectedRoute><Layout><MinhasReservasPage /></Layout></ProtectedRoute>} />
         <Route path='/minhas-multas' element={<ProtectedRoute><Layout><MinhasMultasPage /></Layout></ProtectedRoute>} />
-
+        <Route path='/notificacoes' element={<ProtectedRoute><Layout><NotificacaoPage /></Layout></ProtectedRoute>} />
+        
         {/* === ROTAS DE ADMIN (Com Sidebar, envolvidas pelo Layout) === */}
         <Route path="/admin/cadastrar-livro" element={<AdminRoute><Layout><CadastrarLivroPage /></Layout></AdminRoute>} />
         <Route path="/admin/editar-livro/:id" element={<AdminRoute><Layout><EditarLivroPage /></Layout></AdminRoute>} />

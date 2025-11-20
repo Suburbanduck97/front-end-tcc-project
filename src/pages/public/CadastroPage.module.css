@@ -2,20 +2,25 @@
 
 /* --- NOVAS VARIÁVEIS DE COR --- */
 :root {
-  --primary-color: #612B9F; 
-  --primary-hover-color: #7700ff;
-  --primary-color-link: #0E0F30;
+    --primary-dark: #0E0F30;
+    --primary-purple: #612B9F;
+    --primary-purple-hover: #4c1d80;
+    --bg-color: #f4f6f8;
+    --white: #ffffff;
+    --text-gray: #555;
+    --border-color: #ddd;
 }
 
 .pageContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-    padding: 2rem;
-    background-color: #f0f2f5;
-    min-height: calc(100vh - 5rem);
-    box-sizing: border-box;
-    overflow-y: auto;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--bg-color);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Alinha no topo para permitir scroll natural */
+  padding: 3rem 1rem; /* Espaço em cima e embaixo */
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
 }
 
 .pageContainer h1 {
@@ -31,10 +36,7 @@
     padding: 2.5rem 3rem;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 1400px;
-    max-height: 90vh;
-    overflow-y: auto;
+    width: 100%;
 }
 
 .title {

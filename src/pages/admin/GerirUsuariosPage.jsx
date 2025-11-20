@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { listarTodosUsuarios, buscarUsuarioPorNome, filtrarUsuarioPorRole } from '../../services/usuarioService';
+import { useEffect, useState } from 'react';
 import useDebounce from '../../hooks/useDebounce';
+import { buscarUsuarioPorNome, filtrarUsuarioPorRole, listarTodosUsuarios } from '../../services/usuarioService';
 import styles from './GerirUsuariosPage.module.css';
 
 function GerirUsuariosPage() {

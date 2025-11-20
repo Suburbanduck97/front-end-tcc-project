@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { getTodosEmprestimos, registrarEmprestimo, confirmarRetirada, devolverLivro } from '../../services/emprestimoService';
+import { useEffect, useState } from 'react';
+import Modal from '../../components/Shared/Modal';
+import { useToast } from '../../context/useToast';
+import { confirmarRetirada, devolverLivro, getTodosEmprestimos, registrarEmprestimo } from '../../services/emprestimoService';
 import { getTodasAsReservas } from '../../services/reservaService';
 import styles from './GestaoEmprestimosPage.module.css';
-import Modal from '../../components/Shared/Modal';      // 1. Importa o Modal
-import { useToast } from '../../context/useToast';      // 2. CORREÇÃO: Importa o useToast do arquivo correto
 
 function GestaoEmprestimosPage() {
     const [emprestimos, setEmprestimos] = useState([]);
     const [reservas, setReservas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [submittingAction, setSubmittingAction] = useState({ type: null, id: null });
-    
-    // 3. Estado para controlar o Modal (se está aberto, qual a mensagem, etc.)
+
     const [modalState, setModalState] = useState({ isOpen: false, onConfirm: null, title: '', message: '' });
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const { addToast } = useToast(); // Hook para as notificações (toasts)
+    const { addToast } = useToast();
 
     const fetchDados = async () => {
         try {
@@ -24,7 +23,10 @@ function GestaoEmprestimosPage() {
             ]);
             
             setEmprestimos(emprestimosData || []);
-            setReservas((reservasData || []).filter(r => r.statusReserva === 'ATIVA'));
+            const reservasOrdenadas = (reservasData || [])
+                .filter(r => r.statusReserva === 'ATIVA')
+                .sort((a, b) => new Date(a.dataReserva) - new Date(b.dataReserva));
+            setReservas(reservasOrdenadas);
         } catch (err) {
             console.error("Erro ao buscar dados de gestão:", err);
             addToast("Não foi possível carregar os dados da página.", 'error');
@@ -37,7 +39,7 @@ function GestaoEmprestimosPage() {
         fetchDados();
     }, []);
 
-    // 4. Lógica de "Conceder" foi separada: agora ela é chamada APÓS a confirmação no modal
+
     const handleConcederEmprestimo = async (reserva) => {
         if (isSubmitting) return;
 
@@ -97,7 +99,7 @@ function GestaoEmprestimosPage() {
         }
     };
 
-    // 6. Funções para ABRIR o modal com a pergunta e a ação correta
+
     const openConcederModal = (reserva) => {
         setModalState({
             isOpen: true,
@@ -150,29 +152,41 @@ function GestaoEmprestimosPage() {
                                 <tr>
                                     <th>Prioridade</th>
                                     <th>Livro</th>
-                                    <th>Usuário</th>
+                                    <th>Utilizador</th>
                                     <th>Data Reserva</th>
                                     <th>Ação</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {reservas.map((reserva, index) => (
-                                    <tr key={reserva.id}>
-                                        <td className={styles.priorityCell}>{index + 1}</td>
-                                        <td>{reserva.livro.titulo}</td>
-                                        <td>{reserva.usuario.nome}</td>
-                                        <td>{formatarData(reserva.dataReserva)}</td>
-                                        <td>
-                                            <button 
-                                                className={`${styles.btn} ${styles.btnPrimary}`} 
-                                                onClick={() => openConcederModal(reserva)}
-                                                disabled={submittingAction.id === reserva.id}
-                                            >
-                                                {submittingAction.type === 'conceder' && submittingAction.id === reserva.id ? 'Concedendo...' : 'Conceder Empréstimo'}
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {reservas.map((reserva, index) => {
+                                    // LÓGICA DE FILA: Encontra a primeira reserva deste livro na lista ordenada
+                                    const primeiraReservaDesteLivro = reservas.find(r => r.livro.id === reserva.livro.id);
+                                    // Se o ID da reserva atual for igual ao da primeira encontrada, é a vez dela.
+                                    const isPrimeiroDaFila = primeiraReservaDesteLivro && primeiraReservaDesteLivro.id === reserva.id;
+
+                                    return (
+                                        <tr key={reserva.id}>
+                                            <td className={styles.priorityCell}>{index + 1}</td>
+                                            <td>{reserva.livro.titulo}</td>
+                                            <td>{reserva.usuario.nome}</td>
+                                            <td>{formatarData(reserva.dataReserva)}</td>
+                                            <td>
+                                                <button 
+                                                    className={`${styles.btn} ${styles.btnPrimary}`} 
+                                                    onClick={() => openConcederModal(reserva)}
+                                                    // TRAVA VISUAL:
+                                                    disabled={submittingAction.id === reserva.id || !isPrimeiroDaFila}
+                                                    style={!isPrimeiroDaFila ? { opacity: 0.5, cursor: 'not-allowed', background: '#999' } : {}}
+                                                    title={!isPrimeiroDaFila ? "Este utilizador não é o primeiro da fila para este livro." : "Conceder Empréstimo"}
+                                                >
+                                                    {submittingAction.type === 'conceder' && submittingAction.id === reserva.id 
+                                                        ? 'A processar...' 
+                                                        : 'Conceder'}
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
                         </table>
                     </div>
@@ -188,7 +202,7 @@ function GestaoEmprestimosPage() {
                               <tr>
                                 <th>ID</th>
                                 <th>Livro</th>
-                                <th>Usuário</th>
+                                <th>Utilizador</th>
                                 <th>Data Empréstimo</th>
                                 <th>Devolução Prevista</th>
                                 <th>Status</th>
@@ -215,7 +229,7 @@ function GestaoEmprestimosPage() {
                                                     onClick={() => openConfirmarRetiradaModal(emprestimo)}
                                                     disabled={submittingAction.id === emprestimo.id}
                                                 >
-                                                    {submittingAction.type === 'retirar' && submittingAction.id === emprestimo.id ? 'Confirmando...' : 'Confirmar Retirada'}
+                                                    {submittingAction.type === 'retirar' && submittingAction.id === emprestimo.id ? 'A confirmar...' : 'Confirmar Retirada'}
                                                 </button>
                                             )}
 
@@ -225,9 +239,8 @@ function GestaoEmprestimosPage() {
                                                     onClick={() => openDevolverModal(emprestimo)}
                                                     disabled={submittingAction.id === emprestimo.id}
                                                 >
-                                                    {submittingAction.type === 'devolver' && submittingAction.id === emprestimo.id ? 'Processando...' : 'Devolver'}
+                                                    {submittingAction.type === 'devolver' && submittingAction.id === emprestimo.id ? 'A processar...' : 'Devolver'}
                                                 </button>
-            
                                             )}
                                         </td>
                                     </tr>
@@ -240,9 +253,10 @@ function GestaoEmprestimosPage() {
             
             <Modal
                 isOpen={modalState.isOpen}
-                onClose={() => setModalState({ isOpen: false })}
+                onClose={() => !isSubmitting && setModalState({ isOpen: false})} 
                 onConfirm={modalState.onConfirm}
                 title={modalState.title}
+                isSubmitting={isSubmitting}
             >
                 <p>{modalState.message}</p>
             </Modal>

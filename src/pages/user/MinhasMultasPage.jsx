@@ -1,8 +1,8 @@
 // src/pages/MinhasMultasPage
-import React, { useState, useEffect, useContext } from 'react';
+import { jwtDecode } from 'jwt-decode';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { getMultasPorUsuario } from '../../services/multaService'; // Importa nosso novo serviço
-import { jwtDecode } from 'jwt-decode';
 import styles from './MinhasMultasPage.module.css';
 
 function MinhasMultasPage() {

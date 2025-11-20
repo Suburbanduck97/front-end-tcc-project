@@ -1,8 +1,8 @@
 // src/pages/MeusEmprestimosPage
-import React, { useState, useEffect, useContext } from "react";
+import { jwtDecode } from 'jwt-decode';
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from '../../context/AuthContext';
 import { getEmprestimosPorUsuario } from '../../services/emprestimoService';
-import { jwtDecode } from 'jwt-decode';
 import styles from './MeusEmprestimosPage.module.css';
 
 function MeusEmprestimosPage() {

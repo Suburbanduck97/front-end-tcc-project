@@ -40,8 +40,10 @@
 }
 
 .navigation a {
-  display: block;
+  display: flex;
   color: #bdc3c7;
+  align-items:center;
+  gap: 10px;
   text-decoration: none;
   padding: 0.8rem 1rem;
   border-radius: 6px;
@@ -51,39 +53,34 @@
 }
 
 .navigation a:hover {
-  background-color: #9058D1;
+  background-color: #612B9F;
   color: #ffffff;
 }
 
 .navigation a.active {
-  background-color: #612B9F; /* Cor de destaque */
+  background-color: #0E0F30;
+  border-left: 4px solid #612B9F;
   color: #ffffff;
   font-weight: bold;
 }
 
-/* SUBSTITUA O SEU .separator ATUAL POR ESTE */
+
 .separator {
-  /* Estilos para quando o separador tiver texto (como "Admin") */
   padding: 1.5rem 1rem 0.5rem;
   text-transform: uppercase;
   font-size: 0.75rem;
   font-weight: bold;
   color: #7f8c8d;
-  
-  /* Estilos que se aplicam a todos os separadores */
-  list-style: none; /* Garante que não tenha bolinha de lista */
-  cursor: default;  /* O cursor não muda ao passar por cima */
+  list-style: none; 
+  cursor: default; 
 }
 
-/* Esta é a mágica! 
-  Quando um separador NÃO tiver texto dentro dele, 
-  nós aplicamos o estilo de linha.
-*/
+
 .separator:empty {
-  height: 1px; /* Espessura da linha */
-  background-color: #34495e; /* Cor da linha (um pouco mais clara que o fundo) */
-  margin: 1rem 0; /* Espaçamento em cima e embaixo da linha */
-  padding: 0; /* Remove o padding que definimos acima */
+  height: 1px; 
+  background-color: #34495e; 
+  margin: 1rem 0; 
+  padding: 0; 
 }
 
 .userInfo {
@@ -120,7 +117,7 @@
 
 /* Responsividade */
 .menuToggle {
-  display: none; /* Escondido por padrão em telas grandes */
+  display: none; 
   position: fixed;
   top: 15px;
   left: 15px;
@@ -132,6 +129,41 @@
   border-radius: 50%;
   cursor: pointer;
 }
+
+.notificationWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.notificationWrapper svg {
+  min-width: 20px; 
+  min-height: 20px;
+}
+
+/* Badge diretamente sobre o sino */
+.notificationWrapper .badge {
+  position: absolute;
+  top: -5px;
+  left: 10px;
+  background: #ff4757;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 800;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #2b2b68; 
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 10;
+  pointer-events: none;
+}
+
 
 @media (max-width: 768px) {
   .sidebar {

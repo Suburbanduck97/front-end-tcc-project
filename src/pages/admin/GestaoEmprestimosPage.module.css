@@ -1,141 +1,116 @@
 .pageContainer {
-  background-color: #fff;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
 .pageContainer h1 {
-  margin-top: 0;
-  margin-bottom: 2rem;
-  color: #2a1e3b; 
-  border-bottom: 2px solid #4D227E; 
-  padding-bottom: 0.5rem;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    color: #2a1e3b; 
+    border-bottom: 2px solid #4D227E; 
+    padding-bottom: 0.5rem;
 }
 
 .section {
-  margin-bottom: 3rem;
+    margin-bottom: 3rem;
 }
 
 .section h2 {
-  color: #2a1e3b;
-  margin-bottom: 1.5rem;
+    color: #2a1e3b;
+    margin-bottom: 1.5rem;
 }
 
 .tableContainer {
-  overflow-x: auto; /* Para rolagem horizontal em telas pequenas */
+    overflow-x: auto;
 }
 
 .table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
 }
 
 .table th,
 .table td {
-  padding: 0.9rem 1rem;
-  border-bottom: 1px solid #e0e0e0; /* Cinza claro */
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .table th {
-  background-color: #4D227E;
-  font-weight: 600;
-  color: #ffffff;
+    background-color: #4D227E;
+    font-weight: 600;
+    color: #ffffff;
 }
 
 .table tbody tr:hover {
-  background-color: #f1f3f5;
+    background-color: #f1f3f5;
 }
 
 .priorityCell {
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: #4D227E;
-  text-align: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #4D227E;
+    text-align: center;
 }
 
 .btn {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: opacity 0.2s;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: opacity 0.2s;
 }
 
-.btn:hover {
-  opacity: 0.85;
+.btn:hover:not(:disabled) {
+    opacity: 0.85;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .btnPrimary {
-  background-color: #2e7d32; /* Verde principal */
-  color: white;
+    background-color: #2e7d32;
+    color: white;
 }
 
 .btnSecondary {
-  background-color: #3949ab; /* Azul médio */
-  color: white;
+    background-color: #3949ab;
+    color: white;
 }
 
 .status {
-  padding: 0.25rem 0.6rem;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  font-weight: bold;
-  color: #fff;
-  text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
 }
 
 .status.ativo {
-  background-color: #2e7d32; /* Verde ativo */
+    background-color: #2e7d32;
 }
 
 .status.atrasado {
-  background-color: #d32f2f; /* Vermelho mais suave */
+    background-color: #d32f2f;
 }
 
 .status.finalizado {
-  background-color: #757575;
+    background-color: #757575;
 }
 
 .status.aguardando_retirada {
-  background-color: #f59e0b;
+    background-color: #f59e0b;
 }
 
-/* Para mensagens de sucesso e erro em formulários */
-.successMessage {
-  color: #4F8A10;
-  background-color: #DFF2BF;
-  padding: 10px;
-  border-radius: 5px;
-  margin-top: 15px;
-  text-align: center;
-  border: 1px solid #4F8A10;
-}
-
-.errorMessage {
-  color: #D8000C;
-  background-color: #FFD2D2;
-  padding: 10px;
-  border-radius: 5px;
-  margin-top: 15px;
-  text-align: center;
-  border: 1px solid #D8000C;
-}
-
-/* Para mensagens de status em páginas de listagem (GerirMultas, GerirUsuarios) */
-.messageContainer {
-  text-align: center;
-  padding: 40px 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  margin-top: 20px;
-  font-size: 1.1rem;
-  color: #555;
-  border: 1px solid #eee;
-}
-
-.emptyMessage {
-  color: #666;
+.loadingMessage, .emptyMessage {
+    text-align: center;
+    color: #666;
+    font-size: 1.1rem;
+    padding: 2rem;
 }

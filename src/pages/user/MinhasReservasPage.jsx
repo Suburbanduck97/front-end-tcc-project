@@ -1,6 +1,5 @@
 // src/pages/MinhasReservasPage.jsx
-import React from 'react';
-import { useState, useEffect, useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { getMinhasReservas } from '../../services/reservaService'; // Importa nosso novo serviço
 import styles from './MinhasReservasPage.module.css';

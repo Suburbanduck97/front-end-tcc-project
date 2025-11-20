@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { signup } from '../../services/authService';
+import { getCidadesPorEstado, getEstados } from '../../services/ibgeService';
 import styles from './CadastroPage.module.css';
-import { getEstados, getCidadesPorEstado } from '../../services/ibgeService';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 function CadastroPage() {
     const [estados, setEstados] = useState([]);

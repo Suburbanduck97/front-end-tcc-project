@@ -1,8 +1,8 @@
 // src/pages/ListaLivros
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { buscarLivrosPorTermoGeral, getTodosLivros } from '../../services/livroService';
 import useDebounce from '../../hooks/useDebounce';
+import { buscarLivrosPorTermoGeral, getTodosLivros } from '../../services/livroService';
 import styles from './ListaLivrosPage.module.css';
 
 const API_BASE_URL = 'http://localhost:8080';

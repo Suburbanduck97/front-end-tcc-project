@@ -1,7 +1,7 @@
 // src/context/AuthProvider.jsx
 import React, { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import { AuthContext } from './AuthContext'; // <-- Importa o contexto do novo arquivo
+import { AuthContext } from './AuthContext';
 
 // Este arquivo agora exporta APENAS o componente Provedor
 export const AuthProvider = ({ children }) => {
