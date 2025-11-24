@@ -250,7 +250,7 @@ function GestaoEmprestimosPage() {
                     </div>
                 ) : <p className={styles.emptyMessage}>Nenhum empréstimo encontrado no sistema.</p>}
             </section>
-            
+                
             <Modal
                 isOpen={modalState.isOpen}
                 onClose={() => !isSubmitting && setModalState({ isOpen: false})} 

@@ -36,7 +36,7 @@ function ListaLivros() {
         
         setLivros(data || []);
         if (!data || data.length === 0) {
-          setMessage('Nenhum livro encontrado.');
+          setMessage('Nenhum livro cadastrado no sistema.');
         }
       } catch (err) {
         console.error("Erro ao buscar livros:", err);
@@ -51,7 +51,16 @@ function ListaLivros() {
     fetchData();
   }, [debouncedTermoBusca]);
 
-  const messageClass = isError ? styles.errorMessage : styles.successMessage;
+  let messageClass;
+
+  if (isError){
+    messageClass = styles.errorMessage;
+  }else if(message === 'Nenhum livro cadastrado no sistema.'){
+    messageClass = styles.neutraMessage;
+  }else{
+    messageClass = styles.successMessage;
+  }
+
 
   return (
     <div className={styles.pageContainer}>
@@ -66,7 +75,7 @@ function ListaLivros() {
         />
         <button 
           type="button" 
-          onClick={() => setTermoBusca('')} // Apenas limpa o estado
+          onClick={() => setTermoBusca('')}
           className={styles.clearButton}
         >
           Limpar

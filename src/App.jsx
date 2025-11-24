@@ -50,8 +50,8 @@ function App() {
         <Route path='/livros' element={<ProtectedRoute><Layout><ListaLivrosPage /></Layout></ProtectedRoute>} />
         <Route path='/livros/:id' element={<ProtectedRoute><Layout><DetalhesLivroPage /></Layout></ProtectedRoute>} />
         <Route path='/meu-perfil' element={<ProtectedRoute><Layout><MeuPerfilPage /></Layout></ProtectedRoute>} />
-        <Route path='/meus-emprestimos' element={<ProtectedRoute><Layout><MeusEmprestimosPage /></Layout></ProtectedRoute>} />
         <Route path='/minhas-reservas' element={<ProtectedRoute><Layout><MinhasReservasPage /></Layout></ProtectedRoute>} />
+        <Route path='/meus-emprestimos' element={<ProtectedRoute><Layout><MeusEmprestimosPage /></Layout></ProtectedRoute>} />
         <Route path='/minhas-multas' element={<ProtectedRoute><Layout><MinhasMultasPage /></Layout></ProtectedRoute>} />
         <Route path='/notificacoes' element={<ProtectedRoute><Layout><NotificacaoPage /></Layout></ProtectedRoute>} />
         

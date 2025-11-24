@@ -101,15 +101,14 @@ const Sidebar = () => {
                     <li><NavLink to="/admin/usuarios" className={({ isActive }) => isActive ? styles.active : ''} onClick={closeMenu}>Gerir Usuários</NavLink></li>
 
                     <li className={styles.separator}></li>
-                    <li><NotificationLink /></li>
 
                     <li><NavLink to="/meu-perfil" className={({ isActive }) => isActive ? styles.active : ''} onClick={closeMenu}>Meu Perfil</NavLink></li>
                   </>
                 ) : (
                   <>
                     <li><NavLink to="/livros" className={({ isActive }) => isActive ? styles.active : ''} onClick={closeMenu}>Livros</NavLink></li>
-                    <li><NavLink to="/meus-emprestimos" className={({ isActive }) => isActive ? styles.active : ''} onClick={closeMenu}>Meus Empréstimos</NavLink></li>
                     <li><NavLink to="/minhas-reservas" className={({ isActive }) => isActive ? styles.active : ''} onClick={closeMenu}>Minhas Reservas</NavLink></li>
+                    <li><NavLink to="/meus-emprestimos" className={({ isActive }) => isActive ? styles.active : ''} onClick={closeMenu}>Meus Empréstimos</NavLink></li>
                     <li><NavLink to="/minhas-multas" className={({ isActive }) => isActive ? styles.active : ''} onClick={closeMenu}>Minhas Multas</NavLink></li>
 
                     <li className={styles.separator}></li>
