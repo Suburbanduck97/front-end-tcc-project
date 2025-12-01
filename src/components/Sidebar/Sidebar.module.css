@@ -4,7 +4,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100vh;
+  height: auto;
+  min-height: 100vh;
   width: 250px;
   position: fixed;
   top: 0;
@@ -12,6 +13,7 @@
   padding: 1.5rem 1rem;
   transition: transform 0.3s ease-in-out;
   z-index: 1000;
+  overflow-x: hidden;
 }
 
 .logoContainer {
@@ -31,6 +33,12 @@
   margin: 0;
   font-size: 1.5rem;
   color: #ffffff;
+}
+
+.navigation {
+  flex-grow: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .navigation ul {
@@ -84,10 +92,11 @@
 }
 
 .userInfo {
-    display: flex;
-    flex-direction: column;
-    padding: 0 1rem;
-    margin-bottom: 1rem;
+  flex-shrink: 0; 
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem;
+  margin-bottom: 1rem;
 }
 
 .userInfo strong {
@@ -100,6 +109,7 @@
 }
 
 .logoutButton {
+  flex-shrink: 0; 
   width: 100%;
   padding: 0.7rem;
   background-color: #c0392b;
@@ -109,6 +119,7 @@
   cursor: pointer;
   font-weight: bold;
   transition: background-color 0.2s;
+  margin-top: 1.5rem;
 }
 
 .logoutButton:hover {
@@ -177,5 +188,15 @@
 
   .menuToggle {
     display: block;
+  }
+}
+
+@media (max-height: 750px) {
+  .sidebar {
+    justify-content: flex-start;
+  }
+
+  .logoutButton {
+    margin-top: 1.5rem;
   }
 }

@@ -29,6 +29,7 @@ import EditarLivroPage from './pages/admin/EditarLivroPage.jsx';
 import GestaoEmprestimosPage from './pages/admin/GestaoEmprestimosPage.jsx';
 import GerirUsuarioPage from './pages/admin/GerirUsuariosPage.jsx';
 import GerirMultasPage from './pages/admin/GerirMultasPage.jsx';
+import RelatorioPage from './pages/admin/RelatorioPage.jsx';
 
 // Estilos do App
 import './App.css';
@@ -61,6 +62,7 @@ function App() {
         <Route path="/admin/emprestimos" element={<AdminRoute><Layout><GestaoEmprestimosPage /></Layout></AdminRoute>} />
         <Route path='/admin/usuarios' element={<AdminRoute><Layout><GerirUsuarioPage /></Layout></AdminRoute>} />
         <Route path='/admin/multas' element={<AdminRoute><Layout><GerirMultasPage /></Layout></AdminRoute>} />
+        <Route path='/admin/relatorios' element={<AdminRoute><Layout><RelatorioPage /></Layout></AdminRoute>} />
         {/* Adicione aqui as novas rotas de admin que você criar, sempre dentro do Layout */}
 
       </Routes>

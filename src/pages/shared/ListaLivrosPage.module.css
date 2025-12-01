@@ -169,8 +169,7 @@ margin-right: 1.5rem;
   align-self: flex-start;
 }
 .status.disponivel { background-color: #16a34a; } /* Verde */
-.status.reservado { background-color: #f59e0b; } /* Laranja */
-.status.emprestado { background-color: #dc2626; } /* Vermelho */
+.status.indisponivel { background-color: #dc2626; } /* Vermelho */
 
 .adminActions {
   display: flex;

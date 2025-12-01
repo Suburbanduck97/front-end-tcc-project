@@ -5,6 +5,17 @@ import { signup } from '../../services/authService';
 import { getCidadesPorEstado, getEstados } from '../../services/ibgeService';
 import styles from './CadastroPage.module.css';
 
+const LIMITES = {
+    NOME: 100,
+    CPF: 11,
+    TELEFONE: 11,
+    BAIRRO: 100,
+    EMAIL: 255,
+    SENHA_MIN: 8,
+    SENHA_MAX: 100,
+    CODIGO_ADMIN: 20
+};
+
 function CadastroPage() {
     const [estados, setEstados] = useState([]);
     const [cidades, setCidades] = useState([]);
@@ -25,6 +36,8 @@ function CadastroPage() {
     const [success, setSuccess] = useState(null);
 
     const navigate = useNavigate();
+
+    const hoje = new Date().toISOString().split('T')[0];
 
     useEffect(() => {
         getEstados().then(data => { setEstados(data); });
@@ -54,18 +67,28 @@ function CadastroPage() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        
+        if(formData.senha.length < LIMITES.SENHA_MIN){
+            setError(`A senha deve ter pelo menos ${LIMITES.SENHA_MIN} caracteres.`);
+            return;
+        }
+
         if (formData.senha !== formData.confirmarSenha) {
             setError('As senhas não coincidem. Por favor, verifique.');
             return;
         }
+
         setError(null);
         setSuccess(null);
         setIsSubmitting(true);
+
         const dadosParaEnviar = { ...formData };
         delete dadosParaEnviar.confirmarSenha;
+
         if (dadosParaEnviar.role !== 'BIBLIOTECARIO') {
             delete dadosParaEnviar.codigoAdministrativo;
         }
+
         try {
             await signup(dadosParaEnviar);
             setSuccess('Cadastro realizado com sucesso! Você será redirecionado para a página de login.');
@@ -101,17 +124,17 @@ return (
                     {/* Nome (ocupa 2/3) e CPF */}
                     <div className={`${styles.formGroup} ${styles.col_8}`}>
                         <label htmlFor="nome" className={styles.label}>Nome Completo</label>
-                        <input type="text" id="nome" className={styles.input} value={formData.nome} onChange={handleChange} required disabled={isSubmitting}/>
+                        <input type="text" id="nome" className={styles.input} value={formData.nome} onChange={handleChange} required disabled={isSubmitting} maxLength={LIMITES.NOME}/>
                     </div>
                     <div className={`${styles.formGroup} ${styles.col_4}`}>
                         <label htmlFor="cpf" className={styles.label}>CPF</label>
-                        <input type="text" id="cpf" className={styles.input} placeholder="Somente números" value={formData.cpf} onChange={handleChange} required disabled={isSubmitting}/>
+                        <input type="text" id="cpf" className={styles.input} placeholder="Somente números" value={formData.cpf} onChange={handleChange} required disabled={isSubmitting} maxLength={LIMITES.CPF}/>
                     </div>
 
                     {/* Data, Sexo e Telefone */}
                     <div className={`${styles.formGroup} ${styles.col_4}`}>
                         <label htmlFor="dataNascimento" className={styles.label}>Data de Nascimento</label>
-                        <input type="date" id="dataNascimento" className={styles.input} value={formData.dataNascimento} onChange={handleChange} required disabled={isSubmitting}/>
+                        <input type="date" id="dataNascimento" className={styles.input} value={formData.dataNascimento} onChange={handleChange} required disabled={isSubmitting} max={hoje}/>
                     </div>
                     <div className={`${styles.formGroup} ${styles.col_4}`}>
                         <label htmlFor="sexo" className={styles.label}>Sexo</label>
@@ -123,7 +146,7 @@ return (
                     </div>
                     <div className={`${styles.formGroup} ${styles.col_4}`}>
                         <label htmlFor="telefone" className={styles.label}>Telefone</label>
-                        <input type="tel" id="telefone" className={styles.input} placeholder="Ex: 71999999999" value={formData.telefone} onChange={handleChange} required disabled={isSubmitting}/>
+                        <input type="tel" id="telefone" className={styles.input} placeholder="Ex: 71999999999" value={formData.telefone} onChange={handleChange} required disabled={isSubmitting} maxLength={LIMITES.TELEFONE}/>
                     </div>
                     
                     {/* --- SEÇÃO ENDEREÇO --- */}
@@ -146,7 +169,7 @@ return (
                     </div>
                     <div className={`${styles.formGroup} ${styles.col_4}`}>
                         <label htmlFor="bairro" className={styles.label}>Bairro</label>
-                        <input type="text" id="bairro" className={styles.input} value={formData.bairro} onChange={handleChange} required disabled={isSubmitting}/>
+                        <input type="text" id="bairro" className={styles.input} value={formData.bairro} onChange={handleChange} required disabled={isSubmitting} maxLength={LIMITES.BAIRRO}/>
                     </div>
 
                     {/* --- SEÇÃO ACESSO E TIPO DE CONTA --- */}
@@ -155,19 +178,22 @@ return (
                     {/* E-mail, Senha e Confirmar Senha */}
                     <div className={`${styles.formGroup} ${styles.col_12}`}>
                         <label htmlFor="email" className={styles.label}>E-mail</label>
-                        <input type="email" id="email" className={styles.input} value={formData.email} onChange={handleChange} required disabled={isSubmitting}/>
+                        <input type="email" id="email" className={styles.input} value={formData.email} onChange={handleChange} required disabled={isSubmitting} maxLength={LIMITES.EMAIL}/>
                     </div>
                     <div className={`${styles.formGroup} ${styles.col_6}`}>
                         <label htmlFor="senha" className={styles.label}>Senha</label>
                         <div className={styles.inputWrapper}>
-                            <input type={showSenha ? 'text' : 'password'} id="senha" className={styles.input} value={formData.senha} onChange={handleChange} required disabled={isSubmitting}/>
+                            <input type={showSenha ? 'text' : 'password'} id="senha" className={styles.input} value={formData.senha} onChange={handleChange} required disabled={isSubmitting} minLength={LIMITES.SENHA_MIN}
+                                    maxLength={LIMITES.SENHA_MAX}
+                                    placeholder={`Mínimo ${LIMITES.SENHA_MIN} caracteres`}/>
                             <span className={styles.eyeIcon} onClick={() => setShowSenha(!showSenha)}>{showSenha ? <FaEyeSlash /> : <FaEye />}</span>
                         </div>
                     </div>
                     <div className={`${styles.formGroup} ${styles.col_6}`}>
                         <label htmlFor="confirmarSenha" className={styles.label}>Confirmar Senha</label>
                         <div className={styles.inputWrapper}>
-                            <input type={showConfirmarSenha ? 'text' : 'password'} id="confirmarSenha" className={styles.input} value={formData.confirmarSenha} onChange={handleChange} required disabled={isSubmitting}/>
+                            <input type={showConfirmarSenha ? 'text' : 'password'} id="confirmarSenha" className={styles.input} value={formData.confirmarSenha} onChange={handleChange} required disabled={isSubmitting} minLength={LIMITES.SENHA_MIN}
+                                    maxLength={LIMITES.SENHA_MAX}/>
                             <span className={styles.eyeIcon} onClick={() => setShowConfirmarSenha(!showConfirmarSenha)}>{showConfirmarSenha ? <FaEyeSlash /> : <FaEye />}</span>
                         </div>
                     </div>
@@ -183,7 +209,7 @@ return (
                         <div className={`${styles.formGroup} ${styles.col_12}`}>
                             <label htmlFor="codigoAdministrativo" className={styles.label}>Código Administrativo</label>
                             <div className={styles.inputWrapper}>
-                                <input type={showCodigoAdmin ? 'text' : 'password'} id="codigoAdministrativo" className={styles.input} placeholder="Digite o código secreto" value={formData.codigoAdministrativo} onChange={handleChange} required disabled={isSubmitting}/>
+                                <input type={showCodigoAdmin ? 'text' : 'password'} id="codigoAdministrativo" className={styles.input} placeholder="Digite o código secreto" value={formData.codigoAdministrativo} onChange={handleChange} required disabled={isSubmitting} maxLength={LIMITES.CODIGO_ADMIN}/>
                                 <span className={styles.eyeIcon} onClick={() => setShowCodigoAdmin(!showCodigoAdmin)}>{showCodigoAdmin ? <FaEyeSlash /> : <FaEye />}</span>
                             </div>
                         </div>

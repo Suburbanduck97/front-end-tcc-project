@@ -114,6 +114,7 @@ function GerirMultasPage() {
         }
 
         return (
+          <div className={styles.tableScrollWrapper}>
             <table className={styles.multasTable}>
             <thead>
               <tr>
@@ -154,6 +155,7 @@ function GerirMultasPage() {
               ))}
             </tbody>
           </table>
+          </div>
         );
       };
 

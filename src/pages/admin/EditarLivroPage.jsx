@@ -3,6 +3,15 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { atualizarLivro, getLivroPorId } from '../../services/livroService';
 import styles from './EditarLivroPage.module.css';
 
+const LIMITES = {
+    TITULO: 200,
+    AUTOR: 100,
+    CATEGORIA: 50,
+    EDITORA: 100,
+    DESCRICAO: 2000,
+    CAPA_TAMANHO_MB: 5
+};
+
 function EditarLivroPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -42,10 +51,29 @@ function EditarLivroPage() {
     const { id, value, type, files } = e.target;
 
     if(type === 'file'){
-      setFormData(prevState => ({ ...prevState, [id]: files[0]}));
-    }else{
-      setFormData(prevState => ({ ...prevState, [id]: value}));
-    }
+      const file = files[0];
+      if(file){
+        const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+        if(!validTypes.includes(file.type)){
+          setError('Formato de capa inválido. Use JPG ou PNG.');
+          e.target.value = null;
+          return;
+        }
+
+        const maxSize = LIMITES.CAPA_TAMANHO_MB * 1024 * 1024;
+        if(file.size > maxSize){
+          setError(`A capa é muito grande. Máximo de ${LIMITES.CAPA_TAMANHO_MB}MB.`);
+          e.target.value = null;
+          return;
+        }
+
+        setError('');
+        setFormData(prevState => ({ ...prevState, [id]: file}));
+      }
+
+      }else{
+        setFormData(prevState => ({ ...prevState, [id]: value}));
+      }
 
   };
 
@@ -121,35 +149,40 @@ function EditarLivroPage() {
         <div className={styles.formGrid}>
           <div className={styles.formGroup}>
             <label htmlFor="titulo">Título</label>
-            <input type="text" id="titulo" value={formData.titulo} onChange={handleChange} />
+            <input type="text" id="titulo" value={formData.titulo} onChange={handleChange} maxLength={LIMITES.TITULO}/>
           </div>
           <div className={styles.formGroup}>
             <label htmlFor="autor">Autor</label>
-            <input type="text" id="autor" value={formData.autor} onChange={handleChange} />
+            <input type="text" id="autor" value={formData.autor} onChange={handleChange} maxLength={LIMITES.AUTOR}/>
           </div>
           <div className={styles.formGroup}>
             <label htmlFor="categoria">Categoria</label>
-            <input type="text" id="categoria" value={formData.categoria} onChange={handleChange} />
+            <input type="text" id="categoria" value={formData.categoria} onChange={handleChange} maxLength={LIMITES.CATEGORIA}/>
           </div>
           <div className={styles.formGroup}>
             <label htmlFor="editora">Editora</label>
-            <input type="text" id="editora" value={formData.editora} onChange={handleChange} />
+            <input type="text" id="editora" value={formData.editora} onChange={handleChange} maxLength={LIMITES.EDITORA}/>
           </div>
           <div className={styles.formGroup}>
             <label htmlFor="anoPublicacao">Ano de Publicação</label>
-            <input type="number" id="anoPublicacao" value={formData.anoPublicacao} onChange={handleChange} />
+            <input type="number" id="anoPublicacao" value={formData.anoPublicacao} onChange={handleChange} min="1000"
+                max={new Date().getFullYear() + 1}/>
           </div>
           <div className={styles.formGroup}>
             <label htmlFor="qtdTotal">Quantidade Total</label>
-            <input type="number" id="qtdTotal" value={formData.qtdTotal} onChange={handleChange} />
+            <input type="number" id="qtdTotal" value={formData.qtdTotal} onChange={handleChange} min="0"
+                max="9999"/>
           </div>
           <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-            <label htmlFor="descricao">Descrição</label>
-            <textarea id="descricao" value={formData.descricao} onChange={handleChange}></textarea>
+            <label htmlFor="descricao">Descrição <span style={{fontSize: '0.8em', color: '#666', float: 'right'}}>
+                    {(formData.descricao || '').length}/{LIMITES.DESCRICAO}
+                </span></label>
+            <textarea id="descricao" value={formData.descricao} onChange={handleChange} maxLength={LIMITES.DESCRICAO}
+                style={{minHeight: '120px'}}></textarea>
           </div>
           <div className={styles.formGroup}>
-            <label htmlFor="capa">Capa do Livro</label>
-            <input type="file" id="capa" onChange={handleChange} accept="image/png, image/jpeg" />
+            <label htmlFor="capa">Capa do Livro <small>(Máx {LIMITES.CAPA_TAMANHO_MB}MB)</small></label>
+            <input type="file" id="capa" onChange={handleChange} accept="image/png, image/jpeg, image/jpg" />
           </div>
         </div>
         <div className={styles.formActions}>

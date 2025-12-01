@@ -71,7 +71,9 @@ function DetalhesLivroPage() {
                     addToast('Livro excluído com sucesso!', 'success');
                     navigate('/livros');
                 } catch (error) {
-                    const errorMessage = error.response?.data?.message || 'Não foi possível excluir o livro.';
+                    const errorMessage =  error.response?.data?.mensagem ||
+                    error.response?.data?.message ||
+                    error.response?.data || 'Não foi possível excluir o livro.';
                     addToast(errorMessage, 'error');
                 } finally {
                     setIsSubmitting(false);

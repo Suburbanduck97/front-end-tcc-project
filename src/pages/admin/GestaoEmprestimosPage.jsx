@@ -46,6 +46,7 @@ function GestaoEmprestimosPage() {
         setIsSubmitting(true);
         setSubmittingAction({ type: 'conceder', id: reserva.id });
         try {
+            setModalState({ isOpen: false });
             await registrarEmprestimo(reserva.usuario.id, reserva.livro.id);
             addToast('Empréstimo concedido com sucesso!', 'success');
             await fetchDados(); 
@@ -55,7 +56,6 @@ function GestaoEmprestimosPage() {
         } finally {
             setIsSubmitting(false);
             setSubmittingAction({ type: null, id: null });
-            setModalState({ isOpen: false });
         }
         
     };
@@ -67,6 +67,7 @@ function GestaoEmprestimosPage() {
         setSubmittingAction({ type: 'retirar', id: emprestimo.id});
 
         try{
+            setModalState({ isOpen: false});
             await confirmarRetirada(emprestimo.id);
             addToast('Retirada confirmada! O prazo do empréstimo começou.', 'success');
             await fetchDados();
@@ -76,7 +77,6 @@ function GestaoEmprestimosPage() {
         } finally {
             setIsSubmitting(false);
             setSubmittingAction({ type: null, id: null});
-            setModalState({ isOpen: false});
         }
     };
 
@@ -86,6 +86,7 @@ function GestaoEmprestimosPage() {
         setIsSubmitting(true);
         setSubmittingAction({ type: 'devolver', id: emprestimo.id });
         try {
+            setModalState({ isOpen: false});
             await devolverLivro(emprestimo.id);
             addToast(`Devolução registrada com sucesso!`, 'success');
             await fetchDados();
@@ -95,7 +96,6 @@ function GestaoEmprestimosPage() {
         } finally {
             setIsSubmitting(false);
             setSubmittingAction({ type: null, id: null });
-            setModalState({ isOpen: false }); 
         }
     };
 
@@ -160,10 +160,6 @@ function GestaoEmprestimosPage() {
                             <tbody>
                                 {reservas.map((reserva, index) => {
                                     // LÓGICA DE FILA: Encontra a primeira reserva deste livro na lista ordenada
-                                    const primeiraReservaDesteLivro = reservas.find(r => r.livro.id === reserva.livro.id);
-                                    // Se o ID da reserva atual for igual ao da primeira encontrada, é a vez dela.
-                                    const isPrimeiroDaFila = primeiraReservaDesteLivro && primeiraReservaDesteLivro.id === reserva.id;
-
                                     return (
                                         <tr key={reserva.id}>
                                             <td className={styles.priorityCell}>{index + 1}</td>
@@ -174,10 +170,6 @@ function GestaoEmprestimosPage() {
                                                 <button 
                                                     className={`${styles.btn} ${styles.btnPrimary}`} 
                                                     onClick={() => openConcederModal(reserva)}
-                                                    // TRAVA VISUAL:
-                                                    disabled={submittingAction.id === reserva.id || !isPrimeiroDaFila}
-                                                    style={!isPrimeiroDaFila ? { opacity: 0.5, cursor: 'not-allowed', background: '#999' } : {}}
-                                                    title={!isPrimeiroDaFila ? "Este utilizador não é o primeiro da fila para este livro." : "Conceder Empréstimo"}
                                                 >
                                                     {submittingAction.type === 'conceder' && submittingAction.id === reserva.id 
                                                         ? 'A processar...' 

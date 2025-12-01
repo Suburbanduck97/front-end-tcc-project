@@ -12,6 +12,11 @@
   padding-bottom: 0.5rem;
 }
 
+.tableScrollWrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; 
+}
+
 .controlsContainer {
   display: flex;
   justify-content: space-between;
@@ -83,12 +88,14 @@
   border-collapse: collapse;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
   background-color: #fff;
+  min-width: 700px;
 }
 
 .multasTable th, .multasTable td {
   padding: 1rem;
   text-align: left;
   border-bottom: 1px solid #dee2e6;
+  white-space: nowrap;
 }
 
 .multasTable th {
@@ -170,4 +177,104 @@
 
 .emptyMessage {
   color: #666;
+}
+
+/* Responsividade para telas menores que 600px (Smartphones) */
+@media (max-width: 600px) {
+
+    .pageContainer {
+        padding: 1rem;
+    }
+
+
+    .controlsContainer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .searchForm {
+        width: 100%;
+    }
+
+
+    .searchInput {
+        min-width: 0;
+        flex-grow: 1;
+    }
+
+
+    .filterGroup {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    
+    .filterSelect {
+        flex-grow: 1;
+    }
+
+    .tableScrollWrapper {
+        overflow-x: unset; 
+    }
+
+    .multasTable {
+        border: 0;
+    }
+    
+    .multasTable td {
+        white-space: normal; 
+    }
+
+    .multasTable caption {
+        font-size: 1.3em;
+    }
+    
+    .multasTable thead {
+        border: none;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+    
+    .multasTable tr {
+        display: block;
+        margin-bottom: 0.625em;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+    }
+    
+    .multasTable td {
+        display: block;
+        text-align: right;
+        border-bottom: 1px dotted #ccc;
+    }
+    
+    .multasTable td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #4D227E;
+    }
+    
+    .multasTable td:last-child {
+        border-bottom: 0;
+    }
+    
+    .payButton {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    .multasTable tr td:nth-of-type(1)::before { content: "ID"; }
+    .multasTable tr td:nth-of-type(2)::before { content: "Usuário"; }
+    .multasTable tr td:nth-of-type(3)::before { content: "Livro"; }
+    .multasTable tr td:nth-of-type(4)::before { content: "Valor"; }
+    .multasTable tr td:nth-of-type(5)::before { content: "Data"; }
+    .multasTable tr td:nth-of-type(6)::before { content: "Status"; }
+    .multasTable tr td:nth-of-type(7)::before { content: "Ações"; }
 }

@@ -3,6 +3,18 @@ import { useToast } from '../../context/useToast';
 import { cadastrarLivro } from '../../services/livroService';
 import styles from './CadastrarLivroPage.module.css';
 
+
+// Definição de limites para campos de entrada
+const LIMITES = {
+    TITULO: 200,
+    AUTOR: 100,
+    ISBN: 13,
+    CATEGORIA: 50,
+    EDITORA: 100,
+    DESCRICAO: 2000,
+    CAPA_TAMANHO_MB: 5
+};
+
 function CadastrarLivroPage() {
     const [formData, setFormData] = useState({
         titulo: '', autor: '', isbn: '', categoria: '', editora: '',
@@ -18,8 +30,31 @@ function CadastrarLivroPage() {
     };
 
     const handleFileChange = (e) => {
-        setCapa(e.target.files[0]);
+        const file = e.target.files[0];
+
+        if(file){
+            // Validação de formato
+            const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+            if(!validTypes.includes(file.type)){
+                addToast('Formato de arquivo inválido. Use apenas PNG ou JPG.', 'error');
+                e.target.value = null;
+                setCapa(null);
+                return;
+            }
+            
+            // Validação de tamanho
+            const maxSizeInBytes = LIMITES.CAPA_TAMANHO_MB * 1024 * 1024;
+            if(file.size > maxSizeInBytes){
+                addToast(`a imagem é muito grande. O limite é de ${LIMITES.CAPA_TAMANHO_MB}MB.`, 'error');
+                e.target.value = null;
+                setCapa(null);
+                return;
+            }
+
+            setCapa(file);
+        }
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -74,39 +109,45 @@ function CadastrarLivroPage() {
                     {/* ... seus inputs e labels continuam exatamente iguais ... */}
                     <div className={styles.formGroup}>
                         <label htmlFor="titulo">Título</label>
-                        <input type="text" id="titulo" value={formData.titulo} onChange={handleChange} required disabled={isSubmitting} />
+                        <input type="text" id="titulo" value={formData.titulo} onChange={handleChange} required disabled={isSubmitting} maxLength={LIMITES.TITULO}
+                            placeholder={`Máx. ${LIMITES.TITULO} caracteres`} />
                     </div>
                     <div className={styles.formGroup}>
                         <label htmlFor="autor">Autor</label>
-                        <input type="text" id="autor" value={formData.autor} onChange={handleChange} required disabled={isSubmitting}/>
+                        <input type="text" id="autor" value={formData.autor} onChange={handleChange} required disabled={isSubmitting} maxLength={LIMITES.AUTOR}/>
                     </div>
                     <div className={styles.formGroup}>
                         <label htmlFor="isbn">ISBN</label>
-                        <input type="text" id="isbn" value={formData.isbn} onChange={handleChange} required disabled={isSubmitting}/>
+                        <input type="text" id="isbn" value={formData.isbn} onChange={handleChange} required disabled={isSubmitting} maxLength={LIMITES.ISBN} placeholder="apenas números" />
                     </div>
                     <div className={styles.formGroup}>
                         <label htmlFor="categoria">Categoria</label>
-                        <input type="text" id="categoria" value={formData.categoria} onChange={handleChange} required disabled={isSubmitting} />
+                        <input type="text" id="categoria" value={formData.categoria} onChange={handleChange} required disabled={isSubmitting} maxLength={LIMITES.CATEGORIA} />
                     </div>
                     <div className={styles.formGroup}>
                         <label htmlFor="editora">Editora</label>
-                        <input type="text" id="editora" value={formData.editora} onChange={handleChange} required disabled={isSubmitting}/>
+                        <input type="text" id="editora" value={formData.editora} onChange={handleChange} required disabled={isSubmitting} maxLength={LIMITES.EDITORA}/>
                     </div>
                     <div className={styles.formGroup}>
                         <label htmlFor="anoPublicacao">Ano de Publicação</label>
-                        <input type="number" id="anoPublicacao" value={formData.anoPublicacao} onChange={handleChange} required disabled={isSubmitting}/>
+                        <input type="number" id="anoPublicacao" value={formData.anoPublicacao} onChange={handleChange} required disabled={isSubmitting} min="1000"
+                            max={new Date().getFullYear() + 1}/>
                     </div>
                     <div className={styles.formGroup}>
                         <label htmlFor="qtdTotal">Quantidade Total</label>
-                        <input type="number" id="qtdTotal" value={formData.qtdTotal} onChange={handleChange} required disabled={isSubmitting}/>
+                        <input type="number" id="qtdTotal" value={formData.qtdTotal} onChange={handleChange} required disabled={isSubmitting} min="0"
+                            max="9999"/>
                     </div>
                     <div className={styles.formGroup}>
-                        <label htmlFor="capa">Capa do Livro</label>
-                        <input type="file" id="capa" onChange={handleFileChange} accept="image/png, image/jpeg" />
+                        <label htmlFor="capa">Capa do Livro <small>(Máx {LIMITES.CAPA_TAMANHO_MB}MB - JPG/PNG)</small></label>
+                        <input type="file" id="capa" onChange={handleFileChange} accept="image/png, image/jpeg, image/jpg" />
                     </div>
                     <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-                        <label htmlFor="descricao">Descrição</label>
-                        <textarea id="descricao" value={formData.descricao} onChange={handleChange} required disabled={isSubmitting}></textarea>
+                        <label htmlFor="descricao">Descrição <span style={{fontSize: '0.8em', color: '#666', float: 'right'}}>
+                                {formData.descricao.length}/{LIMITES.DESCRICAO}
+                            </span></label>
+                        <textarea id="descricao" value={formData.descricao} onChange={handleChange} required disabled={isSubmitting} maxLength={LIMITES.DESCRICAO}
+                            style={{minHeight: '120px'}}></textarea>
                     </div>
                 </div>
                 

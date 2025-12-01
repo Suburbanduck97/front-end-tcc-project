@@ -1,0 +1,274 @@
+:root {
+    --primary-color: #612B9F;
+    --secondary-color: #f8f9fa;
+    --text-dark: #343a40;
+    --text-light: #6c757d;
+    --background-page: #e9ecef;
+    --card-background: #ffffff;
+    --shadow-light: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+}
+
+body {
+    background-color: var(--background-page);
+}
+
+.relatorio-page {
+    padding: 3rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-dark);
+    min-height: 100vh;
+}
+
+/* Header com Título e Ações */
+.relatorio-header {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.relatorio-title {
+    color: var(--text-dark);
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Barra de Ações (Filtro e Botão de Exportar) */
+.actions-bar {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.date-filter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--card-background);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.date-filter svg {
+    color: var(--primary-color);
+}
+
+.date-filter label {
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.date-filter input[type="date"] {
+    padding: 0.4rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+    color: var(--text-dark);
+}
+
+.export-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.export-button:hover {
+    background-color: #0056b3; /* Tom mais escuro de azul */
+}
+
+/* Estilos de Seção */
+.data-section {
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    background-color: var(--card-background);
+    border-radius: 12px;
+    box-shadow: var(--shadow-light);
+}
+
+.section-title {
+    color: var(--text-dark);
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Estatísticas Gerais */
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+}
+
+.stat-card {
+    background-color: var(--background-page);
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
+    border-left: 5px solid var(--primary-color);
+    transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.icon-wrapper {
+    margin-right: 0.8rem;
+    padding: 0.5rem;
+    background-color: rgba(0, 123, 255, 0.1);
+    border-radius: 50%;
+    color: var(--primary-color);
+}
+
+.stat-card h3 {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin: 0;
+    font-weight: 500;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+/* Top Listas */
+.top-lists {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 0; /* Removendo padding do section para o card lidar com ele */
+}
+
+.top-list-card {
+    background-color: var(--card-background);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow-light);
+}
+
+.item-list {
+    list-style: none;
+    padding: 0;
+}
+
+.list-item {
+    background-color: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    margin-bottom: 0.7rem;
+    padding: 1rem 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+}
+
+.list-item:hover {
+    background-color: #e9ecef; /* Um tom mais escuro ao passar o mouse */
+}
+
+.list-index {
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-right: 1rem;
+}
+
+.item-title {
+    font-weight: 500;
+    flex-grow: 1; 
+    color: var(--text-dark);
+}
+
+.item-count {
+    font-weight: bold;
+    color: var(--text-light);
+    background-color: #f1f1f1;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+}
+
+.no-data {
+    text-align: center;
+    color: var(--text-light);
+    font-style: italic;
+    padding: 1rem;
+}
+
+/* Responsividade */
+@media (max-width: 992px) {
+    .top-lists {
+        grid-template-columns: 1fr; /* Uma coluna em tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    .relatorio-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .relatorio-page {
+        padding: 1.5rem;
+    }
+
+    .relatorio-title {
+        font-size: 2rem;
+    }
+
+    .actions-bar {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .date-filter {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .stat-value {
+        font-size: 2rem;
+    }
+
+    .list-item {
+        flex-wrap: wrap;
+    }
+
+    .item-title {
+        flex-basis: 100%;
+        margin-left: 2rem; /* Alinhar com o texto após o # */
+    }
+
+    .item-count {
+        margin-top: 0.5rem;
+    }
+}

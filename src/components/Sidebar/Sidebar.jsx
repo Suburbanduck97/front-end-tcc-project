@@ -99,7 +99,7 @@ const Sidebar = () => {
                     <li><NavLink to="/admin/emprestimos" className={({ isActive }) => isActive ? styles.active : ''} onClick={closeMenu}>Gerir Empréstimos</NavLink></li>
                     <li><NavLink to="/admin/multas" className={({ isActive }) => isActive ? styles.active : ''} onClick={closeMenu}>Gerir Multas</NavLink></li>
                     <li><NavLink to="/admin/usuarios" className={({ isActive }) => isActive ? styles.active : ''} onClick={closeMenu}>Gerir Usuários</NavLink></li>
-
+                    <li><NavLink to="/admin/relatorios" className={({ isActive }) => isActive ? styles.active : ''} onClick={closeMenu}>Relatórios</NavLink></li>
                     <li className={styles.separator}></li>
 
                     <li><NavLink to="/meu-perfil" className={({ isActive }) => isActive ? styles.active : ''} onClick={closeMenu}>Meu Perfil</NavLink></li>

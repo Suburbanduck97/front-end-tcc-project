@@ -86,32 +86,39 @@ function ListaLivros() {
       
       {loading ? <p>Carregando...</p> : (
         <div className={styles.bookGrid}>
-          {livros.map((livro) => (
+          {livros.map((livro) => { // Abertura com chaves {}
+            const isDisponivel = livro.qtdDisponivel > 0;
+            const statusTexto = isDisponivel ? 'DISPONÍVEL' : 'INDISPONÍVEL';
+            const statusClasse = isDisponivel ? 'disponivel' : 'indisponivel';
+                      
+            return (
           <div key={livro.id} className={styles.bookCard}>
-          <Link to={`/livros/${livro.id}`} className={styles.cardLink}>
-          <div className={styles.cardImageContainer}>
-          <img
-          className={styles.cardImage}
-          src={`${API_BASE_URL}/livros/${livro.id}/capa`} 
-          alt={`Capa do livro ${livro.titulo}`}
-                                onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/300x420/f1f5f9/64748b?text=Sem+Capa' }}
-          />
+            <Link to={`/livros/${livro.id}`} className={styles.cardLink}>
+            <div className={styles.cardImageContainer}> 
+            <img
+            className={styles.cardImage}
+            src={`${API_BASE_URL}/livros/${livro.id}/capa`} 
+            alt={`Capa do livro ${livro.titulo}`}
+            onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/300x420/f1f5f9/64748b?text=Sem+Capa' }}
+            />
           </div>
           <div className={styles.cardContent}>
             <h3>{livro.titulo}</h3>
             <p>por {livro.autor}</p>
             <span>Categoria: {livro.categoria}</span>
-            <div className={`${styles.status} ${styles[livro.statusLivro.toLowerCase()]}`}>
-                {livro.statusLivro}
-            </div>
+            {/* Usa o status e a classe calculados (statusTexto e statusClasse) */}
+          <div className={`${styles.status} ${styles[statusClasse]}`}>
+          {statusTexto}
+          </div>
           </div>
           </Link>
           </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+          ); 
+          })}
+          </div>
+          )}
+          </div>
+          );
 }
 
 export default ListaLivros;
