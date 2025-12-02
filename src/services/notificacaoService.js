@@ -14,6 +14,20 @@ const notificacaoService = {
     marcarComoLida: async (id) => {
         const response = await api.put(`/notificacoes/${id}/lida`);
         return response.data;
+    },
+
+    marcarTodasComoLidas: async () => {
+        await api.put(`/notificacoes/todas/lidas`);
+    },
+
+    deletarNotificacao: async (id) => {
+        const response = await api.delete(`/notificacoes/${id}/deletar`);
+        return response.data;
+    },
+
+    deletarTodas: async () => {
+        const response = await api.delete(`/notificacoes/excluir/todas`);
+        return response.data;
     }
 };
 

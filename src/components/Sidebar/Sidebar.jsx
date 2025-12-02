@@ -34,6 +34,15 @@ const Sidebar = () => {
 
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  
+  const formatarNome = (nomeCompleto) => {
+    if (!nomeCompleto) return '';
+    const partes = nomeCompleto.trim().split(/\s+/); 
+
+    if (partes.length <= 1) return partes[0];
+
+    return `${partes[0]} ${partes[partes.length - 1]}`;
+  };
 
   useEffect(() => {
     if (user) atualizarContagem();
@@ -41,7 +50,6 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     logoutContext();
-    alert('Você foi desconectado.');
     navigate('/login');
   };
 
@@ -82,7 +90,7 @@ const Sidebar = () => {
           <nav className={styles.navigation}>
             {user && (
               <div className={styles.userInfo}>
-                <span>Olá, <strong>{user.nome}</strong></span>
+                <span>Olá, <strong>{formatarNome(user?.nome)}</strong></span>
                 <small>{user.role.replace('_', ' ')}</small>
               </div>
             )}
@@ -103,6 +111,7 @@ const Sidebar = () => {
                     <li className={styles.separator}></li>
 
                     <li><NavLink to="/meu-perfil" className={({ isActive }) => isActive ? styles.active : ''} onClick={closeMenu}>Meu Perfil</NavLink></li>
+                    <li><NotificationLink /></li>
                   </>
                 ) : (
                   <>

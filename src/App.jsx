@@ -63,6 +63,7 @@ function App() {
         <Route path='/admin/usuarios' element={<AdminRoute><Layout><GerirUsuarioPage /></Layout></AdminRoute>} />
         <Route path='/admin/multas' element={<AdminRoute><Layout><GerirMultasPage /></Layout></AdminRoute>} />
         <Route path='/admin/relatorios' element={<AdminRoute><Layout><RelatorioPage /></Layout></AdminRoute>} />
+        <Route path='/notificacoes' element={<ProtectedRoute><Layout><NotificacaoPage /></Layout></ProtectedRoute>} />
         {/* Adicione aqui as novas rotas de admin que você criar, sempre dentro do Layout */}
 
       </Routes>

@@ -45,18 +45,8 @@ const RelatorioPage = () => {
     };
 
     useEffect(() => {
-        // Busca inicial sem filtro de data (ou com um intervalo padrão, se preferir)
         fetchReports(startDate, endDate); 
-    }, [startDate, endDate]); // Re-executa ao mudar as datas
-
-    // Função para exportar para PDF (simulação)
-    const handleExportPDF = () => {
-        alert("Função de Exportar para PDF ativada! (Implementação real requer bibliotecas como jsPDF ou renderização de PDF no servidor).");
-        // Implementação real: 
-        // 1. Coletar os dados exibidos ou chamar uma API específica de exportação.
-        // 2. Usar uma biblioteca como 'html2pdf' ou 'jsPDF' para gerar o PDF no cliente.
-        // Ou, se for um relatório complexo, chamar um endpoint no backend que gere o PDF.
-    };
+    }, [startDate, endDate]);
 
     if (loading) {
         return <div className="relatorio-container loading"><div className="spinner"></div> Carregando relatórios...</div>;
@@ -96,11 +86,7 @@ const RelatorioPage = () => {
                             value={endDate}
                             onChange={(e) => setEndDate(e.target.value)}
                         />
-                        {/* O filtro é aplicado automaticamente no useEffect ao mudar as datas */}
                     </div>
-                    <button className="export-button" onClick={handleExportPDF} title="Baixar Relatório em PDF">
-                        <DownloadIcon /> Exportar PDF
-                    </button>
                 </div>
             </header>
 

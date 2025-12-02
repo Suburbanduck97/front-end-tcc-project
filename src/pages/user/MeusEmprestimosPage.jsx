@@ -55,27 +55,52 @@ function MeusEmprestimosPage() {
     });
   };
 
-    const RenderEmprestimosGrid = ({ listaEmprestimos }) => (
+  const RenderEmprestimosGrid = ({ listaEmprestimos }) => (
     <div className={styles.grid}>
-      {listaEmprestimos.map((emprestimo) => (
-        <div key={emprestimo.id} className={styles.card}>
-          <h3 className={styles.cardTitle}>{emprestimo.livro.titulo}</h3>
-          <div className={styles.cardContent}>
-            <p><strong>Autor:</strong> {emprestimo.livro.autor || 'Desconhecido'}</p>
-            <p><strong>Data do Empréstimo:</strong> {formatarData(emprestimo.dataEmprestimo)}</p>
-            <p><strong>Devolução Prevista:</strong> {formatarData(emprestimo.dataDevolucaoPrevista)}</p>
-            
-            {emprestimo.statusEmprestimo === 'FINALIZADO' && emprestimo.dataDevolucaoReal && (
-                <p><strong>Devolvido em:</strong> {formatarData(emprestimo.dataDevolucaoReal)}</p>
-            )}
+      {listaEmprestimos.map((emprestimo) => {
+        
+        const isFinalizado = emprestimo.statusEmprestimo === 'FINALIZADO';
+
+        const dataPrincipal = isFinalizado
+          ? emprestimo.dataDevolucaoReal
+          : emprestimo.dataPrevistaDevolucao;
+
+        const labelPrincipal = isFinalizado
+          ? 'Devolvido em'
+          : 'Devolução Prevista';
+
+        return (
+          <div key={emprestimo.id} className={styles.card}>
+            <h3 className={styles.cardTitle}>{emprestimo.livro.titulo}</h3>
+
+            <div className={styles.cardContent}>
+              <p>
+                <strong>Autor:</strong> {emprestimo.livro.autor || 'Desconhecido'}
+              </p>
+
+              <p>
+                <strong>Data do Empréstimo:</strong>{' '}
+                {formatarData(emprestimo.dataEmprestimo)}
+              </p>
+
+              <p>
+                <strong>{labelPrincipal}:</strong>{' '}
+                {formatarData(dataPrincipal)}
+              </p>
+            </div>
+
+            <div className={styles.cardFooter}>
+              <span
+                className={`${styles.status} ${
+                  styles[emprestimo.statusEmprestimo.toLowerCase()]
+                }`}
+              >
+                {emprestimo.statusEmprestimo}
+              </span>
+            </div>
           </div>
-          <div className={styles.cardFooter}>
-            <span className={`${styles.status} ${styles[emprestimo.statusEmprestimo.toLowerCase()]}`}>
-              {emprestimo.statusEmprestimo}
-            </span>
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 

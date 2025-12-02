@@ -68,24 +68,6 @@ body {
     color: var(--text-dark);
 }
 
-.export-button {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1.2rem;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-.export-button:hover {
-    background-color: #0056b3; /* Tom mais escuro de azul */
-}
-
 /* Estilos de Seção */
 .data-section {
     margin-bottom: 3rem;
@@ -207,8 +189,8 @@ body {
 
 .item-count {
     font-weight: bold;
-    color: var(--text-light);
-    background-color: #f1f1f1;
+    color: #e9ecef;
+    background-color: #612B9F;
     padding: 0.3rem 0.6rem;
     border-radius: 4px;
 }
@@ -223,7 +205,8 @@ body {
 /* Responsividade */
 @media (max-width: 992px) {
     .top-lists {
-        grid-template-columns: 1fr; /* Uma coluna em tablets */
+        grid-template-columns: 1fr;
+        gap: 2rem;
     }
 }
 
@@ -251,24 +234,50 @@ body {
     .date-filter {
         flex-wrap: wrap;
         justify-content: center;
+
+        row-gap: 0.8rem; 
+    }
+
+    .date-filter input[type="date"] {
+        flex-grow: 1; 
+        min-width: 120px; 
     }
 }
 
 @media (max-width: 480px) {
-    .stat-value {
-        font-size: 2rem;
+    .top-lists {
+        grid-template-columns: 1fr;
     }
 
     .list-item {
-        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+    }
+
+    .list-index {
+        margin-right: 0;
     }
 
     .item-title {
-        flex-basis: 100%;
-        margin-left: 2rem; /* Alinhar com o texto após o # */
+        margin-left: 0;
+        flex-basis: auto;
+        width: 100%;
     }
 
     .item-count {
-        margin-top: 0.5rem;
+        align-self: flex-end;
+    }
+}
+
+@media (max-width: 360px) {
+    .date-filter {
+        flex-direction: column;
+        gap: 0.7rem;
+        width: 100%;
+    }
+
+    .date-filter input[type="date"] {
+        width: 100%;
     }
 }

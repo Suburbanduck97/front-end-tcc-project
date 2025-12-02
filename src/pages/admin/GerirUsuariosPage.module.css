@@ -72,25 +72,35 @@
 }
 
 .userTable {
-  width: 100%;
-  border-collapse: collapse;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    width: 100%;
+    min-width: 800px;
+    border-collapse: collapse;
 }
 
 .userTable th, .userTable td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
 }
 
 .userTable th {
-  background-color: #4D227E;
-  color: #ffff;
-  font-weight: bold;
+    background-color: #4D227E;
+    color: #fff;
+    font-weight: bold;
 }
 
 .userTable tbody tr:hover {
-  background-color: #f1f1f1;
+    background-color: #f1f1f1;
+}
+
+.tableScrollWrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    padding: 0;
 }
 
 /* Para mensagens de sucesso e erro em formulários */

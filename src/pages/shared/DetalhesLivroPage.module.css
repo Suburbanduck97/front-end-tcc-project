@@ -85,6 +85,8 @@
 .description p {
   margin: 0;
   line-height: 1.6;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 /* Status e Disponíveis */
 .statusContainer {
@@ -299,6 +301,9 @@
   }
   .description {
     text-align: left;
+    width: 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
   }
   .statusContainer {
     justify-content: center;

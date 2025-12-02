@@ -13,12 +13,13 @@ const LocationIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" he
 
 
 function MeuPerfilPage() {
-    const { user, loginContext } = useContext(AuthContext); // loginContext para atualizar o nome no sidebar
+    const { user, loginContext } = useContext(AuthContext);
     const [perfil, setPerfil] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [updateMessage, setUpdateMessage] = useState({ type: '', content: '' });
+    
     
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -74,6 +75,16 @@ function MeuPerfilPage() {
         }
     }, [formData.estado]);
 
+    useEffect(() => {
+    if (updateMessage.content) {
+        const timer = setTimeout(() => {
+            setUpdateMessage({ type: '', content: '' });
+        }, 3000); // 3 segundos
+
+            return () => clearTimeout(timer);
+        }
+    }, [updateMessage]);
+
     // Função para lidar com a mudança nos inputs do formulário
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -117,7 +128,7 @@ function MeuPerfilPage() {
             const response = await api.put('/usuario/meuPerfil', dadosParaAtualizar);
             
             if (response.data.token) {
-                loginContext(response.data.token);
+               loginContext(response.data.token);
             }
 
             setUpdateMessage({ type: 'success', content: 'Perfil atualizado com sucesso!' });
@@ -193,7 +204,7 @@ function MeuPerfilPage() {
                             <div className={styles.infoItem}>
                                 <label htmlFor="novaSenha">Nova Senha</label>
                                 <div className={styles.inputWrapper}>
-                                    <input type={showNovaSenha ? 'text' : 'password'} id="novaSenha" name="novaSenha" value={formData.novaSenha} onChange={handleChange} className={styles.input} placeholder="Mínimo 6 caracteres"/>
+                                    <input type={showNovaSenha ? 'text' : 'password'} id="novaSenha" name="novaSenha" value={formData.novaSenha} onChange={handleChange} className={styles.input} placeholder="Mínimo 8 caracteres"/>
                                     <span className={styles.eyeIcon} onClick={() => setShowNovaSenha(!showNovaSenha)}>
                                         {showNovaSenha ? <FaEyeSlash /> : <FaEye />}
                                     </span>

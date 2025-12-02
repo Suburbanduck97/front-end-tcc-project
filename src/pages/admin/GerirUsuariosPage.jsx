@@ -62,6 +62,7 @@ function GerirUsuariosPage() {
         }
 
         return (
+          <div className={styles.tableScrollWrapper}>
           <table className={styles.userTable}>
             <thead>
               <tr>
@@ -80,6 +81,7 @@ function GerirUsuariosPage() {
               ))}
             </tbody>
           </table>
+          </div>
         );
       };
   return (

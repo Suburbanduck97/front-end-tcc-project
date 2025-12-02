@@ -132,25 +132,54 @@
 
 /* Mensagens de Atualização */
 .updateMessage {
-  padding: 1rem 2rem;
-  text-align: center;
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  min-width: 260px;
+  padding: 14px 22px;
+  border-radius: 10px;
+  z-index: 2000;
+  
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(4px);
+
+  font-size: 0.95rem;
   font-weight: 500;
+  letter-spacing: 0.3px;
+
+  animation: fadeIn 0.4s ease-out;
 }
+
+/* Sucesso */
 .updateMessage.success {
-  background-color: #dcfce7; /* Verde suave */
-  color: #166534;
+  background: #e6f9ee;
+  color: #0f5132;
+  border-left: 4px solid #198754;
 }
+
+/* Erro */
 .updateMessage.error {
-  background-color: #fee2e2; /* Vermelho suave */
-  color: #991b1b;
+  background: #fdecec;
+  color: #842029;
+  border-left: 4px solid #dc3545;
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Mensagem de erro interna (inputs) */
 .errorMessage {
-  color: #dc2626;
-  font-weight: bold;
-  padding: 2rem;
+  color: #dc3545;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 1rem 0;
 }
-
 .inputWrapper {
   position: relative;
   display: flex;
@@ -160,7 +189,7 @@
 
 .inputWrapper .input {
   width: 100%;
-  padding-right: 40px; /* Espaço para o ícone não sobrepor o texto */
+  padding-right: 40px;
 }
 
 .eyeIcon {
@@ -194,7 +223,7 @@
   }
   .formActions {
     flex-direction: column;
-    align-items: stretch; /* Botões 100% */
+    align-items: stretch;
   }
   .actionButton {
     width: 100%;

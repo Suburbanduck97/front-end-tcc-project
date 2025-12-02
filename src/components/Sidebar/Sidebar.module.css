@@ -1,6 +1,9 @@
 .sidebar {
   background-color: #2b2b68; 
   color: #ecf0f1;
+  height: 100vh; 
+  flex-direction:column;
+  justify-content:space-between;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -14,6 +17,13 @@
   transition: transform 0.3s ease-in-out;
   z-index: 1000;
   overflow-x: hidden;
+}
+
+.sidebarTop {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow-y: hidden;
 }
 
 .logoContainer {
@@ -39,6 +49,13 @@
   flex-grow: 1;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  padding-right: 5px;
+}
+
+.sidebarBottom {
+  flex-shrink: 0;
+  padding-top: 1rem;
+  border-top: 1px solid #34495e;
 }
 
 .navigation ul {
@@ -119,7 +136,8 @@
   cursor: pointer;
   font-weight: bold;
   transition: background-color 0.2s;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
+  flex-shrink: 0;
 }
 
 .logoutButton:hover {

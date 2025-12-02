@@ -9,15 +9,18 @@
 }
 
 .header {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
   margin-bottom: 2.5rem;
   border-bottom: 2px solid #e0e0e0;
   padding-bottom: 1rem;
 }
 
 .header h1 {
-  color: #0E0F30; /* Cor Escura da Marca */
+  color: #0E0F30;
   font-size: 2rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
   font-weight: 700;
 }
 
@@ -64,6 +67,8 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.5rem;
+  justify-content: space-between; 
+  padding-right: 30px;
 }
 
 .infoPrincipal {
@@ -156,6 +161,49 @@
   animation: spin 1s linear infinite;
 }
 
+.actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.btnSecundario {
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  background: #612B9F;
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btnPerigo {
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  background: #d64545;
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.deleteBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: #c0392b;
+  cursor: pointer;
+  padding: 5px;
+  line-height: 1;
+  z-index: 10;
+}
+
+.deleteBtn:hover {
+  color: #e74c3c;
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -163,4 +211,35 @@
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .header h1 {
+    width: 100%; 
+    margin-bottom: 0.5rem;
+  }
+
+  .actions {
+    width: 100%;
+    justify-content: flex-end; 
+  }
+}
+
+@media (max-width: 600px) {
+  .actions {
+    flex-direction: column; 
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .btnSecundario, .btnPerigo {
+    width: 100%;
+    text-align: center;
+  }
 }
