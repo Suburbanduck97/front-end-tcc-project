@@ -60,10 +60,18 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.infoItem .input,
+.infoItem select {
+  width: 100%;
 }
 
 .infoItem svg {
-  color: #2563eb; /* Azul médio para ícones */
+  color: #2563eb;
   flex-shrink: 0;
 }
 
@@ -71,13 +79,13 @@
   display: block;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #64748b; /* Cinza azulado */
-  margin-bottom: 0.25rem;
+  color: #64748b;
+  margin-bottom: 0;
 }
 
 .value {
   font-size: 1.1rem;
-  color: #1e293b; /* Azul grafite */
+  color: #1e293b;
 }
 
 /* Estilos do Formulário de Edição */
@@ -87,6 +95,11 @@
   border: 1px solid #cbd5e1;
   border-radius: 6px;
   font-size: 1rem;
+}
+
+.input:not([type="text"]):not([type="email"]):not([type="tel"]):not([type="password"]) {
+    height: calc(0.75rem * 2 + 1rem + 2px);
+    line-height: 1.2;
 }
 
 .input:disabled {
@@ -215,17 +228,23 @@
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
+
   .cardHeader {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
     padding: 1.5rem;
   }
+
   .formActions {
     flex-direction: column;
     align-items: stretch;
   }
   .actionButton {
     width: 100%;
+  }
+
+  .inputWrapper {
+      width: 100%; 
   }
 }

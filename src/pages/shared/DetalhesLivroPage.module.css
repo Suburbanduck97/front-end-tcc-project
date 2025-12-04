@@ -229,13 +229,12 @@
 
 /* --- ESTILOS ADICIONADOS --- */
 
-/* Ações do Admin (no final da coluna) */
 .adminActions {
   display: flex; 
   gap: 1rem;   
   width: 100%; 
-  margin-top: auto; /* Empurra para o final da coluna flex */
-  padding-top: 1rem; /* Espaço acima dos botões */
+  margin-top: auto;
+  padding-top: 1rem;
 }
 
 .btn {
@@ -246,9 +245,9 @@
   border: none;
   cursor: pointer;
   font-weight: 600;
-  font-size: 0.95rem; /* Fonte levemente maior */
+  font-size: 0.95rem;
   transition: all 0.2s;
-  display: inline-flex; /* Para alinhar ícone e texto */
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
 }
@@ -278,6 +277,7 @@
   padding: 2rem;
   color: #616161;
 }
+
 .error {
   color: #d32f2f;
 }
@@ -291,13 +291,22 @@
     text-align: center;
     padding: 1rem;
   }
+  .title, .author {
+    text-align: center;
+    width: 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
   .detailsContainer {
-    align-items: center; /* Centraliza conteúdo no mobile */
+    align-items: center;
+    width: 100%;
   }
   .infoGrid {
     grid-template-columns: 1fr;
-    text-align: left; /* Mantém texto do grid alinhado à esquerda */
+    text-align: left;
     width: 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
   }
   .description {
     text-align: left;
@@ -306,20 +315,29 @@
     box-sizing: border-box;
   }
   .statusContainer {
+    width: 100%; 
     justify-content: center;
     gap: 1.5rem;
-    flex-wrap: wrap; /* Permite quebrar linha se necessário */
+    flex-wrap: wrap; 
+    padding: 0 1rem; 
+    box-sizing: border-box;
   }
   .actions, .adminActions {
-    align-items: stretch; /* Botões ocupam 100% */
+    align-items: center;
     width: 100%;
     margin-top: 1rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
   }
   .adminActions {
-    flex-direction: column; /* Empilha os botões de admin */
+    flex-direction: column;
+  }
+  .actions {
+    align-items: center;
   }
   .reserveButton {
     width: 100%;
+    max-width: 300px;
   }
   .title {
     font-size: 2rem;

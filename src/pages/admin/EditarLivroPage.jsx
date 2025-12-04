@@ -20,7 +20,7 @@ function EditarLivroPage() {
   const [formData, setFormData] = useState(null);
   
   const [loading, setLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false); // <-- Estado de envio
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
 
@@ -130,7 +130,7 @@ function EditarLivroPage() {
       setLivroOriginal(novoOriginal);
       setFormData({ ...novoOriginal, capa: null});
 
-      setTimeout(() => navigate(`/livros/${id}`), 2000);
+      setTimeout(() => navigate(`/livros`), 2000);
     }catch (err){
       console.error("Erro ao atualizar livro:", err);
       setError(err.response?.data?.message || 'Não foi possível atualizar o livro.');

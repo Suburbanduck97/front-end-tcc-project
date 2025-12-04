@@ -33,6 +33,7 @@ function MeuPerfilPage() {
     const [formData, setFormData] = useState({
         nome: '',
         telefone: '',
+        sexo: '',
         estado: '',
         cidade: '',
         bairro: '',
@@ -79,11 +80,12 @@ function MeuPerfilPage() {
     if (updateMessage.content) {
         const timer = setTimeout(() => {
             setUpdateMessage({ type: '', content: '' });
-        }, 3000); // 3 segundos
+        }, 3000);
 
             return () => clearTimeout(timer);
         }
     }, [updateMessage]);
+
 
     // Função para lidar com a mudança nos inputs do formulário
     const handleChange = (e) => {
@@ -105,7 +107,9 @@ function MeuPerfilPage() {
             return;
         }
 
+
         setIsSubmitting(true);
+
 
         // Envia apenas os campos que podem ser alterados
         const dadosParaAtualizar = {
@@ -161,19 +165,34 @@ function MeuPerfilPage() {
                     <form onSubmit={handleUpdate} className={styles.cardBody}>
                         <h4>Dados Pessoais</h4>
                         <div className={styles.infoGrid}>
-                            <div className={styles.infoItem}><label htmlFor="nome">Nome Completo</label><input type="text" id="nome" name="nome" value={formData.nome} onChange={handleChange} className={styles.input}/></div>
-                            <div className={styles.infoItem}><label htmlFor="telefone">Telefone</label><input type="tel" id="telefone" name="telefone" value={formData.telefone} onChange={handleChange} className={styles.input}/></div>
-                            <div className={styles.infoItem}><label>E-mail</label><input type="email" value={perfil.email} className={styles.input} disabled title="O e-mail não pode ser alterado."/></div>
-                            <div className={styles.infoItem}><label>CPF</label><input type="text" value={perfil.cpf} className={styles.input} disabled title="O CPF não pode ser alterado."/></div>
-                            <div className={styles.infoItem}><label htmlFor="sexo">Sexo</label><input type="text" id="sexo" name="sexo" value={formData.sexo} onChange={handleChange} className={styles.input}/></div>
+                            <div className={styles.infoItem}>
+                                <label htmlFor="nome">Nome Completo</label>
+                                <input type="text" id="nome" name="nome" value={formData.nome} onChange={handleChange} className={styles.input}/>
+                            </div>
+                            <div className={styles.infoItem}>
+                                <label htmlFor="telefone">Telefone</label>
+                                <input type="tel" id="telefone" name="telefone" value={formData.telefone} onChange={handleChange} className={styles.input}/>
+                            </div>
+                            <div className={styles.infoItem}>
+                                <label>E-mail</label>
+                                <input type="email" value={perfil.email} className={styles.input} disabled title="O e-mail não pode ser alterado."/>
+                            </div>
+                            <div className={styles.infoItem}>
+                                <label>CPF</label>
+                                <input type="text" value={perfil.cpf} className={styles.input} disabled title="O CPF não pode ser alterado."/>
+                            </div>
+                            <div className={styles.infoItem}>
+                                <label htmlFor="sexo">Sexo</label>
+                                <input type="text" id="sexo" name="sexo" value={formData.sexo} onChange={handleChange} className={styles.input}/>
+                            </div>
                         </div>
 
                         <hr className={styles.divider} />
                         <h4>Endereço</h4>
                         <div className={styles.infoGrid}>
                             <div className={styles.infoItem}>
-                                <label htmlFor="estado">Estado</label>
-                                <select id="estado" name="estado" className={styles.select} value={formData.estado} onChange={handleChange} required>
+                                <label htmlFor="estado" className={styles.label}>Estado</label>
+                                <select id="estado" name="estado" className={styles.input} value={formData.estado} onChange={handleChange} required>
                                     <option value="">Selecione um estado...</option>
                                     {estados.map(estado => (
                                         <option key={estado.id} value={estado.sigla}>{estado.nome}</option>
@@ -181,8 +200,8 @@ function MeuPerfilPage() {
                                 </select>
                             </div>
                             <div className={styles.infoItem}>
-                                <label htmlFor="cidade">Cidade</label>
-                                <select id="cidade" name="cidade" className={styles.select} value={formData.cidade} onChange={handleChange} required disabled={!formData.estado || loadingCidades}>
+                                <label htmlFor="cidade" className={styles.label}>Cidade</label>
+                                <select id="cidade" name="cidade" className={styles.input} value={formData.cidade} onChange={handleChange} required disabled={!formData.estado || loadingCidades}>
                                     <option value="">
                                         {loadingCidades ? 'Carregando...' : (formData.estado ? 'Selecione uma cidade...' : 'Selecione um estado primeiro')}
                                     </option>
@@ -192,7 +211,7 @@ function MeuPerfilPage() {
                                 </select>
                             </div>
                             <div className={styles.infoItem}>
-                                <label htmlFor="bairro">Bairro</label>
+                                <label htmlFor="bairro" className={styles.label}>Bairro</label>
                                 <input type="text" id="bairro" name="bairro" value={formData.bairro} onChange={handleChange} className={styles.input} required/>
                             </div>
                         </div>
@@ -201,25 +220,24 @@ function MeuPerfilPage() {
                         <h4>Alterar Senha (opcional)</h4>
                         <div className={styles.infoGrid}>
                              {/* Campo Nova Senha com ícone de olho */}
-                            <div className={styles.infoItem}>
-                                <label htmlFor="novaSenha">Nova Senha</label>
+                        <div className={styles.infoItem}>
+                                <label htmlFor="novaSenha" className={styles.label}>Nova Senha</label>
                                 <div className={styles.inputWrapper}>
                                     <input type={showNovaSenha ? 'text' : 'password'} id="novaSenha" name="novaSenha" value={formData.novaSenha} onChange={handleChange} className={styles.input} placeholder="Mínimo 8 caracteres"/>
                                     <span className={styles.eyeIcon} onClick={() => setShowNovaSenha(!showNovaSenha)}>
                                         {showNovaSenha ? <FaEyeSlash /> : <FaEye />}
                                     </span>
                                 </div>
-                            </div>
-                            {/* Campo Confirmar Senha com ícone de olho */}
-                            <div className={styles.infoItem}>
-                                <label htmlFor="confirmarNovaSenha">Confirmar Nova Senha</label>
-                                <div className={styles.inputWrapper}>
-                                    <input type={showConfirmarNovaSenha ? 'text' : 'password'} id="confirmarNovaSenha" name="confirmarNovaSenha" value={formData.confirmarNovaSenha} onChange={handleChange} className={styles.input}/>
-                                    <span className={styles.eyeIcon} onClick={() => setShowConfirmarNovaSenha(!showConfirmarNovaSenha)}>
-                                        {showConfirmarNovaSenha ? <FaEyeSlash /> : <FaEye />}
-                                    </span>
                                 </div>
-                            </div>
+                                <div className={styles.infoItem}>
+                                    <label htmlFor="confirmarNovaSenha" className={styles.label}>Confirmar Nova Senha</label>
+                                    <div className={styles.inputWrapper}>
+                                        <input type={showConfirmarNovaSenha ? 'text' : 'password'} id="confirmarNovaSenha" name="confirmarNovaSenha" value={formData.confirmarNovaSenha} onChange={handleChange} className={styles.input}/>
+                                        <span className={styles.eyeIcon} onClick={() => setShowConfirmarNovaSenha(!showConfirmarNovaSenha)}>
+                                            {showConfirmarNovaSenha ? <FaEyeSlash /> : <FaEye />}
+                                        </span>
+                                    </div>
+                                </div>
                         </div>
 
                         <div className={styles.formActions}>

@@ -13,13 +13,12 @@ export const AuthProvider = ({ children }) => {
       try {
         const decodedUser = jwtDecode(token);
 
-        // opcional: validar expiração do token
         if (decodedUser.exp && decodedUser.exp * 1000 < Date.now()) {
           console.warn("Token expirado. Limpando...");
           localStorage.removeItem('authToken');
           setUser(null);
         } else {
-          setUser(decodedUser); // mantém usuário logado após reload
+          setUser(decodedUser);
         }
 
       } catch (error) {

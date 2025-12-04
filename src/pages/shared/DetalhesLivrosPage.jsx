@@ -43,7 +43,7 @@ function DetalhesLivroPage() {
 
     // --- AÇÕES DO USUÁRIO ---
 
-    const handleVoltar = () => navigate(-1);
+    const handleVoltar = () => navigate('/livros');
 
     const handleReservar = async () => {
         setIsSubmitting(true);

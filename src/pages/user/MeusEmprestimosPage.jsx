@@ -47,13 +47,21 @@ function MeusEmprestimosPage() {
         fetchEmprestimo();
     }, [user]);
 
-    const formatarData = (dataString) => {
-    if (!dataString) return 'N/A';
-    return new Date(dataString).toLocaleDateString('pt-BR', {
-      day: '2-digit', month: '2-digit', year: 'numeric',
-      hour: '2-digit', minute: '2-digit'
-    });
-  };
+    const formatarData = (dataString, separador = ' ') => {
+      if (!dataString) return 'N/A';
+
+      const dataObj = new Date(dataString);
+
+      const dataFormatada = dataObj.toLocaleDateString('pt-Br', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+      });
+
+      const horaFormatada = dataObj.toLocaleTimeString('pt-Br', {
+        hour: '2-digit', minute: '2-digit'
+      });
+      
+      return `${dataFormatada}${separador}${horaFormatada}`;
+    };
 
   const RenderEmprestimosGrid = ({ listaEmprestimos }) => (
     <div className={styles.grid}>

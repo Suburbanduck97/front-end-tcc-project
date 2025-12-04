@@ -17,6 +17,10 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
+  useEffect(() => {
+    atualizarContagem();
+  }, []);
+
   const decrementarContagem = () =>
     setNaoLidasCount((prev) => (prev > 0 ? prev - 1 : 0));
 
